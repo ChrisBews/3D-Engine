@@ -23,10 +23,18 @@ class Renderer {
       return;
     }
     this._scene = scene;
-    this._startFrameTimer();
+    this._scene.glContext = this._gl;
   }
 
-  set onUpdate(callback) { this._onUpdate = callback; }
+  set onUpdate(callback) {
+    this._onUpdate = callback;
+    // Start the render loop
+    if (callback) {
+      this._startFrameTimer();
+    } else {
+      this._clearFrameTimer();
+    } 
+  }
 
   _clearFrameTimer() {
     // Cancel a frame request if one exists
@@ -59,6 +67,9 @@ class Renderer {
   }
 
   _draw() {
+    const meshes = this._scene.children;
+    meshes.forEach(mesh => {
 
+    });
   }
 }

@@ -16,14 +16,30 @@ class App {
 
   populateScene() {
     this.cube = new Cube(100);
+    this.cube.shader = new FlatColorShader([0, 1, 0, 1]);
+
+    /*
+    this.cube.position = {x: 0, y: 0, z: 0};
+    this.cube.rotationX = 90;
+    this.cube.scale = 1;
+
+    this.cube.setPosition(x, y, z);
+    this.cube.setRotationX(90);
+    this.cube.setScale(1);
+
     this.cube.x = 0;
     this.cube.y = 0;
     this.cube.z = 0;
+    this.cube.rotationX = 90;
+    this.cube.scale = 1;
+    
+    */
+
     this.scene.addChild(this.cube);
   }
   
   onUpdate() {
-    console.log('ok');
+    //console.log('ok');
   }
 }
 

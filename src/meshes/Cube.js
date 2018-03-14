@@ -11,6 +11,9 @@ class Cube {
     this._x = 0;
     this._y = 0;
     this._z = 0;
+    this._program;
+    this._gl;
+    this._shader;
   }
 
   get x() { return this._x; }
@@ -22,8 +25,22 @@ class Cube {
   get z() { return this._z; }
   set z(value) { this._z = value; }
 
+  set shader(shader) {
+    this._shader = shader;
+    if (this._gl) this._createProgram();
+  }
+
+  set glContext(context) {
+    this._gl = context;
+    if (this._shader) this._createProgram();
+  }
+
   get vertices() {
     return this._vertices || this._generateVertices();
+  }
+
+  _createProgram() {
+    this._program = new Program(this._gl, this._shader);
   }
 
   _generateVertices() {
