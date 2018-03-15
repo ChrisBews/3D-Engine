@@ -15,8 +15,9 @@ class Scene {
   }
 
   addChild(mesh) {
+    console.log('add child');
     if (!this._children.includes(mesh)) {
-      if (this._gl) mesh.gl = this._gl;
+      if (this._gl) mesh.glContext = this._gl;
       this._children.push(mesh);
     }
   }

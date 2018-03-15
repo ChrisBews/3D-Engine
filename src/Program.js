@@ -4,15 +4,31 @@ class Program {
     this._gl = glContext;
     this._vertexShader = this._createShader(this._gl.VERTEX_SHADER, shader.vertexShader);
     this._fragmentShader = this._createShader(this._gl.FRAGMENT_SHADER, shader.fragmentShader);
-    this._glProgram;
     this._glProgram = this._createGLProgram();
     
     this._positionLocation;
     this._colorLocation;
+    this._positionBuffer;
 
     this._getAttributeLocations();
     this._getUniformLocations();
     this._createBuffers();
+  }
+
+  get positionLocation() {
+    return this._positionLocation;
+  }
+
+  get positionBuffer() {
+    return this._positionBuffer;
+  }
+
+  get colorLocation() {
+    return this._colorLocation;
+  }
+
+  get glProgram() {
+    return this._glProgram;
   }
 
   _createShader(type, source) {
@@ -34,14 +50,14 @@ class Program {
     this._gl.linkProgram(program);
     const success = this._gl.getProgramParameter(program, this._gl.LINK_STATUS);
     if (success) {
-      return this.program;
+      return program;
     }
     console.error('Error compiling program:', this._gl.getProgramInfoLog(program));
     this._gl.deleteProgram(program);
   }
 
   _getAttributeLocations() {
-    this.positionLocation = this._gl.getAttribLocation(this._glProgram, 'a_position');
+    this._positionLocation = this._gl.getAttribLocation(this._glProgram, 'a_position');
   }
 
   _getUniformLocations() {
@@ -49,6 +65,6 @@ class Program {
   }
 
   _createBuffers() {
-    this.positionBuffer = this._gl.createBuffer();
+    this._positionBuffer = this._gl.createBuffer();
   }
 }

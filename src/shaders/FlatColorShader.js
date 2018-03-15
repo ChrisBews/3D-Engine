@@ -26,9 +26,9 @@ class FlatColorShader {
   get fragmentShader() {
     return `#version 300 es
       
-      precision mediump float
+      precision mediump float;
 
-      in vec4 v_color;
+      uniform vec4 u_color;
 
       out vec4 outColor;
 

@@ -15,8 +15,8 @@ class App {
   }
 
   populateScene() {
-    this.cube = new Cube(100);
-    this.cube.shader = new FlatColorShader([0, 1, 0, 1]);
+    this.cube = new Cube(0.3);
+    this.cube.shader = new FlatColorShader([0, 0.5, 0, 1]);
 
     /*
     this.cube.position = {x: 0, y: 0, z: 0};
@@ -39,7 +39,7 @@ class App {
   }
   
   onUpdate() {
-    //console.log('ok');
+    
   }
 }
 

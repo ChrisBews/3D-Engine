@@ -39,6 +39,13 @@ class Cube {
     return this._vertices || this._generateVertices();
   }
 
+  get material() {
+    return {
+      program: this._program,
+      shader: this._shader,
+    };
+  }
+
   _createProgram() {
     this._program = new Program(this._gl, this._shader);
   }
