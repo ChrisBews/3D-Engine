@@ -75,7 +75,7 @@ class Renderer {
     this._previousRenderTime = renderTime;
 
     // Allow for updates to take place
-    if (this._onUpdate) this._onUpdate();
+    if (this._onUpdate) this._onUpdate(timePassed);
     // Draw all children in current scene
     this._draw();
     // Wait for next frame
