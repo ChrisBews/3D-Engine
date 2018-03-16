@@ -26,6 +26,7 @@ class App {
     this.cube.x = 300;
     this.cube.y = 300;
     this.cube.z = -200;
+    this.cube.rotationY = 0;
 
     this.cube2 = new Cube(100);
     this.cube2.shader = new FlatColorShader([1, 0, 0, 1]);
@@ -55,7 +56,9 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    
+    this.cube.rotationX += 1;
+    this.cube.rotationY += 1;
+    // console.log(this.cube.rotationY);
   }
 }
 
