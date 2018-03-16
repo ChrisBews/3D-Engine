@@ -11,6 +11,10 @@ class HelperUtils {
     }
     return false;
   }
+
+  degreesToRadians(angleInDegrees) {
+    return angleInDegrees * Math.PI / 180;
+  }
 }
 
 const Helpers = new HelperUtils();

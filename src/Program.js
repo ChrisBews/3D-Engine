@@ -8,11 +8,10 @@ class Program {
     
     this._positionLocation;
     this._colorLocation;
-    this._positionBuffer;
+    this._matrixLocation;
 
     this._getAttributeLocations();
     this._getUniformLocations();
-    this._createBuffers();
   }
 
   get positionLocation() {
@@ -25,6 +24,10 @@ class Program {
 
   get colorLocation() {
     return this._colorLocation;
+  }
+
+  get matrixLocation() {
+    return this._matrixLocation;
   }
 
   get glProgram() {
@@ -62,9 +65,6 @@ class Program {
 
   _getUniformLocations() {
     this._colorLocation = this._gl.getUniformLocation(this._glProgram, 'u_color');
-  }
-
-  _createBuffers() {
-    this._positionBuffer = this._gl.createBuffer();
+    this._matrixLocation = this._gl.getUniformLocation(this._glProgram, 'u_matrix');
   }
 }
