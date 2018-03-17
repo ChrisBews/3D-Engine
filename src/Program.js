@@ -7,6 +7,7 @@ class Program {
     this._glProgram = this._createGLProgram();
     
     this._positionLocation;
+    this._normalsLocation;
     this._colorLocation;
     this._matrixLocation;
 
@@ -18,12 +19,16 @@ class Program {
     return this._positionLocation;
   }
 
-  get positionBuffer() {
-    return this._positionBuffer;
+  get normalsLocation() {
+    return this._normalsLocation;
   }
 
   get colorLocation() {
     return this._colorLocation;
+  }
+
+  get lightDirectionLocation() {
+    return this._lightDirectionLocation;
   }
 
   get matrixLocation() {
@@ -61,10 +66,12 @@ class Program {
 
   _getAttributeLocations() {
     this._positionLocation = this._gl.getAttribLocation(this._glProgram, 'a_position');
+    this._normalsLocation = this._gl.getAttribLocation(this._glProgram, 'a_normal');
   }
 
   _getUniformLocations() {
     this._colorLocation = this._gl.getUniformLocation(this._glProgram, 'u_color');
     this._matrixLocation = this._gl.getUniformLocation(this._glProgram, 'u_matrix');
+    this._lightDirectionLocation = this._gl.getUniformLocation(this._glProgram, 'u_reverseLightDirection');
   }
 }

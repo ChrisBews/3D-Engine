@@ -10,6 +10,7 @@ class Renderer {
     this._vao;
     this._resizeFrameRequest;
     this._positionBuffer;
+    this._normalsBuffer;
     this._initGL();
     if (this._gl) {
       this._addListeners();
@@ -57,6 +58,7 @@ class Renderer {
 
   _createBuffers() {
     this._positionBuffer = this._gl.createBuffer();
+    this._normalsBuffer = this._gl.createBuffer();
   }
 
   _clearFrameTimer() {
@@ -112,16 +114,27 @@ class Renderer {
       const material = mesh.material;
       const program = material.program;
       if (program) {
+        this._gl.useProgram(program.glProgram);
+
+        // Pass the vertex positions
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
         this._gl.enableVertexAttribArray(program.positionLocation);
         this._gl.vertexAttribPointer(program.positionLocation, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.useProgram(program.glProgram);
-
+        // Adjust the vertex positions via the camera matrix
         const meshMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.matrix);
         this._gl.uniformMatrix4fv(program.matrixLocation, false, meshMatrix);
-
         this._gl.bufferData(this._gl.ARRAY_BUFFER, vertices, this._gl.STATIC_DRAW);
+
+        // Pass the normal positions
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._normalsBuffer);
+        this._gl.enableVertexAttribArray(program.normalsLocation);
+        this._gl.vertexAttribPointer(program.normalsLocation, 3, this._gl.FLOAT, false, 0, 0);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.normals, this._gl.STATIC_DRAW);
+
+        // Set the colour to use
         this._gl.uniform4fv(program.colorLocation, material.shader.color);
+        // Set the light direction
+        this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector([0.5, 0.7, -1]));
 
         const primitiveType = this._gl.TRIANGLES;
         this._gl.drawArrays(primitiveType, 0, vertices.length / 3);

@@ -23,6 +23,8 @@ class Cube {
     this._program;
     this._gl;
     this._shader;
+    this._vertices;
+    this._normals;
     this._matrix;
     this._updateMatrix();
   }
@@ -110,6 +112,10 @@ class Cube {
 
   get vertices() {
     return this._vertices || this._generateVertices();
+  }
+
+  get normals() {
+    return this._normals || this._generateNormals();
   }
 
   get matrix() {
@@ -202,5 +208,65 @@ class Cube {
     ]);
 
     return this._vertices;
+  }
+
+  _generateNormals() {
+    this._normals = new Float32Array([
+      // Front face
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
+
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
+
+      // Top face
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+
+      // Right face
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+
+      // Back face
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
+
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
+
+      // Left face
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+      
+      // Bottom face
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+    ]);
+
+    return this._normals;
   }
 }

@@ -8,9 +8,9 @@ class App {
     this.populateScene();
     this.camera.x = 0;
     this.camera.y = 20;
-    this.camera.z = 100;
+    this.camera.z = 800;
     this.camera.angleX = 0;
-    this.camera.lookAt(this.cube3);
+    this.camera.lookAt(this.originCube);
   }
 
   createEngine() {
@@ -45,36 +45,18 @@ class App {
     this.cube2.rotationZ = 0;
     this.cube2.scale = 1;
 
-    this.cube3 = new Cube(10);
-    this.cube3.shader = new FlatColorShader([0, 0, 1, 1]);
-    //this.cube3.y = 100;
-
-    /*
-    this.cube.position = {x: 0, y: 0, z: 0};
-    this.cube.rotationX = 90;
-    this.cube.scale = 1;
-
-    this.cube.setPosition(x, y, z);
-    this.cube.setRotationX(90);
-    this.cube.setScale(1);
-
-    this.cube.x = 0;
-    this.cube.y = 0;
-    this.cube.z = 0;
-    this.cube.rotationX = 90;
-    this.cube.scale = 1;
-    
-    */
+    this.originCube = new Cube(10);
+    this.originCube.shader = new FlatColorShader([0, 0.5, 0.5, 1]);
 
     this.scene.addChild(this.cube);
     this.scene.addChild(this.cube2);
-    this.scene.addChild(this.cube3);
+    this.scene.addChild(this.originCube);
   }
   
   onUpdate(elapsedTime) {
     this.cube.rotationX += 1;
     this.cube.rotationY += 1;
-    //this.camera.x += 0.5;
+    //this.camera.y += 0.5;
     // this.cube2.scale += 0.001;
     // console.log(this.cube.rotationY);
   }
