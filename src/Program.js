@@ -10,6 +10,7 @@ class Program {
     this._normalsLocation;
     this._colorLocation;
     this._matrixLocation;
+    this._worldMatrixLocation;
 
     this._getAttributeLocations();
     this._getUniformLocations();
@@ -35,6 +36,10 @@ class Program {
     return this._matrixLocation;
   }
 
+  get worldLocation() {
+    return this._worldMatrixLocation;
+  }
+  
   get glProgram() {
     return this._glProgram;
   }
@@ -72,6 +77,7 @@ class Program {
   _getUniformLocations() {
     this._colorLocation = this._gl.getUniformLocation(this._glProgram, 'u_color');
     this._matrixLocation = this._gl.getUniformLocation(this._glProgram, 'u_matrix');
+    this._worldMatrixLocation = this._gl.getUniformLocation(this._glProgram, 'u_worldMatrix');
     this._lightDirectionLocation = this._gl.getUniformLocation(this._glProgram, 'u_reverseLightDirection');
   }
 }

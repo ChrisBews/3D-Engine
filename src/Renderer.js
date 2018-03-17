@@ -123,6 +123,8 @@ class Renderer {
         // Adjust the vertex positions via the camera matrix
         const meshMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.matrix);
         this._gl.uniformMatrix4fv(program.matrixLocation, false, meshMatrix);
+        const worldMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.worldMatrix);
+        this._gl.uniformMatrix4fv(program.worldLocation, false, worldMatrix);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, vertices, this._gl.STATIC_DRAW);
 
         // Pass the normal positions
@@ -134,7 +136,7 @@ class Renderer {
         // Set the colour to use
         this._gl.uniform4fv(program.colorLocation, material.shader.color);
         // Set the light direction
-        this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector([0.5, 0.7, -1]));
+        this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector([0.5, 0, 1]));
 
         const primitiveType = this._gl.TRIANGLES;
         this._gl.drawArrays(primitiveType, 0, vertices.length / 3);

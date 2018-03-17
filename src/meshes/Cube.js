@@ -26,6 +26,7 @@ class Cube {
     this._vertices;
     this._normals;
     this._matrix;
+    this._worldMatrix;
     this._updateMatrix();
   }
 
@@ -122,6 +123,10 @@ class Cube {
     return this._matrix;
   }
 
+  get worldMatrix() {
+    return this._worldMatrix;
+  }
+
   get material() {
     return {
       program: this._program,
@@ -131,13 +136,16 @@ class Cube {
 
   _updateMatrix() {
     this._matrix = Matrix3D.createTranslation(this._x, this._y, this._y);
-    if (this._scaleX !== 1 || this._scaleY !== 1 || this._scaleZ !== 1) {
-      this._matrix = Matrix3D.scale(this._matrix, this._scaleX, this._scaleY, this._scaleZ);
-    }
+    // Rotate first, so we can get the world location separately
     if (this._rotationX || this._rotationY || this._rotationZ) {
       this._matrix = Matrix3D.rotateX(this._matrix, this._rotationXRadians);
       this._matrix = Matrix3D.rotateY(this._matrix, this._rotationYRadians);
       this._matrix = Matrix3D.rotateZ(this._matrix, this._rotationZRadians);
+    }
+    this._worldMatrix = this._matrix;
+
+    if (this._scaleX !== 1 || this._scaleY !== 1 || this._scaleZ !== 1) {
+      this._matrix = Matrix3D.scale(this._matrix, this._scaleX, this._scaleY, this._scaleZ);
     }
     // Move origin to the center of the shape
     this._matrix = Matrix3D.translate(this._matrix, -this._width / 2, -this._height / 2, -this._depth / 2);
@@ -231,13 +239,13 @@ class Cube {
       0, 1, 0,
 
       // Right face
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
 
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
 
       // Back face
       0, 0, -1,
@@ -249,13 +257,13 @@ class Cube {
       0, 0, -1,
 
       // Left face
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
 
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
       
       // Bottom face
       0, -1, 0,

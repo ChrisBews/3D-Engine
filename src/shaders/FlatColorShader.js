@@ -11,18 +11,18 @@ class FlatColorShader {
   
       in vec4 a_position;
       in vec3 a_normal;
-      in vec4 a_color;
 
       // Uniforms
       uniform mat4 u_matrix;
+      uniform mat4 u_worldMatrix;
 
-      out vec4 v_color;
       out vec3 v_normal;
       
       void main() {
         gl_Position = u_matrix * a_position;
-        v_color = a_color;
-        v_normal = a_normal;
+
+        // Ignore translation when working with normals
+        v_normal = mat3(u_worldMatrix) * a_normal;
       }
     `;
   }

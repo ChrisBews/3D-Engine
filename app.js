@@ -6,9 +6,9 @@ class App {
     this.camera = undefined;
     this.createEngine();
     this.populateScene();
-    this.camera.x = 0;
+    this.camera.x = -100;
     this.camera.y = 20;
-    this.camera.z = 800;
+    this.camera.z = 1000;
     this.camera.angleX = 0;
     this.camera.lookAt(this.originCube);
   }
@@ -54,8 +54,9 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    this.cube.rotationX += 1;
+    //this.cube.rotationX += 1;
     this.cube.rotationY += 1;
+    this.cube2.rotationX += 1;
     //this.camera.y += 0.5;
     // this.cube2.scale += 0.001;
     // console.log(this.cube.rotationY);
