@@ -17,6 +17,9 @@ class Cube {
     this._rotationYRadians = 0;
     this._rotationZ = 0;
     this._rotationZRadians = 0;
+    this._scaleX = 1;
+    this._scaleY = 1;
+    this._scaleZ = 1;
     this._program;
     this._gl;
     this._shader;
@@ -63,6 +66,30 @@ class Cube {
     this._updateMatrix();
   }
 
+  get scale() { return this._scaleZ; }
+  set scale(value) {
+    this._scaleX = this._scaleY = this._scaleZ = value;
+    this._updateMatrix();
+  }
+
+  get scaleX() { return this._scaleX; }
+  set scaleX(value) {
+    this._scaleX = value;
+    this._updateMatrix();
+  }
+
+  get scaleY() { return this._scaleY; }
+  set scaleY(value) {
+    this._scaleY = value;
+    this._updateMatrix();
+  }
+
+  get scaleZ() { return this._scaleZ; }
+  set scaleZ(value) {
+    this._scaleZ = value;
+    this._updateMatrix();
+  }
+
   set shader(shader) {
     this._shader = shader;
     if (this._gl) this._createProgram();
@@ -90,6 +117,9 @@ class Cube {
 
   _updateMatrix() {
     this._matrix = Matrix3D.createTranslation(this._x, this._y, this._y);
+    if (this._scaleX !== 1 || this._scaleY !== 1 || this._scaleZ !== 1) {
+      this._matrix = Matrix3D.scale(this._matrix, this._scaleX, this._scaleY, this._scaleZ);
+    }
     if (this._rotationX || this._rotationY || this._rotationZ) {
       this._matrix = Matrix3D.rotateX(this._matrix, this._rotationXRadians);
       this._matrix = Matrix3D.rotateY(this._matrix, this._rotationYRadians);

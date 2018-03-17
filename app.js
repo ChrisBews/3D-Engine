@@ -33,6 +33,7 @@ class App {
     this.cube2.x = 200;
     this.cube2.y = 200;
     this.cube2.rotationZ = 20;
+    this.cube2.scale = 1;
 
     /*
     this.cube.position = {x: 0, y: 0, z: 0};
@@ -58,6 +59,7 @@ class App {
   onUpdate(elapsedTime) {
     this.cube.rotationX += 1;
     this.cube.rotationY += 1;
+    // this.cube2.scale += 0.001;
     // console.log(this.cube.rotationY);
   }
 }
