@@ -10,8 +10,11 @@ class App {
     const canvas = document.getElementById('canvas');
     this.renderer = new Renderer(canvas);
     this.scene = new Scene();
-    this.scene.camera = new ProjectionCamera(canvas);
-    //this.scene.camera = new PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 1, 2000);
+    //this.scene.camera = new ProjectionCamera(canvas);
+    const camera = new PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 1, 2000);
+    camera.z = -600;
+    camera.x = 20;
+    this.scene.camera = camera;
     //this.scene2 = new Scene();
     this.renderer.scene = this.scene;
     this.renderer.onUpdate = this.onUpdate.bind(this);
@@ -22,17 +25,17 @@ class App {
 
   populateScene() {
     this.cube = new Cube(200);
-    this.cube.shader = new FlatColorShader([0, 0.5, 0, 1]);
-    this.cube.x = 300;
-    this.cube.y = 300;
-    this.cube.z = -200;
+    this.cube.shader = new FlatColorShader([Math.random(), Math.random(), Math.random(), 1]);
+    this.cube.x = 0;
+    this.cube.y = 0;
+    this.cube.z = 0;
     this.cube.rotationY = 0;
 
     this.cube2 = new Cube(100);
     this.cube2.shader = new FlatColorShader([1, 0, 0, 1]);
     this.cube2.x = 200;
     this.cube2.y = 200;
-    this.cube2.rotationZ = 20;
+    this.cube2.rotationZ = 0;
     this.cube2.scale = 1;
 
     /*
