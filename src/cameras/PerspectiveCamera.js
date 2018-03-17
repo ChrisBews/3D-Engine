@@ -11,8 +11,11 @@ class PerspectiveCamera {
     this._x = 0;
     this._y = 0;
     this._z = 0;
-    this._angle = 80;
-    this._angleInRadians = 0;
+    this._angleY = 80;
+    this._angleXInRadians = 0;
+    this._angleYInRadians = 0;
+    this._angleZInRadians = 0;
+    this._target = [0, 0, 0];
     // Create the projection matrix
     this.fieldOfViewRadians = Helpers.degreesToRadians(fieldOfView);
     this._updateMatrix();
@@ -38,10 +41,27 @@ class PerspectiveCamera {
     this._updateMatrix();
   }
 
-  get angle() { return this._angle; }
-  set angle(value) {
-    this._angle = value;
-    this._angleInRadians = Helpers.degreesToRadians(value);
+  get angleX() { return this._angleX; }
+  set angleX(value) {
+    this._lookingAtMesh = false;
+    this._angleX = value;
+    this._angleXInRadians = Helpers.degreesToRadians(value);
+    this._updateMatrix();
+  }
+
+  get angleY() { return this._angleY; }
+  set angleY(value) {
+    this._lookingAtMesh = false;
+    this._angleY = value;
+    this._angleYInRadians = Helpers.degreesToRadians(value);
+    this._updateMatrix();
+  }
+
+  get angleZ() { return this._angleZ; }
+  set angleZ(value) {
+    this._lookingAtMesh = false;
+    this._angleZ = value;
+    this._angleZInRadians = Helpers.degreesToRadians(value);
     this._updateMatrix();
   }
 
@@ -53,22 +73,28 @@ class PerspectiveCamera {
   }
 
   lookAt(mesh) {
-
+    this._lookingAtMesh = true;
+    this._target = [mesh.center.x, mesh.center.y, mesh.center.z];
+    this._updateMatrix();
   }
 
   _updateMatrix() {
-    console.log('update');
     this._projectionMatrix = Matrix3D.createPerspective(this.fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);
-    this._matrix = Matrix3D.createYRotation(this._angleInRadians);
-    this._matrix = Matrix3D.translate(this._matrix, this._x, this._y, this._z);
-    const cameraPosition = [
-      this._matrix[12],
-      this._matrix[13],
-      this._matrix[14],
-    ];
-    const target = [0, 0, 0];
-    const upDirection = [0, 1, 0];
-    this._matrix = Matrix3D.createLookAt(cameraPosition, target, upDirection);
+    if (!this._lookingAtMesh) {
+      this._matrix = Matrix3D.createXRotation(this._angleXInRadians);
+      this._matrix = Matrix3D.rotateY(this._matrix, this._angleYInRadians);
+      this._matrix = Matrix3D.rotateZ(this._matrix, this._angleZInRadians);
+      this._matrix = Matrix3D.translate(this._matrix, this._x, this._y, this._z);
+    } else {
+      this._matrix = Matrix3D.createTranslation(this._x, this._y, this._z);
+      const cameraPosition = [
+        this._matrix[12],
+        this._matrix[13],
+        this._matrix[14],
+      ];
+      const upDirection = [0, 1, 0];
+      this._matrix = Matrix3D.createLookAt(cameraPosition, this._target, upDirection);
+    }
 
     const viewMatrix = Matrix3D.inverse(this._matrix);
     this._matrix = Matrix3D.multiply(this._projectionMatrix, viewMatrix);

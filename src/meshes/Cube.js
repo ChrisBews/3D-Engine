@@ -90,6 +90,14 @@ class Cube {
     this._updateMatrix();
   }
 
+  get center() {
+    return {
+      x: this._x - (this._width / 2),
+      y: this._y - (this._height / 2),
+      z: this._z - (this._depth / 2),
+    };
+  }
+
   set shader(shader) {
     this._shader = shader;
     if (this._gl) this._createProgram();
