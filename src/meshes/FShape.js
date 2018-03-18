@@ -123,6 +123,14 @@ class FShape {
     return this._matrix;
   }
 
+  get center() {
+    return {
+      x: this._x + (this._width * this._scaleX),
+      y: this._y + (this._height * this._scaleY),
+      z: this._z + (this._depth * this._scaleZ),
+    };
+  }
+
   get material() {
     return {
       program: this._program,

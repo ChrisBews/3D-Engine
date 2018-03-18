@@ -11,11 +11,11 @@ class App {
     this.camera.z = -1000;*/
     //this.camera.angleX = 0;
     this.camera.x = 100;
-    this.camera.y = 200;
-    this.camera.z = 600;
+    this.camera.y = 0;
+    this.camera.z = 300;
     this.camera.angleY = 0;
 
-    //this.camera.lookAt(this.originCube);
+    this.camera.lookAt(this.originCube);
   }
 
   createEngine() {
@@ -72,7 +72,7 @@ class App {
     //this.fShape.rotationY += 1;
     //this.camera.angleY += 2;
     //this.camera.y += 0.5;
-    this.camera.angleY += 1;
+    //this.camera.angleY += 1;
     // this.cube2.scale += 0.001;
   }
 }

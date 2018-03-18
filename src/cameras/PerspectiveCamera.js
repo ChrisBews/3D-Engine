@@ -74,7 +74,7 @@ class PerspectiveCamera {
 
   lookAt(mesh) {
     this._lookingAtMesh = true;
-    this._target = [mesh.x, mesh.y, mesh.z];
+    this._target = [mesh.center.x, mesh.center.y, mesh.center.z];
     this._updateMatrix();
   }
 
