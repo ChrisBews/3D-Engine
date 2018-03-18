@@ -111,32 +111,33 @@ class Renderer {
     const meshes = this._scene.children;
     meshes.forEach(mesh => {
       const vertices = mesh.vertices;
+      const normals = mesh.normals;
       const material = mesh.material;
       const program = material.program;
+
       if (program) {
         this._gl.useProgram(program.glProgram);
 
-        // Pass the vertex positions
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
         this._gl.enableVertexAttribArray(program.positionLocation);
         this._gl.vertexAttribPointer(program.positionLocation, 3, this._gl.FLOAT, false, 0, 0);
-        // Adjust the vertex positions via the camera matrix
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, vertices, this._gl.STATIC_DRAW);
+        
         const meshMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.matrix);
         this._gl.uniformMatrix4fv(program.matrixLocation, false, meshMatrix);
-        const worldMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.worldMatrix);
-        this._gl.uniformMatrix4fv(program.worldLocation, false, worldMatrix);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, vertices, this._gl.STATIC_DRAW);
 
-        // Pass the normal positions
+        // Protect the normals from world scaling by inverting and transposing the mesh's world matrix
+        let inverseWorldMatrix = Matrix3D.inverse(mesh.worldMatrix);
+        let inverseTransposedWorldMatrix = Matrix3D.transpose(inverseWorldMatrix);
+        this._gl.uniformMatrix4fv(program.worldLocation, false, inverseTransposedWorldMatrix);
+ 
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._normalsBuffer);
         this._gl.enableVertexAttribArray(program.normalsLocation);
         this._gl.vertexAttribPointer(program.normalsLocation, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.normals, this._gl.STATIC_DRAW);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, normals, this._gl.STATIC_DRAW);
 
-        // Set the colour to use
         this._gl.uniform4fv(program.colorLocation, material.shader.color);
-        // Set the light direction
-        this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector([0.5, 0, 1]));
+        this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector([0.5, 0.7, 1]));
 
         const primitiveType = this._gl.TRIANGLES;
         this._gl.drawArrays(primitiveType, 0, vertices.length / 3);

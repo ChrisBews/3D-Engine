@@ -6,7 +6,7 @@ class ProjectionCamera {
     this._top = 0;
     this._bottom = canvas.clientHeight;
     this._near = near || 400;
-    this._far = far || -400;
+    this._far = far || -200;
     this._distanceMultiplier = 1;
     this._updateMatrix();
   }

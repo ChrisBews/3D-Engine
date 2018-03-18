@@ -1,13 +1,13 @@
-class Cube {
+class FShape {
 
   constructor(width, height, depth) {
     if (!width) {
       console.error('A cube must have a defined width');
       return;
     }
-    this._width = width;
-    this._height = height || this._width;
-    this._depth = depth || this._width;
+    this._width = width || 100;
+    this._height =  height || (this._width / 2) * 3;
+    this._depth = depth || Math.floor(this._width / 3);
     this._x = 0;
     this._y = 0;
     this._z = 0;
@@ -93,6 +93,14 @@ class Cube {
     this._updateMatrix();
   }
 
+  get center() {
+    return {
+      x: this._x - (this._width / 2),
+      y: this._y - (this._height / 2),
+      z: this._z - (this._depth / 2),
+    };
+  }
+
   set shader(shader) {
     this._shader = shader;
     if (this._gl) this._createProgram();
@@ -155,62 +163,151 @@ class Cube {
     const w = this._width;
     const h = this._height;
     const d = this._depth;
-    // Negative height because +h is upwards, and we want 0,0,0 at top left front corner
-    // Negative depth because -z is into the screen
     this._vertices = new Float32Array([
-      // Front face
+      // Left column front
       0, 0, 0,
-      w, 0, 0,
+      w/3, 0, 0,
       0, h, 0,
 
       0, h, 0,
-      w, 0, 0,
+      w/3, 0, 0,
+      w/3, h, 0,
+
+      // top rung front
+      w/3, h,  0,
+      w/3, (h/5)*4,  0,
+      w, (h/5)*4,  0,
+
+      w, (h/5)*4,  0,
       w, h, 0,
+      w/3, h,  0,
 
-      // Top face
-      w, h, 0,
-      0, h, -d,
-      0, h, 0,
+      // middle rung front
+      w/3, (h/5) * 3, 0,
+      w/3, (h/5) * 2, 0,
+      w, (h/5) * 2, 0,
 
-      0, h, -d,
-      w, h, 0,
-      w, h, -d,
+      w, (h/5)*2, 0,
+      w, (h/5)*3, 0,
+      w/3, (h/5)*3, 0,
 
-      // Right face
-      w, 0, 0,
-      w, h, -d,
-      w, h, 0,
-
-      w, h, -d,
-      w, 0, 0,
-      w, 0, -d,
-
-      // Back face
-      w, 0, -d,
+      // left column back
       0, 0, -d,
       0, h, -d,
+      w/3, 0, -d,
 
       0, h, -d,
+      w/3, h, -d,
+      w/3, 0, -d,
+
+      // top rung back
+      w/3, h, -d,
+      w, (h/5)*4, -d,
+      w/3, (h/5)*4, -d,
+
+      w, (h/5)*4, -d,
+      w/3, h, -d,
       w, h, -d,
-      w, 0, -d,
 
-      // Left face
-      0, 0, 0,
-      0, h, -d,
-      0, 0, -d,
+      // middle rung back
+      w/3, (h/5) * 3, -d,
+      w, (h/5) * 2, -d,
+      w/3, (h/5) * 2, -d,
 
+      w, (h/5)*2, -d,
+      w/3, (h/5)*3, -d,
+      w, (h/5)*3, -d,
+
+      // top
+      0, h, 0,
+      w, h, 0,
+      w, h, -d,
+
+      w, h, -d,
       0, h, -d,
-      0, 0, 0,
       0, h, 0,
 
-      // Bottom face
-      0, 0, 0,
-      w, 0, -d,
-      w, 0, 0,
+      // top rung right
+      w, h, 0,
+      w, (h/5)*4, 0,
+      w, (h/5)*4, -d,
 
-      w, 0, -d,
+      w, (h/5)*4, -d,
+      w, h, -d,
+      w, h, 0,
+
+      // under top rung
+      w/3, (h/5)*4, 0,
+      w, (h/5)*4, -d,
+      w, (h/5)*4, 0,
+
+      w, (h/5)*4, -d,
+      w/3, (h/5)*4, 0,
+      w/3, (h/5)*4, -d,
+
+      // between top rung and middle
+      w/3, (h/5)*4, 0,
+      w/3, (h/5)*3, 0,
+      w/3, (h/5)*3, -d,
+
+      w/3, (h/5)*3, -d,
+      w/3, (h/5)*4, -d,
+      w/3, (h/5)*4, 0,
+
+
+      // top of middle rung
+      w/3, (h/5)*3, 0,
+      w, (h/5)*3, 0,
+      w, (h/5)*3, -d,
+
+      w, (h/5)*3, -d,
+      w/3, (h/5)*3, -d,
+      w/3, (h/5)*3, 0,
+
+      // right of middle rung
+      w, (h/5)*3, 0,
+      w, (h/5)*2, 0,
+      w, (h/5)*2, -d,
+
+      w, (h/5)*2, -d,
+      w, (h/5)*3, -d,
+      w, (h/5)*3, 0,
+
+      // bottom of middle rung.
+      w/3, (h/5)*2, 0,
+      w, (h/5)*2, -d,
+      w, (h/5)*2, 0,
+
+      w, (h/5)*2, -d,
+      w/3, (h/5)*2, 0,
+      w/3, (h/5)*2, -d,
+
+      // right of bottom
+      w/3, (h/5)*2, 0,
+      w/3, 0, 0,
+      w/3, 0, -d,
+
+      w/3, 0, -d,
+      w/3, (h/5)*2, -d,
+      w/3, (h/5)*2, 0,
+
+      // bottom
+      0, 0, 0,
+      w/3, 0, -d,
+      w/3, 0, 0,
+
+      w/3, 0, -d,
       0, 0, 0,
       0, 0, -d,
+
+      // left side
+      0, 0, 0,
+      0, h, 0,
+      0, h, -d,
+      
+      0, h, -d,
+      0, 0, -d,
+      0, 0, 0,
     ]);
 
     return this._vertices;
@@ -218,59 +315,133 @@ class Cube {
 
   _generateNormals() {
     this._normals = new Float32Array([
-      // Front face
+      // left column front
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
       0, 0, 1,
       0, 0, 1,
       0, 0, 1,
 
+      // top rung front
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
       0, 0, 1,
       0, 0, 1,
       0, 0, 1,
 
-      // Top face
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
+      // middle rung front
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
 
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-
-      // Right face
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-
-      // Back face
+      // left column back
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
       0, 0, -1,
       0, 0, -1,
       0, 0, -1,
 
+      // top rung back
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
       0, 0, -1,
       0, 0, -1,
       0, 0, -1,
 
-      // Left face
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
+      // middle rung back
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
+      0, 0, -1,
 
-      -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      
-      // Bottom face
+      // top
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+
+      // top rung right
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+
+      // under top rung
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
       0, -1, 0,
       0, -1, 0,
       0, -1, 0,
 
+      // between top rung and middle
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+
+      // top of middle rung
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+
+      // right of middle rung
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+
+      // bottom of middle rung.
       0, -1, 0,
       0, -1, 0,
       0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+
+      // right of bottom
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+
+      // bottom
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+
+      // left side
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
+      -1, 0, 0,
     ]);
 
     return this._normals;
