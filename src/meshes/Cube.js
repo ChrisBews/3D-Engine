@@ -18,7 +18,7 @@ class Cube extends Mesh {
     const w = this._width;
     const h = this._height;
     const d = this._depth;
-    // Negative height because +h is upwards, and we want 0,0,0 at top left front corner
+    // We want 0,0,0 at bottom of mesh, and in the center
     // Negative depth because -z is into the screen
     const vertices = new Float32Array([
       // Front face

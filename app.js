@@ -6,12 +6,12 @@ class App {
     this.camera = undefined;
     this.createEngine();
     this.populateScene();
-    this.camera.x = 100;
+    this.camera.x = 400;
     this.camera.y = 100;
     this.camera.z = 300;
     //this.camera.angleY = 20;
 
-    this.camera.lookAt(this.cube2);
+    this.camera.lookAt(this.plane);
   }
 
   createEngine() {
@@ -53,13 +53,19 @@ class App {
 
     this.fShape = new FShape(200);
     this.fShape.shader = new FlatColorShader(229, 25, 127);
-
     this.fShape.scale = 0.5;
+
+    this.plane = new Plane(100, 200);
+    this.plane.shader = new FlatColorShader(80, 200, 80);
+    this.plane.x = 300;
+    this.plane.y = 0;
+    this.plane.z = 0;
 
     this.scene.addChild(this.cube);
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.originCube);
     this.scene.addChild(this.fShape);
+    this.scene.addChild(this.plane);
   }
   
   onUpdate(elapsedTime) {
