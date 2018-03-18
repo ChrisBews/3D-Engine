@@ -42,10 +42,10 @@ class App {
     this.cube.z = -1000;
     this.cube.rotationY = 0;
 
-    this.cube2 = new Cube(100);
+    this.cube2 = new Cube(100, 100, 5);
     this.cube2.temp = true;
     this.cube2.shader = new FlatColorShader([1, 0, 0, 1]);
-    this.cube2.x = 100;
+    this.cube2.x = 200;
     this.cube2.y = 0;
     this.cube2.z = 0;
     this.cube2.scale = 1;
@@ -56,6 +56,7 @@ class App {
     this.fShape = new FShape(200);
     this.fShape.shader = new FlatColorShader([0.9, 0.1, 0.5, 1]);
 
+    this.fShape.scale = 0.5;
     //this.scene.addChild(this.cube);
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.originCube);
@@ -66,7 +67,7 @@ class App {
     //this.cube.rotationX += 1;
     //this.cube.rotationY += 1;
     this.cube2.rotationX += 1;
-    this.cube2.y += 1;
+    //this.cube2.y += 1;
     this.fShape.rotationY += 1;
     //this.camera.angleY += 2;
     //this.camera.y += 0.5;
