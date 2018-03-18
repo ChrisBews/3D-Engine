@@ -55,7 +55,7 @@ class App {
     this.fShape.shader = new FlatColorShader(229, 25, 127);
     this.fShape.scale = 0.5;
 
-    this.plane = new Plane(100, 200);
+    this.plane = new Plane(100, 200, 0);
     this.plane.shader = new FlatColorShader(80, 200, 80);
     this.plane.x = 300;
     this.plane.y = 0;
@@ -72,6 +72,7 @@ class App {
     this.cube.rotationY += (elapsedTime * 180);
     this.cube2.rotationX += (elapsedTime * 180);
     this.fShape.rotationY += (elapsedTime * 90);
+    this.plane.rotationY += (elapsedTime * 180);
   }
 }
 
