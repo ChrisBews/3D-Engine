@@ -115,10 +115,6 @@ class Cube {
     return this._matrix;
   }
 
-  get worldMatrix() {
-    return this._worldMatrix;
-  }
-
   get material() {
     return {
       program: this._program,
@@ -146,7 +142,6 @@ class Cube {
       // Translate back. Rotation has now happened in the center
       this._matrix = Matrix3D.translate(this._matrix, -scaledWidth/2, -scaledHeight/2, scaledDepth/2);
     }
-    this._worldMatrix = this._matrix;
 
     if (this._scaleX !== 1 || this._scaleY !== 1 || this._scaleZ !== 1) {
       this._matrix = Matrix3D.scale(this._matrix, this._scaleX, this._scaleY, this._scaleZ);
