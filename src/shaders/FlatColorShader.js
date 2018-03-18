@@ -1,7 +1,7 @@
 class FlatColorShader {
 
-  constructor(color) {
-    this._color = color;
+  constructor(r, g, b) {
+    this._color = Helpers.convertRGBToUnits(r, g, b);
   }
 
   get color() { return this._color; }

@@ -15,6 +15,15 @@ class HelperUtils {
   degreesToRadians(angleInDegrees) {
     return angleInDegrees * Math.PI / 180;
   }
+
+  convertRGBToUnits(r, g, b) {
+    return [
+      r / 255,
+      g / 255,
+      b / 255,
+      1,
+    ];
+  }
 }
 
 const Helpers = new HelperUtils();
