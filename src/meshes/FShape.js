@@ -125,9 +125,9 @@ class FShape {
 
   get center() {
     return {
-      x: this._x + (this._width * this._scaleX),
-      y: this._y + (this._height * this._scaleY),
-      z: this._z + (this._depth * this._scaleZ),
+      x: this._x,
+      y: this._y + ((this._height/2) * this._scaleY),
+      z: this._z,
     };
   }
 

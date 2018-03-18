@@ -6,25 +6,23 @@ class App {
     this.camera = undefined;
     this.createEngine();
     this.populateScene();
-    /*this.camera.x = -100;
-    this.camera.y = 20;
-    this.camera.z = -1000;*/
-    //this.camera.angleX = 0;
     this.camera.x = 100;
-    this.camera.y = 0;
+    this.camera.y = 100;
     this.camera.z = 300;
-    this.camera.angleY = 0;
+    //this.camera.angleY = 20;
 
-    this.camera.lookAt(this.originCube);
+    this.camera.lookAt(this.cube2);
   }
 
   createEngine() {
     const canvas = document.getElementById('canvas');
     this.renderer = new Renderer(canvas);
     this.scene = new Scene();
+
     //this.camera = new ProjectionCamera(canvas);
-    this.camera = new PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 1, 2000);
-    //this.camera.z = 600;
+    //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+
     this.scene.camera = this.camera;
     //this.scene2 = new Scene();
     this.renderer.scene = this.scene;
@@ -65,15 +63,9 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    //this.cube.rotationX += 1;
-    this.cube.rotationY += 1;
-    this.cube2.rotationX += 1;
-    //this.cube2.y += 1;
-    //this.fShape.rotationY += 1;
-    //this.camera.angleY += 2;
-    //this.camera.y += 0.5;
-    //this.camera.angleY += 1;
-    // this.cube2.scale += 0.001;
+    this.cube.rotationY += (elapsedTime * 180);
+    this.cube2.rotationX += (elapsedTime * 180);
+    this.fShape.rotationY += (elapsedTime * 90);
   }
 }
 

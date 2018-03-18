@@ -5,7 +5,7 @@ class Renderer {
     this._gl;
     this._scene;
     this._frameTimer;
-    this._previousRenderTime;
+    this._previousRenderTime = Date.now();
     this._onUpdate;
     this._vao;
     this._resizeFrameRequest;
@@ -82,8 +82,12 @@ class Renderer {
   }
 
   _resizeCanvas() {
+    this._resizeFrameRequest = undefined;
     Helpers.resizeCanvasToDisplay(this._gl.canvas);
-    this._gl.viewport(0, 0, this._gl.canvas.width, this._gl.canvas.height);
+    this._gl.viewport(0, 0, this._gl.canvas.clientWidth, this._gl.canvas.clientHeight);
+    if (this._scene) {
+      this._scene.onWindowResized();
+    }
   }
 
   _update(renderTime) {
@@ -126,7 +130,7 @@ class Renderer {
         const meshMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.matrix);
         this._gl.uniformMatrix4fv(program.matrixLocation, false, meshMatrix);
 
-        // Protect the normals from world scaling by inverting and transposing the mesh's world matrix
+        // Protect the normals from world scaling by inverting and transposing the mesh's matrix
         let inverseWorldMatrix = Matrix3D.inverse(mesh.matrix);
         let inverseTransposedWorldMatrix = Matrix3D.transpose(inverseWorldMatrix);
         this._gl.uniformMatrix4fv(program.worldLocation, false, inverseTransposedWorldMatrix);
