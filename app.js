@@ -11,6 +11,8 @@ class App {
     this.camera.z = 300;
     //this.camera.angleY = 20;
 
+    this.cameraIncrement = -1;
+
     this.camera.lookAt(this.cube2);
   }
 
@@ -71,10 +73,14 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    this.cube.rotationY += (elapsedTime * 180);
+    //this.cube.rotationY += (elapsedTime * 180);
     this.cube2.rotationX += (elapsedTime * 180);
-    this.fShape.rotationY += (elapsedTime * 90);
-    this.plane.rotationY += (elapsedTime * 180);
+    //this.fShape.rotationY += (elapsedTime * 90);
+    //this.plane.rotationY += (elapsedTime * 180);
+    this.camera.z += this.cameraIncrement;
+    if (this.camera.z < -400 || this.camera.z > 400) {
+      this.cameraIncrement *= -1;
+    }
   }
 }
 
