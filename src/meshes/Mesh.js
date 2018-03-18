@@ -23,7 +23,6 @@ class Mesh {
     this._normals = normals;
     this._matrix;
     this._worldMatrix;
-    this._updateMatrix();
     if (vertices) {
       // If vertices were passed into the constructor, this is a custom mesh
       // We therefore need to work out the width/height/depth automatically
@@ -162,12 +161,12 @@ class Mesh {
 
     if (this._rotationX || this._rotationY || this._rotationZ) {
       // Translate so that the origin is at the center of the shape for rotation
-      this._matrix = Matrix3D.translate(this._matrix, scaledWidth/2, scaledHeight/2, -scaledDepth/2);
+      this._matrix = Matrix3D.translate(this._matrix, scaledWidth/2, scaledHeight/2, -scaledDepth / 2);
       this._matrix = Matrix3D.rotateX(this._matrix, this._rotationXRadians);
       this._matrix = Matrix3D.rotateY(this._matrix, this._rotationYRadians);
       this._matrix = Matrix3D.rotateZ(this._matrix, this._rotationZRadians);
       // Translate back. Rotation has now happened in the center
-      this._matrix = Matrix3D.translate(this._matrix, -scaledWidth/2, -scaledHeight/2, scaledDepth/2);
+      this._matrix = Matrix3D.translate(this._matrix, -scaledWidth/2, -scaledHeight/2, scaledDepth / 2);
     }
 
     if (this._scaleX !== 1 || this._scaleY !== 1 || this._scaleZ !== 1) {

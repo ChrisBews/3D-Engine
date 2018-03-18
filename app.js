@@ -7,11 +7,11 @@ class App {
     this.createEngine();
     this.populateScene();
     this.camera.x = 400;
-    this.camera.y = 100;
+    this.camera.y = 300;
     this.camera.z = 300;
     //this.camera.angleY = 20;
 
-    this.camera.lookAt(this.plane);
+    this.camera.lookAt(this.cube2);
   }
 
   createEngine() {
@@ -33,14 +33,14 @@ class App {
   }
 
   populateScene() {
-    this.cube = new Cube(200);
+    this.cube = new Cube(50);
     this.cube.shader = new FlatColorShader(255, 255, 255);
-    this.cube.x = -150;
+    this.cube.x = 0;
     this.cube.y = 0;
-    this.cube.z = -1000;
+    this.cube.z = 0;
     this.cube.rotationY = 0;
 
-    this.cube2 = new Cube(100, 100, 5);
+    this.cube2 = new Cube(100, 100, 3);
     this.cube2.temp = true;
     this.cube2.shader = new FlatColorShader(255, 0, 0);
     this.cube2.x = 200;
@@ -48,16 +48,18 @@ class App {
     this.cube2.z = 0;
     this.cube2.scale = 1;
 
-    this.originCube = new Cube(3, 100, 3);
+    this.originCube = new Cube(3, 200, 3);
     this.originCube.shader = new FlatColorShader(0, 127, 0);
 
-    this.fShape = new FShape(200);
+    this.fShape = new FShape(100);
     this.fShape.shader = new FlatColorShader(229, 25, 127);
-    this.fShape.scale = 0.5;
+    this.fShape.x = 100;
+    this.fShape.z = -100;
+    //this.fShape.scale = 0.5;
 
-    this.plane = new Plane(100, 200, 0);
+    this.plane = new Plane(100, 200, 2);
     this.plane.shader = new FlatColorShader(80, 200, 80);
-    this.plane.x = 300;
+    this.plane.x = 0;
     this.plane.y = 0;
     this.plane.z = 0;
 

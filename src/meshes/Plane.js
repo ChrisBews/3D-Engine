@@ -1,6 +1,6 @@
 class Plane extends Mesh {
 
-  constructor(width, height, divisions) {
+  constructor(width, depth, divisions) {
     super();
 
     if (!width) {
@@ -8,75 +8,59 @@ class Plane extends Mesh {
       return;
     }
     this._width = width;
-    this._height = height || width;
+    this._depth = depth || width;
     this._divisions = divisions || 0;
     this._sections = this._divisions + 1;
     this._generateVerticesAndNormals();
+    this._updateMatrix();
   }
 
   _generateVerticesAndNormals() {
     // Create the surface with as many faces as required
-    const w = this._width;
-    const h = this._height;
     const length = (this._sections * this._sections * 18);
 
     this._vertices = new Float32Array(length);
     this._normals = new Float32Array(length);
 
     let previousX = 0;
-    let previousY = 0;
+    let previousZ = 0;
     for (let i = 0; i < this._sections; i++) {
-      const newY = previousY + (h / this._sections);
+      const newZ = previousZ + (-this._depth / this._sections);
       previousX = 0;
 
       for (let k = 0; k < this._sections; k++) {
-        const newX = previousX + (w / this._sections);
+        const newX = previousX + (this._width / this._sections);
         const counter = (i * (this._sections * 18)) + (k * 18);
-        this._addDivision(counter, previousX, previousY, newX, newY);
+        this._addDivision(counter, previousX, previousZ, newX, newZ);
         previousX = newX;
       }
 
-      previousY = newY;
+      previousZ = newZ;
     }
   }
 
-  _addDivision(index, startX, startY, endX, endY) {
+  _addDivision(index, startX, startZ, endX, endZ) {
     const newVertices = [
-      startX, startY, 0,
-      endX, startY, 0,
-      endX, endY, 0,
+      startX, 0, startZ,
+      endX, 0, startZ,
+      endX, 0, endZ,
 
-      endX, endY, 0,
-      startX, endY, 0,
-      startX, startY, 0,
+      endX, 0, endZ,
+      startX, 0, endZ,
+      startX, 0, startZ,
     ];
 
     const newNormals = [
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
 
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
     ];
 
     this._vertices.set(newVertices, index);
     this._normals.set(newNormals, index);
   }
-
-  _generateNormals() {
-    const normals = new Float32Array([
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-
-      0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-    ]);
-
-    return normals;
-  }
-
 }

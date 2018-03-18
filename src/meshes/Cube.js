@@ -12,6 +12,7 @@ class Cube extends Mesh {
     this._depth = depth || this._width;
     this._vertices = this._generateVertices();
     this._normals = this._generateNormals();
+    this._updateMatrix();
   }
 
   _generateVertices() {

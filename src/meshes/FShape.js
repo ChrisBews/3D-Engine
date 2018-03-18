@@ -12,6 +12,7 @@ class FShape extends Mesh {
     this._depth = depth || Math.floor(this._width / 3);
     this._vertices = this._generateVertices();
     this._normals = this._generateNormals();
+    this._updateMatrix();
   }
 
   _generateVertices() {
