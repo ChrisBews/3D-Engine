@@ -9,11 +9,13 @@ class App {
     this.camera.x = 400;
     this.camera.y = 300;
     this.camera.z = 300;
-    //this.camera.angleY = 20;
+    
+    //this.camera.angleX = -60;
+    //this.camera.angleY = 60;
 
     this.cameraIncrement = -1;
 
-    this.camera.lookAt(this.cube2);
+    this.camera.lookAt(this.fShape);
   }
 
   createEngine() {
@@ -64,6 +66,7 @@ class App {
     this.plane.x = 0;
     this.plane.y = 0;
     this.plane.z = 0;
+    //this.plane.rotationZ = -90;
 
     this.scene.addChild(this.cube);
     this.scene.addChild(this.cube2);
@@ -73,7 +76,7 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    //this.cube.rotationY += (elapsedTime * 180);
+    this.cube.rotationY += (elapsedTime * 120);
     this.cube2.rotationX += (elapsedTime * 180);
     //this.fShape.rotationY += (elapsedTime * 90);
     //this.plane.rotationY += (elapsedTime * 180);
