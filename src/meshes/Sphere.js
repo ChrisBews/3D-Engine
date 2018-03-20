@@ -1,15 +1,15 @@
 class Sphere extends Mesh {
 
-  constructor(radius, bands) {
+  constructor(radius, segments) {
     super();
-    this._latitudeBands = bands || 20;
-    this._longitudeBands = bands || 20;
-    
     if (!radius) {
       console.error('A sphere must have a defined radius');
       return;
     }
+    this._id = `Sphere-${Date.now()}`;
     this._radius = radius;
+    this._latitudeBands = segments || 20;
+    this._longitudeBands = segments || 20;
     this._vertexArray = [];
     this._normalsArray = [];
     this._generateVerticesAndNormals();

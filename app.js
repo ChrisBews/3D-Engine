@@ -10,12 +10,29 @@ class App {
     this.camera.y = 100;
     this.camera.z = 300;
     
-    //this.camera.angleX = -60;
-    //this.camera.angleY = 60;
+    this.camera2.x = -100;
+    this.camera2.y = 200;
+    this.camera2.z = 100;
+    this.camera2.angleX = -40;
+    this.camera2.angleY = -40;
 
     this.cameraIncrement = -1;
-
     this.camera.lookAt(this.sphere);
+
+    this.activeCamera = this.camera;
+    this.toggleCamera();
+  }
+
+  toggleCamera() {
+    setTimeout(() => {
+      if (this.activeCamera === this.camera) {
+        this.activeCamera = this.camera2;
+      } else {
+        this.activeCamera = this.camera;
+      }
+      this.scene.camera = this.activeCamera;
+      this.toggleCamera();
+    }, 5000);
   }
 
   createEngine() {
@@ -24,16 +41,14 @@ class App {
     this.scene = new Scene();
 
     //this.camera = new ProjectionCamera(canvas);
-    //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
 
     this.scene.camera = this.camera;
     //this.scene2 = new Scene();
     this.renderer.scene = this.scene;
+    //this.renderer.scene = this.scene2;
     this.renderer.onUpdate = this.onUpdate.bind(this);
-    /*setTimeout(() => {
-      this.renderer.scene = this.scene2;
-    }, 5000);*/
   }
 
   populateScene() {

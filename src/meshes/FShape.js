@@ -7,6 +7,7 @@ class FShape extends Mesh {
       console.error('A cube must have a defined width');
       return;
     }
+    this._id = `FShape-${Date.now()}`;
     this._width = width || 100;
     this._height =  height || (this._width / 2) * 3;
     this._depth = depth || Math.floor(this._width / 3);

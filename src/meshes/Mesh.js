@@ -1,6 +1,7 @@
 class Mesh {
 
   constructor(vertices, normals) {
+    this._id = `Mesh-${Date.now()}`;
     this._width = 0;
     this._height = 0;
     this._depth = 0;
@@ -45,6 +46,8 @@ class Mesh {
   _calculateDepth() {
 
   }
+
+  get id() { return this._id; }
 
   get x() { return this._x; }
   set x(value) {

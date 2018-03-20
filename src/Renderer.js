@@ -145,6 +145,8 @@ class Renderer {
 
         const primitiveType = this._gl.TRIANGLES;
         this._gl.drawArrays(primitiveType, 0, vertices.length / 3);
+      } else {
+        console.warn(`Mesh ${mesh.id} has no shader assigned, so will not be rendered`);
       }
     });
   }

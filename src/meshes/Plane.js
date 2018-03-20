@@ -7,6 +7,7 @@ class Plane extends Mesh {
       console.error('A plane must have a width');
       return;
     }
+    this._id = `Plane-${Date.now()}`;
     this._width = width;
     this._depth = depth || width;
     this._divisions = divisions || 0;
