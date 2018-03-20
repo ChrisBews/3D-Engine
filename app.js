@@ -70,7 +70,7 @@ class App {
 
     this.sphere = new Sphere(50);
     this.sphere.y = 50;
-    this.sphere.shader = new FlatColorShader(80, 200, 80);
+    this.sphere.shader = new FlatColorShader(80, 40, 250);
 
     this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
@@ -85,8 +85,8 @@ class App {
     this.cube2.rotationX += (elapsedTime * 180);
     //this.fShape.rotationY += (elapsedTime * 90);
     //this.plane.rotationY += (elapsedTime * 180);
-    this.camera.y -= this.cameraIncrement;
-    if (this.camera.y < -100 || this.camera.y > 200) {
+    this.camera.x -= this.cameraIncrement;
+    if (this.camera.x < -300 || this.camera.x > 300) {
       this.cameraIncrement *= -1;
     }
   }
