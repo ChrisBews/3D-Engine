@@ -6,8 +6,8 @@ class App {
     this.camera = undefined;
     this.createEngine();
     this.populateScene();
-    this.camera.x = 400;
-    this.camera.y = 300;
+    this.camera.x = 300;
+    this.camera.y = 100;
     this.camera.z = 300;
     
     //this.camera.angleX = -60;
@@ -15,7 +15,7 @@ class App {
 
     this.cameraIncrement = -1;
 
-    this.camera.lookAt(this.fShape);
+    this.camera.lookAt(this.sphere);
   }
 
   createEngine() {
@@ -39,7 +39,7 @@ class App {
   populateScene() {
     this.cube = new Cube(50);
     this.cube.shader = new FlatColorShader(255, 255, 255);
-    this.cube.x = 0;
+    this.cube.x = 100;
     this.cube.y = 0;
     this.cube.z = 0;
     this.cube.rotationY = 0;
@@ -68,6 +68,11 @@ class App {
     this.plane.z = 0;
     //this.plane.rotationZ = -90;
 
+    this.sphere = new Sphere(50);
+    this.sphere.y = 50;
+    this.sphere.shader = new FlatColorShader(80, 200, 80);
+
+    this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.originCube);
@@ -80,8 +85,8 @@ class App {
     this.cube2.rotationX += (elapsedTime * 180);
     //this.fShape.rotationY += (elapsedTime * 90);
     //this.plane.rotationY += (elapsedTime * 180);
-    this.camera.z += this.cameraIncrement;
-    if (this.camera.z < -400 || this.camera.z > 400) {
+    this.camera.y -= this.cameraIncrement;
+    if (this.camera.y < -100 || this.camera.y > 200) {
       this.cameraIncrement *= -1;
     }
   }
