@@ -6,8 +6,8 @@ class App {
     this.camera = undefined;
     this.createEngine();
     this.populateScene();
-    this.camera.x = 300;
-    this.camera.y = 100;
+    this.camera.x = -100;
+    this.camera.y = 300;
     this.camera.z = 300;
     
     this.camera2.x = -100;
@@ -17,7 +17,7 @@ class App {
     this.camera2.angleY = -40;
 
     this.cameraIncrement = -1;
-    this.camera.lookAt(this.sphere);
+    this.camera.lookAt(this.cylinder);
 
     this.activeCamera = this.camera;
     this.toggleCamera();
@@ -74,33 +74,38 @@ class App {
     this.fShape.shader = new FlatColorShader(229, 25, 127);
     this.fShape.x = 100;
     this.fShape.z = -100;
-    //this.fShape.scale = 0.5;
 
     this.plane = new Plane(100, 200, 2);
     this.plane.shader = new FlatColorShader(80, 200, 80);
     this.plane.x = 0;
     this.plane.y = 0;
     this.plane.z = 0;
-    //this.plane.rotationZ = -90;
 
     this.sphere = new Sphere(50);
     this.sphere.y = 50;
     this.sphere.shader = new FlatColorShader(80, 40, 250);
 
+    this.cylinder = new Cylinder(50, 200);
+    this.cylinder.shader = new FlatColorShader(244, 232, 66);
+    this.cylinder.z = -150;
+  
     this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.originCube);
     this.scene.addChild(this.fShape);
     this.scene.addChild(this.plane);
+    this.scene.addChild(this.cylinder);
   }
   
   onUpdate(elapsedTime) {
     this.cube.rotationY += (elapsedTime * 120);
     this.cube2.rotationX += (elapsedTime * 180);
+    this.cylinder.rotationX += (elapsedTime * 120);
+    this.cylinder.rotationZ += (elapsedTime * 120);
     //this.fShape.rotationY += (elapsedTime * 90);
     //this.plane.rotationY += (elapsedTime * 180);
-    this.camera.x -= this.cameraIncrement;
+    this.camera.x += this.cameraIncrement;
     if (this.camera.x < -300 || this.camera.x > 300) {
       this.cameraIncrement *= -1;
     }
