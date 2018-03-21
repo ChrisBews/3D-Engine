@@ -53,24 +53,29 @@ class Cylinder extends Mesh {
       );
 
       // Draw the middle segments
-      vertexArray.push(
-        vX1, 0, vZ1,
-        vX2, h, vZ2,
-        vX2, 0, vZ2,
+      for (let k = 0; k < this._heightSegments; k++) {
+        const h1 = k * (this._height / this._heightSegments);
+        const h2 = (k+1) * (this._height / this._heightSegments);
 
-        vX2, h, vZ2,
-        vX1, 0, vZ1,
-        vX1, h, vZ1,
-      );
-      normalsArray.push(
-        nX1, 0, nZ1,
-        nX2, 0, nZ2,
-        nX2, 0, nZ2,
+        vertexArray.push(
+          vX1, h1, vZ1,
+          vX2, h2, vZ2,
+          vX2, h1, vZ2,
 
-        nX2, 0, nZ2,
-        nX1, 0, nZ1,
-        nX1, 0, nZ1,
-      );
+          vX2, h2, vZ2,
+          vX1, h1, vZ1,
+          vX1, h2, vZ1,
+        );
+        normalsArray.push(
+          nX1, 0, nZ1,
+          nX2, 0, nZ2,
+          nX2, 0, nZ2,
+
+          nX2, 0, nZ2,
+          nX1, 0, nZ1,
+          nX1, 0, nZ1,
+        );
+      }
 
       // Draw the top triangle
       vertexArray.push(

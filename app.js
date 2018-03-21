@@ -87,6 +87,7 @@ class App {
 
     this.cylinder = new Cylinder(50, 200);
     this.cylinder.shader = new FlatColorShader(244, 232, 66);
+    this.cylinder.x = -100;
     this.cylinder.z = -150;
   
     this.scene.addChild(this.sphere);
