@@ -35,6 +35,7 @@ class FlatColorShader {
       in vec3 v_normal;
 
       uniform vec3 u_reverseLightDirection;
+      uniform vec3 u_lightColor;
       uniform vec4 u_color;
 
       out vec4 outColor;
@@ -51,7 +52,7 @@ class FlatColorShader {
         outColor = u_color;
 
         // Multiply the colour portion (not alpha) by the light
-        outColor.rgb *= light;
+        outColor.rgb *= light * u_lightColor;
       }
     `;
   }

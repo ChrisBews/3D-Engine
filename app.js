@@ -105,7 +105,8 @@ class App {
   }
 
   createLights() {
-    this.directionalLight = new DirectionalLight(0, 0, 1);
+    this.directionalLight = new DirectionalLight(0, 0.2, 0);
+    this.directionalLight.color = [200, 200, 255];
     this.scene.addLight(this.directionalLight);
   }
   

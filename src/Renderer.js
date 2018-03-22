@@ -146,12 +146,15 @@ class Renderer {
         if (this._scene.lights.length) {
           const lightValues = [0, 0, 0];
           const totalLights = this._scene.lights.length;
+          let lightColor = [255, 255, 255];
           this._scene.lights.forEach(light => {
             if (light.isDirectional) {
               const directions = light.direction;
               lightValues[0] += directions[0];
               lightValues[1] += directions[1];
               lightValues[2] += directions[2];
+              lightColor = light.color;
+              //console.log(light.color);
             }
           });
           if (totalLights > 1) {
@@ -161,6 +164,7 @@ class Renderer {
             lightValues[2] = lightValues[2] / totalLights;
           }
           this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector(lightValues));
+          this._gl.uniform3fv(program.lightColorLocation, lightColor);
         }
 
         const primitiveType = this._gl.TRIANGLES;

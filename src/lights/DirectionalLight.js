@@ -51,10 +51,11 @@ class DirectionalLight {
   }
 
   convertColors() {
+    const convertedColor = Helpers.convertRGBToUnits(this._color[0], this._color[1], this._color[2]);
     this._colorUnits = {
-      r: Helpers.convertRGBToUnits(this._color[0]),
-      g: Helpers.convertRGBToUnits(this._color[1]),
-      b: Helpers.convertRGBToUnits(this._color[2]),
+      r: convertedColor[0],
+      g: convertedColor[1],
+      b: convertedColor[2],
     };
   }
 }

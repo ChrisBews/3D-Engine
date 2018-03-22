@@ -32,6 +32,10 @@ class Program {
     return this._lightDirectionLocation;
   }
 
+  get lightColorLocation() {
+    return this._lightColorLocation;
+  }
+
   get matrixLocation() {
     return this._matrixLocation;
   }
@@ -79,5 +83,6 @@ class Program {
     this._matrixLocation = this._gl.getUniformLocation(this._glProgram, 'u_matrix');
     this._worldMatrixLocation = this._gl.getUniformLocation(this._glProgram, 'u_worldMatrix');
     this._lightDirectionLocation = this._gl.getUniformLocation(this._glProgram, 'u_reverseLightDirection');
+    this._lightColorLocation = this._gl.getUniformLocation(this._glProgram, 'u_lightColor');
   }
 }
