@@ -29,7 +29,7 @@ class Scene {
   }
 
   removeChild(mesh) {
-    this.children.filter(child => child !== mesh);
+    this._children = this.children.filter(child => child !== mesh);
   }
 
   addLight(light) {
@@ -37,7 +37,7 @@ class Scene {
   }
 
   removeLight(light) {
-    this._lights.filter(thisLight => thisLight !== light);
+    this._lights = this._lights.filter(thisLight => thisLight !== light);
   }
 
   onWindowResized() {

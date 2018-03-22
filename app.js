@@ -102,12 +102,19 @@ class App {
     this.scene.addChild(this.fShape);
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);
+
+    /*setTimeout(() => {
+      this.scene.removeChild(this.fShape);
+    }, 5000);*/
   }
 
   createLights() {
     this.directionalLight = new DirectionalLight(0, 0.2, 0);
     this.directionalLight.color = [200, 200, 255];
     this.scene.addLight(this.directionalLight);
+    /*setTimeout(() => {
+      this.scene.removeLight(this.directionalLight);
+    }, 5000);*/
   }
   
   onUpdate(elapsedTime) {
