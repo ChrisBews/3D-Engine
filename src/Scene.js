@@ -4,6 +4,7 @@ class Scene {
     this._children = [];
     this._gl;
     this._camera;
+    this._lights = [];
   }
 
   get children() {
@@ -18,6 +19,8 @@ class Scene {
   get camera() { return this._camera; }
   set camera(value) { this._camera = value; }
 
+  get lights() { return this._lights; }
+  
   addChild(mesh) {
     if (!this._children.includes(mesh)) {
       if (this._gl) mesh.glContext = this._gl;
@@ -27,6 +30,14 @@ class Scene {
 
   removeChild(mesh) {
     this.children.filter(child => child !== mesh);
+  }
+
+  addLight(light) {
+    this._lights.push(light);
+  }
+
+  removeLight(light) {
+    this._lights.filter(thisLight => thisLight !== light);
   }
 
   onWindowResized() {
