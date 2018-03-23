@@ -131,7 +131,7 @@ class Renderer {
         this._gl.uniformMatrix4fv(program.matrixLocation, false, meshMatrix);
 
         // Protect the normals from world scaling by inverting and transposing the mesh's matrix
-        let inverseWorldMatrix = Matrix3D.inverse(mesh.matrix);
+        let inverseWorldMatrix = Matrix3D.inverse(mesh.worldMatrix);
         let inverseTransposedWorldMatrix = Matrix3D.transpose(inverseWorldMatrix);
         this._gl.uniformMatrix4fv(program.worldLocation, false, inverseTransposedWorldMatrix);
  

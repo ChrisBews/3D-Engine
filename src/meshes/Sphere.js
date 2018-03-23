@@ -34,7 +34,7 @@ class Sphere extends Mesh {
       },
       vertex: {
         x: xPos * this._radius,
-        y: yPos * this._radius,
+        y: (yPos * this._radius) + this._radius,
         z: zPos * this._radius,
       },
     };

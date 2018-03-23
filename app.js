@@ -12,20 +12,21 @@ class App {
     this.camera.z = 300;
     
     this.camera2.x = 0;
-    this.camera2.y = 100;
+    this.camera2.y = 75;
     this.camera2.z = 200;
     //this.camera2.angleX = -40;
     //this.camera2.angleY = -40;
 
     this.cameraIncrement = -1;
+    this.sphereIncrement = -0.01;
     
     this.lightDirection = 360;
     this.lightIncrement = 1;
 
-    this.camera.lookAt(this.cylinder);
+    this.camera.lookAt(this.sphere);
 
     this.activeCamera = this.camera2;
-    //this.toggleCamera();
+    this.toggleCamera();
   }
 
   toggleCamera() {
@@ -87,7 +88,7 @@ class App {
     this.plane.z = 0;
 
     this.sphere = new Sphere(50);
-    this.sphere.y = 50;
+    this.sphere.y = 0;
     this.sphere.shader = new FlatColorShader(80, 40, 250);
 
     this.cylinder = new Cylinder(50, 200);
@@ -110,7 +111,7 @@ class App {
 
   createLights() {
     this.directionalLight = new DirectionalLight(0, 0.2, 0);
-    this.directionalLight.color = [200, 200, 255];
+    this.directionalLight.color = [255, 255, 255];
     this.scene.addLight(this.directionalLight);
     /*setTimeout(() => {
       this.scene.removeLight(this.directionalLight);
@@ -118,7 +119,7 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    //this.cube.rotationY += (elapsedTime * 120);
+    this.cube.rotationY += (elapsedTime * 120);
     //this.cube2.rotationX += (elapsedTime * 180);
     //this.cylinder.rotationX += (elapsedTime * 120);
     //this.cylinder.rotationZ += (elapsedTime * 120);
@@ -130,9 +131,14 @@ class App {
 
     //this.fShape.rotationY += (elapsedTime * 90);
     //this.plane.rotationY += (elapsedTime * 180);
-    //this.camera.x += this.cameraIncrement;
+    this.camera.x += this.cameraIncrement;
     if (this.camera.x < -300 || this.camera.x > 300) {
-      //this.cameraIncrement *= -1;
+      this.cameraIncrement *= -1;
+    }
+
+    this.sphere.scaleY += this.sphereIncrement;
+    if (this.sphere.scaleY <= 0.5 || this.sphere.scaleY >= 1) {
+      this.sphereIncrement *= -1;
     }
   }
 }
