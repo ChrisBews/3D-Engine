@@ -17,6 +17,16 @@ class App {
     //this.camera2.angleX = -40;
     //this.camera2.angleY = -40;
 
+    Animber.start(
+      this.cube,
+      {rotationX: 180, y: 100},
+      {
+        duration: 5000,
+        easing: Animber.Easing.inOutExpo,
+        alternate: true,
+      },
+    );
+
     this.cameraIncrement = -1;
     this.sphereIncrement = -0.01;
     
@@ -110,7 +120,7 @@ class App {
   }
 
   createLights() {
-    this.directionalLight = new DirectionalLight(0, 0.2, 0);
+    this.directionalLight = new DirectionalLight(0, 0, 0);
     this.directionalLight.color = [255, 255, 255];
     this.scene.addLight(this.directionalLight);
     /*setTimeout(() => {
@@ -119,12 +129,13 @@ class App {
   }
   
   onUpdate(elapsedTime) {
-    this.cube.rotationY += (elapsedTime * 120);
+    //this.cube.rotationY += (elapsedTime * 120);
     //this.cube2.rotationX += (elapsedTime * 180);
     //this.cylinder.rotationX += (elapsedTime * 120);
     //this.cylinder.rotationZ += (elapsedTime * 120);
 
     this.lightDirection -= this.lightIncrement;
+    
     this.directionalLight.directionX = Math.cos(Helpers.degreesToRadians(this.lightDirection));
     //this.directionalLight.directionY = Math.cos(Helpers.degreesToRadians(this.lightDirection));
     this.directionalLight.directionZ = Math.sin(Helpers.degreesToRadians(this.lightDirection));
@@ -136,10 +147,10 @@ class App {
       this.cameraIncrement *= -1;
     }
 
-    this.sphere.scaleY += this.sphereIncrement;
-    if (this.sphere.scaleY <= 0.5 || this.sphere.scaleY >= 1) {
+    /*this.sphere.scale += this.sphereIncrement;
+    if (this.sphere.scale <= 0.5 || this.sphere.scale >= 1) {
       this.sphereIncrement *= -1;
-    }
+    }*/
   }
 }
 
