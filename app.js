@@ -37,9 +37,24 @@ class App {
       },
     );
 
-    OomphMotion.start(
+    /*OomphMotion.start(
       0,
       10,
+      {
+        duration: 1000,
+        easing: OomphMotion.Easing.outQuad,
+        onUpdate: (animation) => {
+          console.log(animation.value);
+        },
+      },
+    );*/
+
+
+    OomphMotion.start(
+      'rgba(255, 255, 255, 0)',
+      //'hsla(0, 0, 100, 1)',
+      //'#FFF',
+      'rgba(0, 0, 0, 0.1)',
       {
         duration: 1000,
         easing: OomphMotion.Easing.outQuad,

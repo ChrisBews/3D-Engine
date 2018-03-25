@@ -4,33 +4,73 @@ class ActiveAnimation {
     this._source = source;
     this._destination = destination;
     this._options = options;
-    this._isNumber = typeof source === 'number' && typeof destination === 'number';
-
+    this._isNumber = this.isValidNumber(source, destination);
+    this._isColor = OomphMotion.Colors.getColorType(source, destination);
     this._startValues = source;
     this._endValues = destination;
     this._currentValues = this._startValues;
-    if (!this._isNumber) {
-      // Properties of an object instead of a raw number
-      this._startValues = {};
-      for (let key in destination) {
-        this._startValues[key] = source[key];
-        this._endValues[key] = destination[key];
-        this._currentValues[key] = this._startValues[key];
-      }
-    }
-
     this._id = Math.random() + Date.now();
     this._endTime = options.duration;
     this._elapsedSinceStart = 0;
     this._complete = false;
     this._totalLoops = 0;
     this._animBackwards = false;
-    console.log('current', this._currentValues);
+    this.processValues();
   }
 
   get id() { return this._id; }
   get complete() { return this._complete; }
   get value() { return this._currentValues; }
+
+  isValidNumber(source, destination) {
+    return typeof source === 'number' && typeof destination === 'number';
+  }
+
+  processValues() {
+    if (!this._isNumber && !this._isColor) {
+      // Properties of an object instead of a raw number or color
+      this._startValues = {};
+      for (let key in this._destination) {
+        const startValue = this._source[key];
+        const endValue = this._destination[key];
+        const valueData = this.prepareStartAndEndValue(startValue, endValue);
+        this._startValues[key] = {
+          value: valueData.start,
+          isColor: valueData.isColor,
+          colorType: valueData.startColorType,
+        };
+        this._endValues[key] = {
+          value: valueData.end,
+          isColor: valueData.isColor,
+          colorType: valueData.endColorType,
+        };
+        this._currentValues[key] = valueData.start;
+      }
+    } else {
+      // Either a raw number or a raw color string
+      const valueData = this.prepareStartAndEndValue(this._startValues, this._endValues);
+      this._startValues = valueData.start;
+      this._endValues = valueData.end;
+    }
+  }
+
+  prepareStartAndEndValue(startValue, endValue) {
+    const startColorType = OomphMotion.Colors.getColorType(startValue);
+    const endColorType = OomphMotion.Colors.getColorType(endValue);
+    const isColor = startColorType && endColorType;
+    if (isColor) {
+      startValue = OomphMotion.Colors.convertToRGBA(startValue, startColorType);
+      endValue = OomphMotion.Colors.convertToRGBA(endValue, endColorType);
+    }
+
+    return {
+      start: startValue,
+      end: endValue,
+      isColor: isColor,
+      startColorType: startColorType,
+      endColorType: endColorType,
+    };
+  }
 
   update(elapsed) {
     this._elapsedSinceStart += elapsed;
@@ -41,6 +81,8 @@ class ActiveAnimation {
     this._easedProgress = OomphMotion.Easing.getEasedPercentageOnCurve(this._options.easing, this._progress);
     if (this._isNumber) {
       this._updateNumberValue();
+    } else if (this._isColor) {
+      this._updateColorValue();
     } else {
       this._updateObjectValues();
     }
@@ -79,12 +121,18 @@ class ActiveAnimation {
   }
 
   _updateNumberValue() {
-    this._currentValues = this._startValues + (this._easedProgress * (this._endValues - this._startValues));
+    this._currentValues = this._startValues.value + (this._easedProgress * (this._endValues.value - this._startValues.value));
+  }
+
+  _updateColorValue() {
+    this._currentValues = OomphMotion.Colors.getColorBetweenRGBA(this._startValues, this._endValues, this._easedProgress);
   }
 
   _updateObjectValues() {
     for (let key in this._startValues) {
-      const newValue = this._startValues[key] + (this._easedProgress * (this._endValues[key] - this._startValues[key]));
+      const newValue = this._startValues.isColor
+        ? OomphMotion.Colors.getColorBetweenRGBA(this._startValues[key].value, this._endValues[key].value, this._easedProgress)
+        : this._startValues[key].value + (this._easedProgress * (this._endValues[key].value - this._startValues[key].value));
       this._source[key] = newValue;
       this._currentValues[key] = newValue;
     }

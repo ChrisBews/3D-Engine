@@ -2,10 +2,11 @@ class OomphMotionCore {
 
   constructor() {
     this.Easing = new Easing();
+    this.Colors = new Colors();
     this.defaultEasing = this.Easing.linear;
-    this._activeAnimations = [];
     this.defaultDuration = 1000;
     this._requestStartTime = 0;
+    this._activeAnimations = [];
   }
 
   /**
@@ -28,12 +29,12 @@ class OomphMotionCore {
   ) {
     const sourceType = typeof source;
     const destType = typeof destination;
-    if (sourceType !== 'object' && sourceType !== 'number') {
-      console.error('Animber: Target is neither an object or a number');
+    if (sourceType !== 'object' && sourceType !== 'number' && !OomphMotion.Colors.getColorType(source)) {
+      console.error('OomphMotion: Source is neither an object of values, a color, or a number');
       return;
     }
-    if (destType !== 'object' && destType !== 'number') {
-      console.error('Animber: Destination is neither an object of values, or a number');
+    if (destType !== 'object' && destType !== 'number' && !OomphMotion.Colors.getColorType(destination)) {
+      console.error('OomphMotion: Destination is neither an object of values, a color, or a number');
       return;
     }
     if (!options.easing) options.easing = this.defaultEasing;
