@@ -17,12 +17,53 @@ class App {
     //this.camera2.angleX = -40;
     //this.camera2.angleY = -40;
 
-    Animber.start(
+    OomphMotion.start(
       this.cube,
-      {rotationX: 180, y: 100},
+      { rotationX: 360, y: 100},
+      {
+        duration: 500,
+        easing: OomphMotion.Easing.outQuart,
+        bounce: true,
+      },
+    );
+
+    OomphMotion.start(
+      this.cylinder,
+      {scaleY: 0.1},
+      {
+        duration: 500,
+        easing: OomphMotion.Easing.outQuad,
+        bounce: true,
+      },
+    );
+
+    OomphMotion.start(
+      0,
+      10,
+      {
+        duration: 1000,
+        easing: OomphMotion.Easing.outQuad,
+        onUpdate: (animation) => {
+          console.log(animation.value);
+        },
+      },
+    );
+
+    /*this.camera.x += this.cameraIncrement;
+    if (this.camera.x < -300 || this.camera.x > 300) {
+      this.cameraIncrement *= -1;
+    }*/
+    this.camera.x = -500;
+
+    //Snowmotion.start(
+
+    //Oomph3D
+    OomphMotion.start(
+      this.camera,
+      {x: 500},
       {
         duration: 5000,
-        easing: Animber.Easing.inOutExpo,
+        easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
       },
     );
@@ -35,8 +76,8 @@ class App {
 
     this.camera.lookAt(this.sphere);
 
-    this.activeCamera = this.camera2;
-    this.toggleCamera();
+    this.activeCamera = this.camera;
+    //this.toggleCamera();
   }
 
   toggleCamera() {
@@ -53,14 +94,14 @@ class App {
 
   createEngine() {
     const canvas = document.getElementById('canvas');
-    this.renderer = new Renderer(canvas);
+    this.renderer = new Oomph3D(canvas);
     this.scene = new Scene();
 
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
 
-    this.scene.camera = this.camera2;
+    this.scene.camera = this.camera;
     //this.scene2 = new Scene();
     this.renderer.scene = this.scene;
     //this.renderer.scene = this.scene2;
@@ -142,10 +183,11 @@ class App {
 
     //this.fShape.rotationY += (elapsedTime * 90);
     //this.plane.rotationY += (elapsedTime * 180);
-    this.camera.x += this.cameraIncrement;
+    
+    /*this.camera.x += this.cameraIncrement;
     if (this.camera.x < -300 || this.camera.x > 300) {
       this.cameraIncrement *= -1;
-    }
+    }*/
 
     /*this.sphere.scale += this.sphereIncrement;
     if (this.sphere.scale <= 0.5 || this.sphere.scale >= 1) {

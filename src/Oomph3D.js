@@ -1,4 +1,4 @@
-class Renderer {
+class Oomph3D {
 
   constructor(canvas) {
     this.canvas = canvas;
