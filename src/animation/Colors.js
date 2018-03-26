@@ -31,15 +31,15 @@ class Colors {
   }
 
   validRGBA(color) {
-    return /^^rgba[(](?:\s*0*(?:\d\d?(?:\.\d+)?(?:\s*%)?|\.\d+\s*%|100(?:\.0*)?\s*%|(?:1\d\d|2[0-4]\d|25[0-5])(?:\.\d+)?)\s*,){3}\s*0*(?:\.\d+|1(?:\.0*)?)\s*[)]$/i.test(color);
+    return /^rgba\(\s*(-?\d+|-?\d*\.\d+(?=%))(%?)\s*,\s*(-?\d+|-?\d*\.\d+(?=%))(\2)\s*,\s*(-?\d+|-?\d*\.\d+(?=%))(\2)\s*,\s*(-?\d+|-?\d*.\d+)\s*\)$/i.test(color);
   }
 
   validHSL(color) {
-    return /^hsl[(]\s*0*(?:[12]?\d{1,2}|3(?:[0-5]\d|60))\s*(?:\s*,\s*0*(?:\d\d?(?:\.\d+)?\s*%|\.\d+\s*%|100(?:\.0*)?\s*%)){2}\s*[)]$/i.test(color);
+    return /^hsl\((\d+(\.\d)*)(turn|rad)*,\s*([\d.]+)%,\s*([\d.]+)%\)$/i.test(color);
   }
 
   validHSLA(color) {
-    return /^hsla[(]\s*0*(?:[12]?\d{1,2}|3(?:[0-5]\d|60))\s*(?:\s*,\s*0*(?:\d\d?(?:\.\d+)?\s*%|\.\d+\s*%|100(?:\.0*)?\s*%)){2}\s*,\s*0*(?:\.\d+|1(?:\.0*)?)\s*[)]$/i.test(color);
+    return /hsla\((\d+(\.\d)*)(turn|rad)*,\s*([\d.]+)%,\s*([\d.]+)%,\s*(\d+(?:\.\d+)?)\)/i.test(color);
   }
 
   expandHex(color) {
@@ -84,22 +84,33 @@ class Colors {
 
   hslToRGBA(color) {
     let newColor = color.replace('hsla(', '');
-    newColor = color.replace('hsl(', '');
-    newColor = color.replace(')');
-    newColor = color.split(',');
-    const h = newColor[0];
-    const s = newColor[1];
-    const l = newColor[2];
-    const a = newColor[3] || 1;
+    newColor = newColor.replace(/%|deg/g, '');
+    newColor = newColor.replace('hsl(', '');
+    newColor = newColor.replace(')');
+    newColor = newColor.split(',');
+    let h = newColor[0];
+    if (h !== 0) {
+      // Check for radians or turns as units
+      if (h.search('rad')) {
+        h = Helpers.radiansToDegrees(parseFloat(h.replace('rad', '')));
+      } else if (h.search('turn')) {
+        h = Math.float(h.replace('turn', '')) * 360;
+      }
+    }
+
+    h = parseFloat(h) / 360;
+    const s = parseFloat(newColor[1]);
+    const l = parseFloat(newColor[2]);
+    const a = newColor[3] ? parseFloat(newColor[3]) : 1;
     let r, g, b;
     if (s === 0) {
-      r = g = b = 1;
+      r = g = b = 0;
     } else {
       const q = (l < 0.5) ? l * (1 + s) : l + s - l * s;
       const p = 2 * l - q;
       r = this.hueToRGB(p, q, h + 1/3) * 255;
       g = this.hueToRGB(p, q, h) * 255;
-      b = this.hueToRGB(p, q, h = 1/3) * 255;
+      b = this.hueToRGB(p, q, h - 1/3) * 255;
     }
 
     return `rgba(${r}, ${g}, ${b}, ${a})`;
@@ -122,10 +133,10 @@ class Colors {
       start[i] = parseFloat(start[i]);
       end[i] = parseFloat(end[i]);
     }
-    const r = start.r + ((end.r - start.r) * percentage);
-    const g = start.g + ((end.g - start.g) * percentage);
-    const b = start.b + ((end.b - start.b) * percentage);
-    const a = start.a + ((end.a - start.a) * percentage);
+    let r = start.r + ((end.r - start.r) * percentage);
+    let g = start.g + ((end.g - start.g) * percentage);
+    let b = start.b + ((end.b - start.b) * percentage);
+    let a = start.a + ((end.a - start.a) * percentage);
 
     return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
@@ -136,11 +147,17 @@ class Colors {
     string = string.replace('rgb(', '');
     string = string.replace(')', '');
     string = string.split(',');
+    let r = string[0];
+    let g = string[1];
+    let b = string[2];
+    if (r.search('%') > -1) r = (r / 100) * 255;
+    if (g.search('%') > -1) g = (g / 100) * 255;
+    if (b.search('%') > -1) b = (b / 100) * 255;
 
     return {
-      r: Math.round(string[0]),
-      g: Math.round(string[1]),
-      b: Math.round(string[2]),
+      r: Math.round(r),
+      g: Math.round(g),
+      b: Math.round(b),
       a: string[3] ? parseFloat(string[3]) : 1,
     };
   }

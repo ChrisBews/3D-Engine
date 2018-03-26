@@ -16,6 +16,8 @@ class ActiveAnimation {
     this._totalLoops = 0;
     this._animBackwards = false;
     this.processValues();
+    console.log('START', this._startValues);
+    console.log('END', this._endValues);
   }
 
   get id() { return this._id; }

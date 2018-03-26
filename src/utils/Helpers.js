@@ -16,6 +16,10 @@ class HelperUtils {
     return angleInDegrees * Math.PI / 180;
   }
 
+  radiansToDegrees(angleInRadians) {
+    return angleInRadians * 180 / Math.PI;
+  }
+
   convertRGBToUnits(r, g, b) {
     return [
       r / 255,

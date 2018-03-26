@@ -50,19 +50,22 @@ class App {
     );*/
 
 
-    OomphMotion.start(
-      'rgba(255, 255, 255, 0)',
-      //'hsla(0, 0, 100, 1)',
-      //'#FFF',
-      'rgba(0, 0, 0, 0.1)',
-      {
-        duration: 1000,
-        easing: OomphMotion.Easing.outQuad,
-        onUpdate: (animation) => {
-          console.log(animation.value);
+    setTimeout(() => {
+      OomphMotion.start(
+        //'rgba(255, 255, 255, 0)',
+        //'hsl(0, 0%, 0%)',
+        'hsl(0.5turn, 0%, 0%)',
+        //'#FFF',
+        'rgba(0, 0, 0, 0.5)',
+        {
+          duration: 1000,
+          easing: OomphMotion.Easing.outQuad,
+          onUpdate: (animation) => {
+            console.log(animation.value);
+          },
         },
-      },
-    );
+      );
+    }, 1000);
 
     /*this.camera.x += this.cameraIncrement;
     if (this.camera.x < -300 || this.camera.x > 300) {
