@@ -91,16 +91,16 @@ class Colors {
     let h = newColor[0];
     if (h !== 0) {
       // Check for radians or turns as units
-      if (h.search('rad')) {
+      if (h.search('rad') > -1) {
         h = Helpers.radiansToDegrees(parseFloat(h.replace('rad', '')));
-      } else if (h.search('turn')) {
-        h = Math.float(h.replace('turn', '')) * 360;
+      } else if (h.search('turn') > -1) {
+        h = parseFloat(h.replace('turn', '')) * 360;
       }
     }
 
     h = parseFloat(h) / 360;
-    const s = parseFloat(newColor[1]);
-    const l = parseFloat(newColor[2]);
+    const s = parseFloat(newColor[1]) / 100;
+    const l = parseFloat(newColor[2]) / 100;
     const a = newColor[3] ? parseFloat(newColor[3]) : 1;
     let r, g, b;
     if (s === 0) {
@@ -138,7 +138,9 @@ class Colors {
     let b = start.b + ((end.b - start.b) * percentage);
     let a = start.a + ((end.a - start.a) * percentage);
 
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
+    return OomphMotion.outputColorsAsArrays
+      ? [r, g, b, a]
+      : `rgba(${r}, ${g}, ${b}, ${a})`;
   }
 
   getColorValuesFromRGBAString(string) {

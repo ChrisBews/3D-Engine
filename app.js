@@ -17,7 +17,9 @@ class App {
     //this.camera2.angleX = -40;
     //this.camera2.angleY = -40;
 
-    OomphMotion.start(
+    OomphMotion.outputColorsAsArrays = true;
+
+    /*OomphMotion.start(
       this.cube,
       { rotationX: 360, y: 100},
       {
@@ -35,7 +37,7 @@ class App {
         easing: OomphMotion.Easing.outQuad,
         bounce: true,
       },
-    );
+    );*/
 
     /*OomphMotion.start(
       0,
@@ -52,16 +54,25 @@ class App {
 
     setTimeout(() => {
       OomphMotion.start(
-        //'rgba(255, 255, 255, 0)',
-        //'hsl(0, 0%, 0%)',
-        'hsl(0.5turn, 0%, 0%)',
+        /*'rgba(255, 255, 255, 0)',
+        'hsl(0, 0%, 0%)',*/
+        /*'hsl(180, 100%, 50%)',
+        'rgba(0, 0, 0, 0.5)',*/
+        {
+          color: 'hsl(180, 100%, 50%)',
+        },
         //'#FFF',
-        'rgba(0, 0, 0, 0.5)',
+        {
+          color: 'rgba(20, 20, 20, 0.5)',
+        },
         {
           duration: 1000,
           easing: OomphMotion.Easing.outQuad,
           onUpdate: (animation) => {
-            console.log(animation.value);
+            console.log(animation.value.color.toString());
+          },
+          onComplete: () => {
+            console.log('Complete');
           },
         },
       );
@@ -76,7 +87,7 @@ class App {
     //Snowmotion.start(
 
     //Oomph3D
-    OomphMotion.start(
+    /*OomphMotion.start(
       this.camera,
       {x: 500},
       {
@@ -84,7 +95,7 @@ class App {
         easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
       },
-    );
+    );*/
 
     this.cameraIncrement = -1;
     this.sphereIncrement = -0.01;

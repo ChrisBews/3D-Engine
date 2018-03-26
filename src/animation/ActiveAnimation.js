@@ -16,8 +16,6 @@ class ActiveAnimation {
     this._totalLoops = 0;
     this._animBackwards = false;
     this.processValues();
-    console.log('START', this._startValues);
-    console.log('END', this._endValues);
   }
 
   get id() { return this._id; }
@@ -132,7 +130,7 @@ class ActiveAnimation {
 
   _updateObjectValues() {
     for (let key in this._startValues) {
-      const newValue = this._startValues.isColor
+      const newValue = this._startValues[key].isColor
         ? OomphMotion.Colors.getColorBetweenRGBA(this._startValues[key].value, this._endValues[key].value, this._easedProgress)
         : this._startValues[key].value + (this._easedProgress * (this._endValues[key].value - this._startValues[key].value));
       this._source[key] = newValue;

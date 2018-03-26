@@ -7,6 +7,12 @@ class OomphMotionCore {
     this.defaultDuration = 1000;
     this._requestStartTime = 0;
     this._activeAnimations = [];
+    this._outputColorsAsArrays = false;
+  }
+
+  get outputColorsAsArrays() { return this._outputColorsAsArrays; }
+  set outputColorsAsArrays(value) {
+    this._outputColorsAsArrays = value;
   }
 
   /**
@@ -75,7 +81,7 @@ class OomphMotionCore {
   }
 
   _onFrame(currentTime) {
-    const elapsed = currentTime - this._requestStartTime;
+    const elapsed = (!this._requestStartTime) ? 0 : currentTime - this._requestStartTime;
     this._requestStartTime = currentTime;
     for (let i = 0; i < this._activeAnimations.length; i++) {
       this._activeAnimations[i].update(elapsed);
