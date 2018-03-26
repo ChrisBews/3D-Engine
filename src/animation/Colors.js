@@ -133,9 +133,9 @@ class Colors {
       start[i] = parseFloat(start[i]);
       end[i] = parseFloat(end[i]);
     }
-    let r = start.r + ((end.r - start.r) * percentage);
-    let g = start.g + ((end.g - start.g) * percentage);
-    let b = start.b + ((end.b - start.b) * percentage);
+    let r = Math.round(start.r + ((end.r - start.r) * percentage));
+    let g = Math.round(start.g + ((end.g - start.g) * percentage));
+    let b = Math.round(start.b + ((end.b - start.b) * percentage));
     let a = start.a + ((end.a - start.a) * percentage);
 
     return OomphMotion.outputColorsAsArrays
