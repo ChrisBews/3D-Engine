@@ -84,6 +84,11 @@ class ActiveAnimation {
       this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
       if (this._animBackwards) this._progress = 1 - this._progress;
     }
+    if (this._progress > 1) {
+      this._progress = 1;
+    } else if (this._progress < 0) {
+      this._progress = 0;
+    }
     this._easedProgress = OomphMotion.Easing.getEasedPercentageOnCurve(this._options.easing, this._progress);
     if (this._isNumber) {
       this._updateNumberValue();

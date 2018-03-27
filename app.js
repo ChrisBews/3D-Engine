@@ -28,7 +28,7 @@ class App {
         duration: 1000,
         easing: OomphMotion.Easing.outQuart,
         bounce: true,
-        steps: 5,
+        steps: 12,
       },
     );
 
