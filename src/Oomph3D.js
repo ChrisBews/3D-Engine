@@ -140,7 +140,7 @@ class Oomph3D {
         this._gl.vertexAttribPointer(program.normalsLocation, 3, this._gl.FLOAT, false, 0, 0);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, normals, this._gl.STATIC_DRAW);
 
-        this._gl.uniform4fv(program.colorLocation, material.shader.color);
+        this._gl.uniform4fv(program.colorLocation, material.shader.colorInUnits);
 
         // Apply lighting
         const lightValues = [0, 0, 0];

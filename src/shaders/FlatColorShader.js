@@ -1,10 +1,17 @@
 class FlatColorShader {
 
-  constructor(r, g, b) {
-    this._color = Helpers.convertRGBToUnits(r, g, b);
+  constructor(color) {
+    this._color = color;
+    this._colorInUnits = Helpers.convertRGBToUnits(color[0], color[1], color[2]);
   }
 
   get color() { return this._color; }
+  set color(value) {
+    this._color = value;
+    this._colorInUnits = Helpers.convertRGBToUnits(value[0], value[1], value[2]);
+  }
+
+  get colorInUnits() { return this._colorInUnits; }
   
   get vertexShader() {
     return `#version 300 es

@@ -35,22 +35,41 @@ class OomphMotionCore {
   ) {
     const sourceType = typeof source;
     const destType = typeof destination;
-    if (sourceType !== 'object' && sourceType !== 'number' && !OomphMotion.Colors.getColorType(source)) {
-      console.error('OomphMotion: Source is neither an object of values, a color, or a number');
+    const sourceIsNumber = sourceType === 'number';
+    const sourceColorType = OomphMotion.Colors.getColorType(source);
+    const sourceIsNumberArray = this._isNumberArray(source);
+    if (sourceType !== 'object' && !sourceIsNumber
+      && !sourceIsNumberArray && !sourceColorType) {
+      console.error('OomphMotion: Start value is neither an object of values, a color, a number, or an array of numbers');
       return;
     }
-    if (destType !== 'object' && destType !== 'number' && !OomphMotion.Colors.getColorType(destination)) {
-      console.error('OomphMotion: Destination is neither an object of values, a color, or a number');
+    const destIsNumber = destType === 'number';
+    const destColorType = OomphMotion.Colors.getColorType(destination);
+    const destIsNumberArray = this._isNumberArray(destination);
+    if (destType !== 'object' && !destIsNumber
+      && !destIsNumberArray && !destColorType) {
+      console.error('OomphMotion: End value is neither an object of values, a color, a number, or an array of numbers');
       return;
     }
+    if (sourceType !== destType || sourceIsNumberArray !== destIsNumberArray) {
+      console.error(`OomphMotion: Start and end values don't match.`);
+      return;
+    }
+
+    const stats = {};
     if (!options.easing) options.easing = this.defaultEasing;
     if (!options.duration) options.duration = this.defaultDuration;
+    if (sourceIsNumber && destIsNumber) stats.isNumber = true;
+    if (sourceColorType) stats.sourceColorType = sourceColorType;
+    if (destColorType) stats.destColorType = destColorType;
+    if (sourceIsNumberArray && destIsNumberArray) stats.isNumberArray = true;
+
     if (!this._activeAnimations.length) {
       // Start the animation loop if no animations are running
       this._requestStartTime = 0;
       this._startAnimFrame();
     }
-    const newAnimation = new ActiveAnimation(source, destination, options);
+    const newAnimation = new ActiveAnimation(source, destination, options, stats);
     this._activeAnimations.push(newAnimation);
 
     return newAnimation;
@@ -78,6 +97,16 @@ class OomphMotionCore {
       cancelAnimationFrame(this._animFrame);
       this._animFrame = undefined;
     }
+  }
+
+  _isNumberArray(value) {
+    const isArray = Array.isArray(value);
+    if (!isArray) return false;
+    for (let i = 0; i < value.length; i++) {
+      if (typeof value[i] !== 'number') return false;
+    }
+    
+    return true;
   }
 
   _onFrame(currentTime) {

@@ -1,11 +1,14 @@
 class ActiveAnimation {
 
-  constructor(source, destination, options) {
+  constructor(source, destination, options, stats) {
     this._source = source;
     this._destination = destination;
     this._options = options;
-    this._isNumber = this.isValidNumber(source, destination);
-    this._isColor = OomphMotion.Colors.getColorType(source, destination);
+    this._isNumber = stats.isNumber;
+    this._isColor = stats.sourceColorType && stats.destColorType;
+    this._isNumberArray = stats.isNumberArray;
+    this._sourceColorType = stats.sourceColorType;
+    this._destColorType = stats.destColorType;
     this._startValues = source;
     this._endValues = destination;
     this._currentValues = this._startValues;
@@ -22,12 +25,8 @@ class ActiveAnimation {
   get complete() { return this._complete; }
   get value() { return this._currentValues; }
 
-  isValidNumber(source, destination) {
-    return typeof source === 'number' && typeof destination === 'number';
-  }
-
   processValues() {
-    if (!this._isNumber && !this._isColor) {
+    if (!this._isNumber && !this._isColor && !this._isNumberArray) {
       // Properties of an object instead of a raw number or color
       this._startValues = {};
       for (let key in this._destination) {
@@ -36,11 +35,13 @@ class ActiveAnimation {
         const valueData = this.prepareStartAndEndValue(startValue, endValue);
         this._startValues[key] = {
           value: valueData.start,
+          isNumberArray: Array.isArray(valueData.start),
           isColor: valueData.isColor,
           colorType: valueData.startColorType,
         };
         this._endValues[key] = {
           value: valueData.end,
+          isNumberArray: Array.isArray(valueData.end),
           isColor: valueData.isColor,
           colorType: valueData.endColorType,
         };
@@ -55,9 +56,7 @@ class ActiveAnimation {
   }
 
   prepareStartAndEndValue(startValue, endValue) {
-    const startColorType = OomphMotion.Colors.getColorType(startValue);
-    const endColorType = OomphMotion.Colors.getColorType(endValue);
-    const isColor = startColorType && endColorType;
+    const isColor = this._sourceColorType && this._destColorType;
     if (isColor) {
       startValue = OomphMotion.Colors.convertToRGBA(startValue, startColorType);
       endValue = OomphMotion.Colors.convertToRGBA(endValue, endColorType);
@@ -67,8 +66,8 @@ class ActiveAnimation {
       start: startValue,
       end: endValue,
       isColor: isColor,
-      startColorType: startColorType,
-      endColorType: endColorType,
+      startColorType: this._sourceColorType,
+      endColorType: this._destColorType,
     };
   }
 
@@ -83,6 +82,8 @@ class ActiveAnimation {
       this._updateNumberValue();
     } else if (this._isColor) {
       this._updateColorValue();
+    } else if (this._isNumberArray) {
+      this._updateNumberArrayValue();
     } else {
       this._updateObjectValues();
     }
@@ -128,11 +129,26 @@ class ActiveAnimation {
     this._currentValues = OomphMotion.Colors.getColorBetweenRGBA(this._startValues, this._endValues, this._easedProgress);
   }
 
+  _updateNumberArrayValue() {
+    this._currentValues = [];
+    for (let i = 0; i < this._endValues.length; i++) {
+      this._currentValues.push(this._startValues[i] + (this._easedProgress * (this._endValues[i] - this._startValues[i])));
+    }
+  }
+
   _updateObjectValues() {
     for (let key in this._startValues) {
-      const newValue = this._startValues[key].isColor
-        ? OomphMotion.Colors.getColorBetweenRGBA(this._startValues[key].value, this._endValues[key].value, this._easedProgress)
-        : this._startValues[key].value + (this._easedProgress * (this._endValues[key].value - this._startValues[key].value));
+      let newValue;
+      if (this._startValues[key].isColor) {
+        newValue = OomphMotion.Colors.getColorBetweenRGBA(this._startValues[key].value, this._endValues[key].value, this._easedProgress);
+      } else if (this._startValues[key].isNumberArray) {
+        newValue = [];
+        for (let i = 0; i < this._endValues[key].value.length; i++) {
+          newValue.push(this._startValues[key].value[i] + (this._easedProgress * (this._endValues[key].value[i] - this._startValues[key].value[i])));
+        }
+      } else {
+        newValue = this._startValues[key].value + (this._easedProgress * (this._endValues[key].value - this._startValues[key].value));
+      }
       this._source[key] = newValue;
       this._currentValues[key] = newValue;
     }
