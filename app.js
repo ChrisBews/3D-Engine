@@ -94,8 +94,6 @@ class App {
 
     this.camera.x = -500;
 
-    //Snowmotion.start(
-
     //Oomph3D
     OomphMotion.start(
       this.camera,
@@ -104,12 +102,13 @@ class App {
         duration: 5000,
         easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
+        steps: 5,
       },
     );
 
     this.camera.lookAt(this.sphere);
 
-    this.toggleCamera();
+    //this.toggleCamera();
   }
 
   toggleCamera() {

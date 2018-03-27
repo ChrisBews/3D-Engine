@@ -25,6 +25,7 @@ class OomphMotionCore {
    * loop: Play the same animation infinitely
    * alternate: Animate back and forth, with the easing method the same in either direction
    * bounce: Animate back and forth, with the easing method reversed on return
+   * steps: Jump between the passed number of steps instead of a smooth progression
    * onUpdate: Called every time the animation is updated. Passes the ActiveAnimation in the callback
    * onComplete: Called when the animation completes
    */
@@ -72,7 +73,7 @@ class OomphMotionCore {
     const newAnimation = new ActiveAnimation(source, destination, options, stats);
     this._activeAnimations.push(newAnimation);
 
-    return newAnimation;
+    return newAnimation.id;
   }
 
   stop(id) {

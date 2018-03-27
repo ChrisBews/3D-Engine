@@ -74,6 +74,11 @@ class ActiveAnimation {
   update(elapsed) {
     this._elapsedSinceStart += elapsed;
     this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
+    if (this._options.steps) {
+      const stepDuration = (this._options.duration / (this._options.steps-1));
+      const currentStep = Math.floor(this._elapsedSinceStart / stepDuration);
+      this._progress = currentStep / (this._options.steps-1);
+    }
     if (this._animBackwards) {
       this._progress = 1 - this._progress;
     }
