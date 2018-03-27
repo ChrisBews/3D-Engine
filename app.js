@@ -21,15 +21,16 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
-    /*OomphMotion.start(
+    OomphMotion.start(
       this.cube,
       { rotationX: 360, y: 100},
       {
-        duration: 500,
+        duration: 1000,
         easing: OomphMotion.Easing.outQuart,
         bounce: true,
+        steps: 5,
       },
-    );*/
+    );
 
     /*OomphMotion.start(
       this.cylinder,
@@ -102,7 +103,6 @@ class App {
         duration: 5000,
         easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
-        steps: 5,
       },
     );
 

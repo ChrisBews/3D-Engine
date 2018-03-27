@@ -73,14 +73,16 @@ class ActiveAnimation {
 
   update(elapsed) {
     this._elapsedSinceStart += elapsed;
-    this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
     if (this._options.steps) {
       const stepDuration = (this._options.duration / (this._options.steps-1));
-      const currentStep = Math.floor(this._elapsedSinceStart / stepDuration);
+      let currentStep = Math.floor(this._elapsedSinceStart / stepDuration);
+      if (this._animBackwards) {
+        currentStep = (this._options.steps-1) - currentStep;
+      }
       this._progress = currentStep / (this._options.steps-1);
-    }
-    if (this._animBackwards) {
-      this._progress = 1 - this._progress;
+    } else {
+      this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
+      if (this._animBackwards) this._progress = 1 - this._progress;
     }
     this._easedProgress = OomphMotion.Easing.getEasedPercentageOnCurve(this._options.easing, this._progress);
     if (this._isNumber) {
@@ -93,7 +95,7 @@ class ActiveAnimation {
       this._updateObjectValues();
     }
     if (this._options.onUpdate) this._options.onUpdate(this);
-    if (this._progress === 1 || (this._progress === 0 && this._animBackwards)) {
+    if ((this._progress === 1 && !this._animBackwards) || (this._progress === 0 && this._animBackwards)) {
       if (this._options.loop) {
         this._totalLoops++;
         this._restart();
