@@ -18,12 +18,39 @@ class ActiveAnimation {
     this._complete = false;
     this._totalLoops = 0;
     this._animBackwards = false;
+    this._paused = false;
+    this._elapsedWhenPaused = 0;
     this.processValues();
   }
 
   get id() { return this._id; }
   get complete() { return this._complete; }
   get value() { return this._currentValues; }
+  get paused() { return this._paused; }
+
+  stop() {
+    this._progress = 0;
+    this._easedProgress = 0;
+    this._elapsedSinceStart = 0;
+    this._animBackwards = false;
+    this.update(0);
+  }
+
+  pause() {
+    if (!this._paused) {
+      this._paused = true;
+      this._elapsedWhenPaused = this._elapsedSinceStart;
+    }
+  }
+
+  resume() {
+    if (this._paused) {
+      this._paused = false;
+      // Resume at the correct progress
+      this._elapsedSinceStart = this._elapsedWhenPaused;
+
+    }
+  }
 
   processValues() {
     if (!this._isNumber && !this._isColor && !this._isNumberArray) {
@@ -73,44 +100,46 @@ class ActiveAnimation {
 
   update(elapsed) {
     this._elapsedSinceStart += elapsed;
-    if (this._options.steps) {
-      const stepDuration = (this._options.duration / (this._options.steps-1));
-      let currentStep = Math.floor(this._elapsedSinceStart / stepDuration);
-      if (this._animBackwards) {
-        currentStep = (this._options.steps-1) - currentStep;
-      }
-      this._progress = currentStep / (this._options.steps-1);
-    } else {
-      this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
-      if (this._animBackwards) this._progress = 1 - this._progress;
-    }
-    if (this._progress > 1) {
-      this._progress = 1;
-    } else if (this._progress < 0) {
-      this._progress = 0;
-    }
-    this._easedProgress = OomphMotion.Easing.getEasedPercentageOnCurve(this._options.easing, this._progress);
-    if (this._isNumber) {
-      this._updateNumberValue();
-    } else if (this._isColor) {
-      this._updateColorValue();
-    } else if (this._isNumberArray) {
-      this._updateNumberArrayValue();
-    } else {
-      this._updateObjectValues();
-    }
-    if (this._options.onUpdate) this._options.onUpdate(this);
-    if ((this._progress === 1 && !this._animBackwards) || (this._progress === 0 && this._animBackwards)) {
-      if (this._options.loop) {
-        this._totalLoops++;
-        this._restart();
-      } else if (this._options.alternate) {
-        this._reverseDirection();
-      } else if (this._options.bounce) {
-        this._reverseEasing();
+    if (!this._paused) {
+      if (this._options.steps) {
+        const stepDuration = (this._options.duration / (this._options.steps-1));
+        let currentStep = Math.floor(this._elapsedSinceStart / stepDuration);
+        if (this._animBackwards) {
+          currentStep = (this._options.steps-1) - currentStep;
+        }
+        this._progress = currentStep / (this._options.steps-1);
       } else {
-        this._complete = true;
-        if (this._options.onComplete) this._options.onComplete();
+        this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
+        if (this._animBackwards) this._progress = 1 - this._progress;
+      }
+      if (this._progress > 1) {
+        this._progress = 1;
+      } else if (this._progress < 0) {
+        this._progress = 0;
+      }
+      this._easedProgress = OomphMotion.Easing.getEasedPercentageOnCurve(this._options.easing, this._progress);
+      if (this._isNumber) {
+        this._updateNumberValue();
+      } else if (this._isColor) {
+        this._updateColorValue();
+      } else if (this._isNumberArray) {
+        this._updateNumberArrayValue();
+      } else {
+        this._updateObjectValues();
+      }
+      if (this._options.onUpdate) this._options.onUpdate(this);
+      if ((this._progress === 1 && !this._animBackwards) || (this._progress === 0 && this._animBackwards)) {
+        if (this._options.loop) {
+          this._totalLoops++;
+          this._restart();
+        } else if (this._options.alternate) {
+          this._reverseDirection();
+        } else if (this._options.bounce) {
+          this._reverseEasing();
+        } else {
+          this._complete = true;
+          if (this._options.onComplete) this._options.onComplete();
+        }
       }
     }
   }

@@ -77,15 +77,31 @@ class OomphMotionCore {
   }
 
   stop(id) {
-
+    let remainingAnimations = [];
+    for (let i = 0; i < this._activeAnimations.length; i++) {
+      if (this._activeAnimations[i].id === id || !id) {
+        this._activeAnimations[i].stop();
+      } else {
+        remainingAnimations.push(this._activeAnimations[i]);
+      }
+    }
+    this._activeAnimations = remainingAnimations;
   }
 
   pause(id) {
-
+    for (let i = 0; i < this._activeAnimations.length; i++) {
+      if (this._activeAnimations[i].id === id || !id) {
+        this._activeAnimations[i].pause();
+      }
+    }
   }
 
   resume(id) {
-
+    for (let i = 0; i < this._activeAnimations.length; i++) {
+      if (this._activeAnimations[i].id === id || !id) {
+        this._activeAnimations[i].resume();
+      }
+    }
   }
 
   _startAnimFrame() {

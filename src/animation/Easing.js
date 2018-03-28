@@ -2,7 +2,7 @@ class Easing {
 
   constructor() {
     // Predefined easing objects
-    this.linear = {x1: 0, t1: 0, x2: 1, y2: 1};
+    this.linear = {x1: 0, t1: 0, x2: 1, t2: 1};
     this.inSine = {x1: 0.47, t1: 0.0, x2: 0.745, t2: 0.715};
     this.outSine = {x1: 0.39, t1: 0.575, x2: 0.565, t2: 1};
     this.inOutSine = {x1: 0.445, t1: 0.05, x2: 0.55, t2: 0.95};

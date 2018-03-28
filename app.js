@@ -21,7 +21,7 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
-    OomphMotion.start(
+    this.cubeAnimId = OomphMotion.start(
       this.cube,
       { rotationX: 360, y: 100},
       {
@@ -31,6 +31,13 @@ class App {
         steps: 12,
       },
     );
+
+    setTimeout(() => {
+      OomphMotion.pause();
+      setTimeout(() => {
+        OomphMotion.resume();
+      }, 5500);
+    }, 5500);
 
     /*OomphMotion.start(
       this.cylinder,
@@ -54,31 +61,12 @@ class App {
       },
     );*/
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       OomphMotion.start(
         this.cylinderShader,
         {
           color: [255, 0, 0],
         },
-        /*'rgba(255, 255, 255, 0)',
-        'hsl(0, 0%, 0%)',*/
-        /*'hsl(180, 100%, 50%)',
-        'rgba(0, 0, 0, 0.5)',*/
-        /*{
-          color: 'hsl(180, 100%, 50%)',
-        },
-        //'#FFF',
-        {
-          color: 'rgba(20, 20, 20, 0.5)',
-        },*/
-        /*[255, 100, 0, 0.5],
-        [0, 0, 0, 1],*/
-        /*{
-          color: [255, 100, 0, 0.5],
-        },
-        {
-          color: [0, 0, 0, 1],
-        },*/
         {
           duration: 2000,
           easing: OomphMotion.Easing.inOutQuad,
@@ -91,7 +79,7 @@ class App {
           },
         },
       );
-    }, 1000);
+    }, 1000);*/
 
     this.camera.x = -500;
 
