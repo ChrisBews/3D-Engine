@@ -18,8 +18,8 @@ class OomphMotionCore {
   /**
    * Start a new animation of properties
    * @param {object} target 
-   * @param {object} properties 
    * @param {object} options The following options can be set:
+   * to: Number, color, array of numbers, or object with values to animate towards
    * duration: Length of the animation in milliseconds
    * easing: Easing curve to use (x1, y1, x2, y2)
    * loop: Play the same animation infinitely
@@ -31,9 +31,62 @@ class OomphMotionCore {
    */
   start(
     source,
-    destination,
     options,
   ) {
+    if (!options.to) {
+      console.error(`OomphMotion: No value for 'to' has been set`);
+      return;
+    }
+    const newAnimation = this._createAnimation(source, options);
+
+    if (newAnimation) {
+      this._activeAnimations.push(newAnimation);
+
+      return newAnimation.id;
+    } else {
+      return;
+    }
+  }
+
+  stop(id) {
+    let remainingAnimations = [];
+    for (let i = 0; i < this._activeAnimations.length; i++) {
+      if (this._activeAnimations[i].id === id || !id) {
+        this._activeAnimations[i].stop();
+      } else {
+        remainingAnimations.push(this._activeAnimations[i]);
+      }
+    }
+    this._activeAnimations = remainingAnimations;
+  }
+
+  timeline(source, animations, options) {
+    const newAnimations = [];
+    for (let i = 0; i < animations.length; i++) {
+      const newAnimation = this._createAnimation(source, animations[i]);
+      newAnimations.push(newAnimation);
+    }
+    this._activeAnimations.push(new Timeline(source, newAnimations, options));
+  }
+
+  pause(id) {
+    for (let i = 0; i < this._activeAnimations.length; i++) {
+      if (this._activeAnimations[i].id === id || !id) {
+        this._activeAnimations[i].pause();
+      }
+    }
+  }
+
+  resume(id) {
+    for (let i = 0; i < this._activeAnimations.length; i++) {
+      if (this._activeAnimations[i].id === id || !id) {
+        this._activeAnimations[i].resume();
+      }
+    }
+  }
+
+  _createAnimation(source, options) {
+    const destination = options.to;
     const sourceType = typeof source;
     const destType = typeof destination;
     const sourceIsNumber = sourceType === 'number';
@@ -70,38 +123,8 @@ class OomphMotionCore {
       this._requestStartTime = 0;
       this._startAnimFrame();
     }
-    const newAnimation = new ActiveAnimation(source, destination, options, stats);
-    this._activeAnimations.push(newAnimation);
 
-    return newAnimation.id;
-  }
-
-  stop(id) {
-    let remainingAnimations = [];
-    for (let i = 0; i < this._activeAnimations.length; i++) {
-      if (this._activeAnimations[i].id === id || !id) {
-        this._activeAnimations[i].stop();
-      } else {
-        remainingAnimations.push(this._activeAnimations[i]);
-      }
-    }
-    this._activeAnimations = remainingAnimations;
-  }
-
-  pause(id) {
-    for (let i = 0; i < this._activeAnimations.length; i++) {
-      if (this._activeAnimations[i].id === id || !id) {
-        this._activeAnimations[i].pause();
-      }
-    }
-  }
-
-  resume(id) {
-    for (let i = 0; i < this._activeAnimations.length; i++) {
-      if (this._activeAnimations[i].id === id || !id) {
-        this._activeAnimations[i].resume();
-      }
-    }
+    return new ActiveAnimation(source, destination, options, stats);
   }
 
   _startAnimFrame() {

@@ -23,8 +23,11 @@ class App {
 
     this.cubeAnimId = OomphMotion.start(
       this.cube,
-      { rotationX: 360, y: 100},
       {
+        to: {
+          rotationX: 360,
+          y: 100,
+        },
         duration: 1000,
         easing: OomphMotion.Easing.outQuart,
         bounce: true,
@@ -83,16 +86,51 @@ class App {
 
     this.camera.x = -500;
 
-    //Oomph3D
-    OomphMotion.start(
-      this.camera,
-      {x: 500},
+    OomphMotion.timeline(
+      this.cube2,
+      [
+        {
+          to: { x: -200 },
+          duration: 1000,
+          easing: OomphMotion.Easing.inQuad,
+        },
+        {
+          to: { z: -200 },
+          duration: 1000,
+          easing: OomphMotion.Easing.outQuad,
+        },
+        {
+          to: { scale: 2 },
+          duration: 1000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+        {
+          to: { rotationX: 180 },
+          duration: 1000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+      ],
       {
+        loop: true,
+        // alternate: true,
+        // bounce: true,
+        // onUpdate,
+        onComplete: () => {
+          console.log('Timeline complete!');
+        },
+      },
+    );
+
+    //Oomph3D
+    /*OomphMotion.start(
+      this.camera,
+      {
+        to: { x: 500},
         duration: 5000,
         easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
       },
-    );
+    );*/
 
     this.camera.lookAt(this.sphere);
 
