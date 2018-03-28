@@ -63,6 +63,7 @@ class OomphMotionCore {
   timeline(source, animations, options) {
     const newAnimations = [];
     for (let i = 0; i < animations.length; i++) {
+      animations[i].loop = false;
       const newAnimation = this._createAnimation(source, animations[i]);
       newAnimations.push(newAnimation);
     }
