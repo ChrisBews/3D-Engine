@@ -29,6 +29,7 @@ class ActiveAnimation {
   get paused() { return this._paused; }
 
   stop() {
+    this._animBackwards = false;
     this.reset();
   }
 
@@ -147,7 +148,6 @@ class ActiveAnimation {
 
   _restart() {
     this._complete = false;
-    this._animBackwards = false;
     this._progress = 0;
     this._easedProgress = 0;
     this._elapsedSinceStart = 0;

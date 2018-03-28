@@ -21,7 +21,7 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
-    /*this.cubeAnimId = OomphMotion.start(
+    this.cubeAnimId = OomphMotion.start(
       this.cube,
       {
         to: {
@@ -40,7 +40,7 @@ class App {
       setTimeout(() => {
         OomphMotion.resume();
       }, 5500);
-    }, 5500);*/
+    }, 5500);
 
     /*OomphMotion.start(
       this.cylinder,
@@ -92,7 +92,7 @@ class App {
         {
           to: { x: -200 },
           duration: 1000,
-          easing: OomphMotion.Easing.inOutQuad,
+          easing: OomphMotion.Easing.inOutExpo,
         },
         {
           to: { z: -200 },
@@ -100,7 +100,10 @@ class App {
           easing: OomphMotion.Easing.inOutQuad,
         },
         {
-          to: { scale: 2 },
+          to: {
+            scale: 2,
+            rotationZ: -45,
+          },
           duration: 1000,
           easing: OomphMotion.Easing.inOutQuad,
         },
@@ -122,7 +125,7 @@ class App {
     );
 
     //Oomph3D
-    /*OomphMotion.start(
+    OomphMotion.start(
       this.camera,
       {
         to: { x: 500},
@@ -130,7 +133,7 @@ class App {
         easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
       },
-    );*/
+    );
 
     this.camera.lookAt(this.sphere);
 
