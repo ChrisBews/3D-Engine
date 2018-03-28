@@ -39,8 +39,28 @@ class Timeline {
     }
   }
 
+  _reset() {
+    for (let i = this._animations.length-1; i >= 0; i--) {
+      this._animations[i].reset();
+    }
+    this._activeAnimation = this._animations[0];
+    this._activeAnimationIndex = 0;
+  }
+
+  _reverseDirection() {
+
+  }
+
   _onTimelineComplete() {
-    this._complete = true;
-    if (this._options.onComplete) this._options.onComplete();
+    if (this._options.loop) {
+      this._reset();
+    } else if (this._options.alternate) {
+      this._reverseDirection();
+    } else if (this._options.bounce) {
+
+    } else if (this._options.onComplete) {
+      this._complete = true;
+      this._options.onComplete();
+    }
   }
 }

@@ -29,11 +29,7 @@ class ActiveAnimation {
   get paused() { return this._paused; }
 
   stop() {
-    this._progress = 0;
-    this._easedProgress = 0;
-    this._elapsedSinceStart = 0;
-    this._animBackwards = false;
-    this.update(0);
+    this.reset();
   }
 
   pause() {
@@ -48,8 +44,13 @@ class ActiveAnimation {
       this._paused = false;
       // Resume at the correct progress
       this._elapsedSinceStart = this._elapsedWhenPaused;
-
     }
+  }
+
+  reset() {
+    //this._currentValues = this._startValues;
+    this._restart();
+    this.update(0);
   }
 
   processValues() {
@@ -145,6 +146,8 @@ class ActiveAnimation {
   }
 
   _restart() {
+    this._complete = false;
+    this._animBackwards = false;
     this._progress = 0;
     this._easedProgress = 0;
     this._elapsedSinceStart = 0;
@@ -178,7 +181,7 @@ class ActiveAnimation {
   }
 
   _updateObjectValues() {
-    for (let key in this._startValues) {
+    for (let key in this._endValues) {
       let newValue;
       if (this._startValues[key].isColor) {
         newValue = OomphMotion.Colors.getColorBetweenRGBA(this._startValues[key].value, this._endValues[key].value, this._easedProgress);
