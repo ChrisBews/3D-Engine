@@ -35,12 +35,12 @@ class App {
       },
     );
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       OomphMotion.pause();
       setTimeout(() => {
         OomphMotion.resume();
       }, 5500);
-    }, 5500);
+    }, 5500);*/
 
     /*OomphMotion.start(
       this.cylinder,
@@ -114,9 +114,9 @@ class App {
         },
       ],
       {
-        loop: true,
+        //loop: true,
         // alternate: true,
-        // bounce: true,
+        alternate: true,
         // onUpdate,
         onComplete: () => {
           console.log('Timeline complete!');

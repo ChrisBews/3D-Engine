@@ -7,6 +7,7 @@ class Timeline {
     this._activeAnimation = animations[0];
     this._activeAnimationIndex = 0;
     this._complete = false;
+    this._reversing = false;
   }
 
   get complete() { return this._complete; }
@@ -25,8 +26,12 @@ class Timeline {
 
   update(elapsed) {
     if (this._activeAnimation.complete) {
-      if (this._activeAnimationIndex < this._animations.length-1) {
+      const totalAnims = this._animations.length;
+      if (!this._reversing && this._activeAnimationIndex < totalAnims - 1) {
         this._activeAnimationIndex++;
+        this._activeAnimation = this._animations[this._activeAnimationIndex];
+      } else if (this._reversing && this._activeAnimationIndex > 0) {
+        this._activeAnimationIndex--;
         this._activeAnimation = this._animations[this._activeAnimationIndex];
       } else {
         this._onTimelineComplete();
@@ -48,7 +53,10 @@ class Timeline {
   }
 
   _reverseDirection() {
-
+    this._reversing = !this._reversing;
+    for (let i = this._animations.length-1; i >= 0; i--) {
+      this._animations[i].reverseDirection();
+    }
   }
 
   _onTimelineComplete() {

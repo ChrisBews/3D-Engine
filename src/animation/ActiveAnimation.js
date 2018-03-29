@@ -49,7 +49,6 @@ class ActiveAnimation {
   }
 
   reset() {
-    //this._currentValues = this._startValues;
     this._restart();
     this.update(0);
   }
@@ -135,7 +134,7 @@ class ActiveAnimation {
           this._totalLoops++;
           this._restart();
         } else if (this._options.alternate) {
-          this._reverseDirection();
+          this.reverseDirection();
         } else if (this._options.bounce) {
           this._reverseEasing();
         } else {
@@ -153,7 +152,7 @@ class ActiveAnimation {
     this._elapsedSinceStart = 0;
   }
 
-  _reverseDirection() {
+  reverseDirection() {
     this._restart();
     const newStartValues = this._endValues;
     this._endValues = this._startValues;
