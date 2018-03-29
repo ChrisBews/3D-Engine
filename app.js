@@ -21,7 +21,7 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
-    this.cubeAnimId = OomphMotion.start(
+    /*this.cubeAnimId = OomphMotion.start(
       this.cube,
       {
         to: {
@@ -33,7 +33,7 @@ class App {
         bounce: true,
         steps: 12,
       },
-    );
+    );*/
 
     /*setTimeout(() => {
       OomphMotion.pause();
@@ -86,18 +86,18 @@ class App {
 
     this.camera.x = -500;
 
-    OomphMotion.timeline(
+    /*OomphMotion.timeline(
       this.cube2,
       [
         {
           to: { x: -200 },
           duration: 1000,
-          easing: OomphMotion.Easing.inOutExpo,
+          easing: OomphMotion.Easing.inQuart,
         },
         {
           to: { z: -200 },
           duration: 1000,
-          easing: OomphMotion.Easing.inOutQuad,
+          easing: OomphMotion.Easing.inQuart,
         },
         {
           to: {
@@ -116,22 +116,51 @@ class App {
       {
         //loop: true,
         // alternate: true,
-        alternate: true,
+        bounce: true,
         // onUpdate,
         onComplete: () => {
           console.log('Timeline complete!');
         },
       },
-    );
+    );*/
 
     //Oomph3D
-    OomphMotion.start(
+    /*OomphMotion.start(
       this.camera,
       {
         to: { x: 500},
         duration: 5000,
         easing: OomphMotion.Easing.inOutQuad,
         alternate: true,
+      },
+    );*/
+
+    OomphMotion.timeline(
+      this.camera,
+      [
+        {
+          to: { x: 500 },
+          duration: 5000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+        {
+          to: { z: -500 },
+          duration: 5000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+        {
+          to: { x: -300 },
+          duration: 5000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+        {
+          to: { z: 300 },
+          duration: 5000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+      ],
+      {
+        loop: true,
       },
     );
 

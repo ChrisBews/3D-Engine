@@ -28,10 +28,14 @@ class Timeline {
     if (this._activeAnimation.complete) {
       const totalAnims = this._animations.length;
       if (!this._reversing && this._activeAnimationIndex < totalAnims - 1) {
+        const previousEndValues = this._animations[this._activeAnimationIndex].endValues;
         this._activeAnimationIndex++;
+        this._updateStartValues(previousEndValues);
         this._activeAnimation = this._animations[this._activeAnimationIndex];
       } else if (this._reversing && this._activeAnimationIndex > 0) {
+        const previousStartValues = this._animations[this._activeAnimationIndex].startValues;
         this._activeAnimationIndex--;
+        this._updateEndValues(previousStartValues);
         this._activeAnimation = this._animations[this._activeAnimationIndex];
       } else {
         this._onTimelineComplete();
@@ -44,10 +48,24 @@ class Timeline {
     }
   }
 
-  _reset() {
-    for (let i = this._animations.length-1; i >= 0; i--) {
-      this._animations[i].reset();
+  _updateStartValues(previousEndValues) {
+    for (let i = this._activeAnimationIndex; i < this._animations.length; i++) {
+      this._animations[i].updateStartValues(previousEndValues);
     }
+  }
+
+  _updateEndValues(previousStartValues) {
+    for (let i = this._activeAnimationIndex; i > 0; i--) {
+      this._animations[i].updateEndValues(previousStartValues);
+    }
+  }
+
+  _restart() {
+    for (let i = this._animations.length-1; i >= 0; i--) {
+      this._animations[i].restart();
+    }
+    const previousEndValues = this._animations[this._activeAnimationIndex].endValues;
+    this._updateStartValues(previousEndValues);
     this._activeAnimation = this._animations[0];
     this._activeAnimationIndex = 0;
   }
@@ -59,13 +77,20 @@ class Timeline {
     }
   }
 
+  _reverseEasing() {
+    this._reversing = !this._reversing;
+    for (let i = this._animations.length - 1; i >= 0; i--) {
+      this._animations[i].reverseEasing();
+    }
+  }
+
   _onTimelineComplete() {
     if (this._options.loop) {
-      this._reset();
+      this._restart();
     } else if (this._options.alternate) {
       this._reverseDirection();
     } else if (this._options.bounce) {
-
+      this._reverseEasing();
     } else if (this._options.onComplete) {
       this._complete = true;
       this._options.onComplete();

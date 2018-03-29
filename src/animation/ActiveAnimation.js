@@ -27,6 +27,8 @@ class ActiveAnimation {
   get complete() { return this._complete; }
   get value() { return this._currentValues; }
   get paused() { return this._paused; }
+  get startValues() { return this._startValues; }
+  get endValues() { return this._endValues; }
 
   stop() {
     this._animBackwards = false;
@@ -49,8 +51,36 @@ class ActiveAnimation {
   }
 
   reset() {
-    this._restart();
+    this.restart();
     this.update(0);
+  }
+
+  updateStartValues(values) {
+    if (!this._isNumber && !this._isColor && !this._isNumberArray) {
+      // Properties of an object instead of a raw number or color
+      for (let key in values) {
+        
+        if (this._startValues[key]) {
+          this._startValues[key] = values[key];
+        }
+      }
+    } else {
+      this._startValues = values;
+    }
+  }
+
+  updateEndValues(values) {
+    if (!this._isNumber && !this._isColor && !this._isNumberArray) {
+      // Properties of an object instead of a raw number or color
+      for (let key in values) {
+        
+        if (this._endValues[key]) {
+          this._endValues[key] = values[key];
+        }
+      }
+    } else {
+      this._endValues = values;
+    }
   }
 
   processValues() {
@@ -132,11 +162,11 @@ class ActiveAnimation {
       if ((this._progress === 1 && !this._animBackwards) || (this._progress === 0 && this._animBackwards)) {
         if (this._options.loop) {
           this._totalLoops++;
-          this._restart();
+          this.restart();
         } else if (this._options.alternate) {
           this.reverseDirection();
         } else if (this._options.bounce) {
-          this._reverseEasing();
+          this.reverseEasing();
         } else {
           this._complete = true;
           if (this._options.onComplete) this._options.onComplete();
@@ -145,7 +175,7 @@ class ActiveAnimation {
     }
   }
 
-  _restart() {
+  restart() {
     this._complete = false;
     this._progress = 0;
     this._easedProgress = 0;
@@ -153,14 +183,14 @@ class ActiveAnimation {
   }
 
   reverseDirection() {
-    this._restart();
+    this.restart();
     const newStartValues = this._endValues;
     this._endValues = this._startValues;
     this._startValues = newStartValues;
   }
 
-  _reverseEasing() {
-    this._restart();
+  reverseEasing() {
+    this.restart();
     this._animBackwards = !this._animBackwards;
   }
 
