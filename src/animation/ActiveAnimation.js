@@ -16,7 +16,9 @@ class ActiveAnimation {
     this._endTime = options.duration;
     this._elapsedSinceStart = 0;
     this._complete = false;
-    this._totalLoops = 0;
+    this._loopCount = 0;
+    this._totalLoops;
+    if (typeof options.loops === 'number') this._totalLoops = options.loops;
     this._animBackwards = false;
     this._paused = false;
     this._elapsedWhenPaused = 0;
@@ -160,9 +162,14 @@ class ActiveAnimation {
       }
       if (this._options.onUpdate) this._options.onUpdate(this);
       if ((this._progress === 1 && !this._animBackwards) || (this._progress === 0 && this._animBackwards)) {
-        if (this._options.loop) {
-          this._totalLoops++;
-          this.restart();
+        if (this._options.loops) {
+          this._loopCount++;
+          if (this._totalLoops && this._loopCount >= this._totalLoops) {
+            this._complete = true;
+            if (this._options.onComplete) this._options.onComplete();
+          } else {
+            this.restart();
+          }
         } else if (this._options.alternate) {
           this.reverseDirection();
         } else if (this._options.bounce) {
@@ -177,6 +184,7 @@ class ActiveAnimation {
 
   restart() {
     this._complete = false;
+    this._loopCount = 0;
     this._progress = 0;
     this._easedProgress = 0;
     this._elapsedSinceStart = 0;

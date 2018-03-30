@@ -22,7 +22,7 @@ class OomphMotionCore {
    * to: Number, color, array of numbers, or object with values to animate towards
    * duration: Length of the animation in milliseconds
    * easing: Easing curve to use (x1, y1, x2, y2)
-   * loop: Play the same animation infinitely
+   * loops: Play the same animation infinitely
    * alternate: Animate back and forth, with the easing method the same in either direction
    * bounce: Animate back and forth, with the easing method reversed on return
    * steps: Jump between the passed number of steps instead of a smooth progression
@@ -63,7 +63,9 @@ class OomphMotionCore {
   timeline(source, animations, options) {
     const newAnimations = [];
     for (let i = 0; i < animations.length; i++) {
-      animations[i].loop = false;
+      animations[i].loops = false;
+      animations[i].alternate = false;
+      animations[i].bounce = false;
       const newAnimation = this._createAnimation(source, animations[i]);
       newAnimations.push(newAnimation);
     }

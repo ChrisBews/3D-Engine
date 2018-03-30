@@ -21,7 +21,7 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
-    /*this.cubeAnimId = OomphMotion.start(
+    this.cubeAnimId = OomphMotion.start(
       this.cube,
       {
         to: {
@@ -30,10 +30,10 @@ class App {
         },
         duration: 1000,
         easing: OomphMotion.Easing.outQuart,
-        bounce: true,
+        loops: 5,
         steps: 12,
       },
-    );*/
+    )
 
     /*setTimeout(() => {
       OomphMotion.pause();
@@ -64,29 +64,38 @@ class App {
       },
     );*/
 
-    /*setTimeout(() => {
-      OomphMotion.start(
-        this.cylinderShader,
+    OomphMotion.timeline(
+      this.cylinderShader,
+      [
         {
-          color: [255, 0, 0],
-        },
-        {
+          to: { color: [255, 0, 0] },
           duration: 2000,
           easing: OomphMotion.Easing.inOutQuad,
-          alternate: true,
-          onUpdate: (animation) => {
-            //console.log(animation.value.color.toString());
-          },
-          onComplete: () => {
-            console.log('Complete');
-          },
         },
-      );
-    }, 1000);*/
+        {
+          to: { color: [0, 255, 0] },
+          duration: 2000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+        {
+          to: { color: [0, 0, 255] },
+          duration: 2000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+        {
+          to: { color: [244, 232, 66] },
+          duration: 2000,
+          easing: OomphMotion.Easing.inOutQuad,
+        },
+      ],
+      {
+        loops: true,
+      },
+    );
 
     this.camera.x = -500;
 
-    /*OomphMotion.timeline(
+    OomphMotion.timeline(
       this.cube2,
       [
         {
@@ -122,7 +131,7 @@ class App {
           console.log('Timeline complete!');
         },
       },
-    );*/
+    );
 
     //Oomph3D
     /*OomphMotion.start(
@@ -135,13 +144,13 @@ class App {
       },
     );*/
 
-    OomphMotion.timeline(
+    /*OomphMotion.timeline(
       this.camera,
       [
         {
           to: { x: 500 },
           duration: 5000,
-          easing: OomphMotion.Easing.inOutQuad,
+          easing: OomphMotion.Easing.inExpo,
         },
         {
           to: { z: -500 },
@@ -160,9 +169,9 @@ class App {
         },
       ],
       {
-        loop: true,
+        bounce: true,
       },
-    );
+    );*/
 
     this.camera.lookAt(this.sphere);
 
@@ -251,9 +260,9 @@ class App {
   }
 
   createLights() {
-    const lightDirection = 90;
-    const lightDirX = Math.cos(Helpers.degreesToRadians(lightDirection));
-    const lightDirZ = Math.sin(Helpers.degreesToRadians(lightDirection));
+    this.lightDirection = 90;
+    const lightDirX = Math.cos(Helpers.degreesToRadians(this.lightDirection));
+    const lightDirZ = Math.sin(Helpers.degreesToRadians(this.lightDirection));
     this.directionalLight = new DirectionalLight(lightDirX, 0, lightDirZ);
     this.directionalLight.color = [255, 255, 255];
     this.scene.addLight(this.directionalLight);
@@ -268,7 +277,7 @@ class App {
     //this.cylinder.rotationX += (elapsedTime * 120);
     //this.cylinder.rotationZ += (elapsedTime * 120);
 
-    //this.lightDirection -= this.lightIncrement;
+    this.lightDirection -= this.lightIncrement;
     
     //this.directionalLight.directionX = Math.cos(Helpers.degreesToRadians(this.lightDirection));
     //this.directionalLight.directionY = Math.cos(Helpers.degreesToRadians(this.lightDirection));
