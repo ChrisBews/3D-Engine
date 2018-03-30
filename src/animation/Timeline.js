@@ -8,6 +8,8 @@ class Timeline {
     this._activeAnimationIndex = 0;
     this._complete = false;
     this._reversing = false;
+    this._loopCount = 0;
+    this._totalLoops = typeof options.loops === 'number' ? options.loops : undefined;
   }
 
   get complete() { return this._complete; }
@@ -85,15 +87,21 @@ class Timeline {
   }
 
   _onTimelineComplete() {
-    if (this._options.loop) {
-      this._restart();
+    if (this._options.loops) {
+      this._loopCount++;
+      if (this._totalLoops && this._loopCount >= this._totalLoops) {
+        this._complete = true;
+        if (this._options.onComplete) this._options.onComplete();
+      } else {
+        this._restart();
+      }
     } else if (this._options.alternate) {
       this._reverseDirection();
     } else if (this._options.bounce) {
       this._reverseEasing();
     } else if (this._options.onComplete) {
       this._complete = true;
-      this._options.onComplete();
+      if (this._options.onComplete) this._options.onComplete();
     }
   }
 }

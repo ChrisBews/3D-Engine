@@ -28,9 +28,10 @@ class App {
           rotationX: 360,
           y: 100,
         },
+        delay: 1000,
         duration: 1000,
         easing: OomphMotion.Easing.outQuart,
-        loops: 5,
+        //loops: 5,
         steps: 12,
       },
     )
@@ -89,7 +90,7 @@ class App {
         },
       ],
       {
-        loops: true,
+        loops: 2,
       },
     );
 

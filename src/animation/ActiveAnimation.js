@@ -15,10 +15,10 @@ class ActiveAnimation {
     this._id = Math.random() + Date.now();
     this._endTime = options.duration;
     this._elapsedSinceStart = 0;
+    this._waitingForDelay = !!this._options.delay;
     this._complete = false;
     this._loopCount = 0;
-    this._totalLoops;
-    if (typeof options.loops === 'number') this._totalLoops = options.loops;
+    this._totalLoops =  (typeof options.loops === 'number') ? options.loops : undefined;
     this._animBackwards = false;
     this._paused = false;
     this._elapsedWhenPaused = 0;
@@ -133,6 +133,13 @@ class ActiveAnimation {
 
   update(elapsed) {
     this._elapsedSinceStart += elapsed;
+    if (this._waitingForDelay) {
+      if (this._options.delay && this._elapsedSinceStart < this._options.delay) {
+        return;
+      }
+      this._elapsedSinceStart -= this._options.delay;
+      this._waitingForDelay = false;
+    }
     if (!this._paused) {
       if (this._options.steps) {
         const stepDuration = (this._options.duration / (this._options.steps-1));
@@ -184,7 +191,6 @@ class ActiveAnimation {
 
   restart() {
     this._complete = false;
-    this._loopCount = 0;
     this._progress = 0;
     this._easedProgress = 0;
     this._elapsedSinceStart = 0;
