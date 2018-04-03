@@ -1,17 +1,15 @@
 class LookAtCamera {
 
   constructor(fieldOfView, canvasWidth, canvasHeight, zNear, zFar) {
+    this._fieldOfViewRadians = Helpers.degreesToRadians(fieldOfView);
     this._aspectRatio;
     this._zNear = zNear || 1;
     this._zFar = zFar || 2000;
-    this._position;
-    this._positionMatrix;
     this._matrix;
     this._x = 0;
     this._y = 0;
     this._z = 0;
     this._target = [0, 0, 0];
-    this._fieldOfViewRadians = Helpers.degreesToRadians(fieldOfView);
     // Calculate the current aspect ratio
     this.resize(canvasWidth, canvasHeight);
     this._updateMatrix();

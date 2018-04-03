@@ -7,14 +7,16 @@ class App {
     this.createEngine();
     this.populateScene();
     this.createLights();
-    this.camera.x = -100;
-    this.camera.y = 300;
-    this.camera.z = 300;
+    //this.camera.x = -500;
+    //this.camera.y = 300;
+    //this.camera.z = 300;
     
-    this.camera2.x = 0;
-    this.camera2.y = 75;
-    this.camera2.z = 200;
+    //this.camera2.x = 0;
+    //this.camera2.y = 75;
+    //this.camera2.z = 200;
 
+    //this.camera.lookAt(this.cube2);
+    this.camera.followMesh(this.cube2, -100, 0, 400);
     this.activeCamera = this.camera;
     
     this.lightIncrement = 1;
@@ -94,7 +96,6 @@ class App {
       },
     );
 
-    this.camera.x = -500;
 
     OomphMotion.timeline(
       this.cube2,
@@ -174,8 +175,6 @@ class App {
       },
     );*/
 
-    this.camera.lookAt(this.sphere);
-
     //this.toggleCamera();
   }
 
@@ -197,8 +196,9 @@ class App {
     this.scene = new Scene();
 
     //this.camera = new ProjectionCamera(canvas);
-    this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    //this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    //this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
 
     this.scene.camera = this.camera;
     //this.scene2 = new Scene();

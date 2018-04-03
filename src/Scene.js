@@ -16,7 +16,10 @@ class Scene {
     this._children.forEach(child => child.glContext = this._gl);
   }
 
-  get camera() { return this._camera; }
+  get camera() {
+    if (this._camera && this._camera.update) this._camera.update();
+    return this._camera;
+  }
   set camera(value) { this._camera = value; }
 
   get lights() { return this._lights; }
