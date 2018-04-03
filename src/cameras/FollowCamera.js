@@ -11,6 +11,9 @@ class FollowCamera {
     this._x = 0;
     this._y = 0;
     this._z = 0;
+    this._distanceX = 0;
+    this._distanceY = 0;
+    this._distanceZ = 400;
     this.resize(canvasWidth, canvasHeight);
   }
 
@@ -25,11 +28,25 @@ class FollowCamera {
   }
 
   update() {
-    if (this._targetMesh) this._updateTarget();
-    this._x = this._target[0] + this._distanceX;
-    this._y = this._target[1] + this._distanceY;
-    this._z = this._target[2] + this._distanceZ;
-    this._updateMatrix();
+    if (this._targetMesh) {
+      this._updateTarget();
+      const s = Helpers.degreesToRadians(this._targetMesh.rotationY);
+      const t = Helpers.degreesToRadians(this._targetMesh.rotationX);
+
+      /*this._x = this._targetMesh.center.x + this._distanceZ * Math.sin(rotationXRadians) * Math.sin(rotationYRadians);
+      this._y = this._targetMesh.center.y + this._distanceZ * Math.sin(rotationXRadians) * Math.sin(rotationYRadians);
+      this._z = this._targetMesh.center.z + this._distanceZ * Math.cos(rotationYRadians);*/
+
+      this._x = this._targetMesh.center.x + this._distanceZ * Math.cos(t) * Math.sin(s);
+      this._y = this._targetMesh.center.y + this._distanceZ * -Math.sin(t);
+      this._z = this._targetMesh.center.z + this._distanceZ * Math.cos(s);
+
+      //console.log(this._y);
+      /*this._x = this._target[0] + this._distanceX;
+      this._y = this._target[1] + this._distanceY;
+      this._z = this._target[2] + this._distanceZ;*/
+      this._updateMatrix();
+    }
   }
 
   _updateTarget() {
