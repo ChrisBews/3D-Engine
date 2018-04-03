@@ -167,7 +167,12 @@ class ActiveAnimation {
       } else {
         this._updateObjectValues();
       }
-      if (this._options.onUpdate) this._options.onUpdate(this);
+      if (this._options.onUpdate) this._options.onUpdate({
+        id: this._id,
+        source: this._source,
+        value: this._currentValues,
+        progress: this._progress,
+      });
       if ((this._progress === 1 && !this._animBackwards) || (this._progress === 0 && this._animBackwards)) {
         if (this._options.loops) {
           this._loopCount++;
