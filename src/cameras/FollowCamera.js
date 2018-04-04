@@ -33,20 +33,10 @@ class FollowCamera {
       const s = Helpers.degreesToRadians(this._targetMesh.rotationY);
       const t = Helpers.degreesToRadians(this._targetMesh.rotationX);
 
-      /*this._x = this._targetMesh.center.x + this._distanceZ * Math.sin(rotationXRadians) * Math.sin(rotationYRadians);
-      this._y = this._targetMesh.center.y + this._distanceZ * Math.sin(rotationXRadians) * Math.sin(rotationYRadians);
-      this._z = this._targetMesh.center.z + this._distanceZ * Math.cos(rotationYRadians);*/
+      this._x = this._targetMesh.center.x + (this._distanceZ * Math.sin(s) * Math.cos(t));
+      this._y = this._targetMesh.center.y + (this._distanceZ * -Math.sin(t));
+      this._z = this._targetMesh.center.z + (this._distanceZ * Math.cos(s) * Math.cos(t));
 
-      this._x = (this._targetMesh.center.x + this._distanceZ) * Math.cos(t) * Math.sin(s);
-      this._y = (this._targetMesh.center.y + this._distanceZ) * -Math.sin(t);
-      this._z = (this._targetMesh.center.z + this._distanceZ) * Math.cos(s) * Math.cos(t);
-      //this._y = -475;
-      //this._z = 0;
-
-      //console.log(this._y);
-      /*this._x = this._target[0] + this._distanceX;
-      this._y = this._target[1] + this._distanceY;
-      this._z = this._target[2] + this._distanceZ;*/
       this._updateMatrix();
     }
   }
@@ -72,10 +62,9 @@ class FollowCamera {
       this._matrix[13],
       this._matrix[14],
     ];
-    //console.log(Matrix3D.normalizeVector(cameraPosition));
-    // this._targetMesh.rotationY
-    // this._targetMesh.rotationX
-    // TODO: We need to re-calculate 'up' from the camera's perspective
+
+    // TODO: We need to re-calculate 'up' from the camera's perspective in relation to the target
+    // not just directly using the rotation of the target shape like this is doing:
     const xAngleInRadians = -Helpers.degreesToRadians(this._targetMesh.rotationX)
 
     const upDirection = [0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians)];
