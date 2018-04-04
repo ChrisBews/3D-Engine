@@ -29,22 +29,24 @@ class App {
         {
           to: {
             //z: -500,
-            rotationY: 180,
-            //rotationX: 90,
+            //y: 200,
+            //rotationY: 180,
+            rotationX: 90,
           },
           duration: 3000,
         },
         {
           to: {
            // z: 0,
-           rotationY: 0,
-           //rotationX: 0,
+           //y: 0,
+           //rotationY: 0,
+           rotationX: -90,
           },
           duration: 3000,
         },
       ],
       {
-        loops: true,
+        alternate: true,
       },
     );
 
@@ -253,7 +255,7 @@ class App {
 
     this.fShape = new FShape(100);
     this.fShape.shader = new FlatColorShader([229, 25, 127]);
-    this.fShape.x = 100;
+    this.fShape.x = 0;
     this.fShape.z = 0;
 
     this.plane = new Plane(100, 200, 2);

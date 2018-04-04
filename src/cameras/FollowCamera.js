@@ -37,9 +37,11 @@ class FollowCamera {
       this._y = this._targetMesh.center.y + this._distanceZ * Math.sin(rotationXRadians) * Math.sin(rotationYRadians);
       this._z = this._targetMesh.center.z + this._distanceZ * Math.cos(rotationYRadians);*/
 
-      this._x = this._targetMesh.center.x + this._distanceZ * Math.cos(t) * Math.sin(s);
-      this._y = this._targetMesh.center.y + this._distanceZ * -Math.sin(t);
-      this._z = this._targetMesh.center.z + this._distanceZ * Math.cos(s);
+      this._x = (this._targetMesh.center.x + this._distanceZ) * Math.cos(t) * Math.sin(s);
+      this._y = (this._targetMesh.center.y + this._distanceZ) * -Math.sin(t);
+      this._z = (this._targetMesh.center.z + this._distanceZ) * Math.cos(s) * Math.cos(t);
+      //this._y = -475;
+      //this._z = 0;
 
       //console.log(this._y);
       /*this._x = this._target[0] + this._distanceX;
@@ -70,7 +72,14 @@ class FollowCamera {
       this._matrix[13],
       this._matrix[14],
     ];
-    const upDirection = [0, 1, 0];
+    //console.log(Matrix3D.normalizeVector(cameraPosition));
+    // this._targetMesh.rotationY
+    // this._targetMesh.rotationX
+    // TODO: We need to re-calculate 'up' from the camera's perspective
+    const xAngleInRadians = -Helpers.degreesToRadians(this._targetMesh.rotationX)
+
+    const upDirection = [0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians)];
+    //console.log(upDirection);
     this._matrix = Matrix3D.createLookAt(cameraPosition, this._target, upDirection);
 
     const viewMatrix = Matrix3D.inverse(this._matrix);
