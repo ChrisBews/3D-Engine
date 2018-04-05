@@ -64,11 +64,22 @@ class FollowCamera {
     ];
 
     // TODO: We need to re-calculate 'up' from the camera's perspective in relation to the target
-    // not just directly using the rotation of the target shape like this is doing:
+    // not just directly using the rotation of the target shape like this is doing
+    // Also should factor in the other rotations, not just X
     const xAngleInRadians = -Helpers.degreesToRadians(this._targetMesh.rotationX)
+    const yAngleInRadians = -Helpers.degreesToRadians(this._targetMesh.rotationY)
 
-    const upDirection = [0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians)];
+    let directionVector = Matrix3D.normalizeVector(Matrix3D.subtractVectors(this._target, cameraPosition));
+    //console.log('direction = ', directionVector);
+    //const upDirection = [0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians)];
+    //const upDirection = [0, -Math.sin(directionVector[1]), -Math.cos(directionVector[2])];
+    
+    let upDirection = [0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians)];//Matrix3D.normalizeVector(Matrix3D.cross(cameraPosition, directionVector));
+    
+    //let upDirection = Matrix3D.normalizeVector(Matrix3D.cross(directionVector, [1, 0, 0]));
+    //upDirection = [upDirection[0], upDirection[1], upDirection[2]];
     //console.log(upDirection);
+    
     this._matrix = Matrix3D.createLookAt(cameraPosition, this._target, upDirection);
 
     const viewMatrix = Matrix3D.inverse(this._matrix);

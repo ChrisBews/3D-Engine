@@ -30,20 +30,12 @@ class App {
           to: {
             //z: -500,
             //y: 200,
-            //rotationY: 180,
+            rotationY: 90,
             rotationX: 90,
           },
           duration: 3000,
-        },
-        {
-          to: {
-           // z: 0,
-           //y: 0,
-           //rotationY: 0,
-           rotationX: -90,
-          },
-          duration: 3000,
-        },
+          easing: OomphMotion.Easing.inOutQuart,
+        }
       ],
       {
         alternate: true,
