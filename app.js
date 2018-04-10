@@ -23,6 +23,8 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
+    this.fShape.rotationX = 0;
+    this.fShape.rotationY = 0;
     OomphMotion.timeline(
       this.fShape,
       [
@@ -30,11 +32,11 @@ class App {
           to: {
             //z: -500,
             //y: 200,
-            rotationY: 90,
-            rotationX: 90,
+            rotationY: 360,
+            rotationX: 360,
           },
-          duration: 3000,
-          easing: OomphMotion.Easing.inOutQuart,
+          duration: 10000,
+          easing: OomphMotion.Easing.linear,
         }
       ],
       {
