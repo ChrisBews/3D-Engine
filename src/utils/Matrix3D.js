@@ -83,6 +83,48 @@ class Matrix3DUtils {
     ];
   }
 
+  rotateOnAxis(angleInRadians, x, y, z) {
+    const c = Math.cos(angleInRadians);
+    const s = Math.sin(angleInRadians);
+    const len = Math.sqrt(x*x + y*y + z*z);
+    if (len !== 1) {
+      let rlen = 1 / len;
+      x *= rlen;
+      y *= rlen;
+      z *= rlen;
+    }
+    let nc = 1 - c;
+    let xy = x * y;
+    let yz = y * z;
+    let zx = z * x;
+    let xs = x * s;
+    let ys = y * s;
+    let zs = z * s;
+
+    const e = [];
+    e[ 0] = x*x*nc +  c;
+    e[ 1] = xy *nc + zs;
+    e[ 2] = zx *nc - ys;
+    e[ 3] = 0;
+
+    e[ 4] = xy *nc - zs;
+    e[ 5] = y*y*nc +  c;
+    e[ 6] = yz *nc + xs;
+    e[ 7] = 0;
+
+    e[ 8] = zx *nc + ys;
+    e[ 9] = yz *nc - xs;
+    e[10] = z*z*nc +  c;
+    e[11] = 0;
+
+    e[12] = 0;
+    e[13] = 0;
+    e[14] = 0;
+    e[15] = 1;
+
+    return e;
+  }
+
   createScale(sx, sy, sz) {
     return [
       sx, 0, 0, 0,

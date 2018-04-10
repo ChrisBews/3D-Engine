@@ -63,8 +63,8 @@ class FollowCamera {
     //this._z = 400;
 
     this._y = this._target[1];
-    this._x = 0;
-this._z = this._distanceZ;
+    this._x = this._target[0];
+this._z = this._target[2] + this._distanceZ;
 
     this._matrix = Matrix3D.createTranslation(this._x, this._y, this._z);
     let cameraPosition = [
@@ -87,16 +87,25 @@ this._z = this._distanceZ;
 
     /// pitch = y, yaw = x
 
-    let rotMatrix = Matrix3D.createYRotation(yAngleInRadians);
-    rotMatrix = Matrix3D.rotateX(rotMatrix, xAngleInRadians);
+    let rotMatrix = Matrix3D.createXRotation(xAngleInRadians);
+
+    //upDirection = Matrix3D.transformVector(rotMatrix, upDirection);
+
+    //rotMatrix = Matrix3D.rotateX(rotMatrix, xAngleInRadians);
+    
+     //upDirection = Matrix3D.normalizeVector(Matrix3D.transformVector(rotMatrix, upDirection));
+    rightDirection = Matrix3D.normalizeVector(Matrix3D.transformVector(rotMatrix, rightDirection));
+
+    rotMatrix = Matrix3D.multiply(rotMatrix, Matrix3D.rotateOnAxis(yAngleInRadians, upDirection[0], upDirection[1], upDirection[2]));
+
 
     directionVector = Matrix3D.transformVector(rotMatrix, directionVector);
 
 
-    upDirection = Matrix3D.transformVector(rotMatrix, upDirection);
+    upDirection = Matrix3D.transformVector(rotMatrix, [0, 1, 0, 0]);
 
     this._x = directionVector[0] + this._target[0];
-    this._y = directionVector[1] - this._target[1];
+    this._y = directionVector[1] + this._target[1];
     this._z = directionVector[2] + this._target[2];
 
     cameraPosition = [
