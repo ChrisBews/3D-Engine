@@ -16,7 +16,7 @@ class App {
     //this.camera2.z = 200;
 
     //this.camera.lookAt(this.cube2);
-    this.camera.followMesh(this.fShape, -400);
+    this.camera.followMesh(this.fShape, 400);
     this.activeCamera = this.camera;
     
     this.lightIncrement = 1;
@@ -41,7 +41,7 @@ class App {
         }
       ],
       {
-        alternate: true,
+        loops: true,
       },
     );
 

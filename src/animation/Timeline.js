@@ -66,7 +66,9 @@ class Timeline {
     for (let i = this._animations.length-1; i >= 0; i--) {
       this._animations[i].restart();
     }
-    const previousEndValues = this._animations[this._activeAnimationIndex].endValues;
+    const previousEndValues = this._animations.length > 1
+      ? this._animations[this._activeAnimationIndex].endValues
+      : this._animations[0].startValues;
     this._updateStartValues(previousEndValues);
     this._activeAnimation = this._animations[0];
     this._activeAnimationIndex = 0;
