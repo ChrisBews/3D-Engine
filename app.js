@@ -16,7 +16,8 @@ class App {
     //this.camera2.z = 200;
 
     //this.camera.lookAt(this.cube2);
-    this.camera.followMesh(this.fShape, 400);
+    //this.camera.followMesh(this.fShape, 400);
+
     this.activeCamera = this.camera;
     
     this.lightIncrement = 1;
@@ -45,7 +46,7 @@ class App {
       },
     );
 
-    /*this.cubeAnimId = OomphMotion.start(
+    this.cubeAnimId = OomphMotion.start(
       this.cube,
       {
         to: {
@@ -55,10 +56,10 @@ class App {
         delay: 1000,
         duration: 1000,
         easing: OomphMotion.Easing.outQuart,
-        //loops: 5,
+        loops: true,
         steps: 12,
       },
-    )*/
+    )
 
     /*setTimeout(() => {
       OomphMotion.pause();
@@ -220,7 +221,8 @@ class App {
     //this.camera = new ProjectionCamera(canvas);
     //this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
+    //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
+    this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
 
     this.scene.camera = this.camera;
     //this.scene2 = new Scene();
