@@ -16,7 +16,7 @@ class App {
     //this.camera2.z = 200;
 
     //this.camera.lookAt(this.cube2);
-    this.camera.followMesh(this.fShape, 0, 0, 400);
+    this.camera.followMesh(this.fShape, -400);
     this.activeCamera = this.camera;
     
     this.lightIncrement = 1;
@@ -32,11 +32,12 @@ class App {
           to: {
             //z: -500,
             //y: 200,
+            x: -200,
             rotationY: 360,
             rotationX: 360,
           },
           duration: 10000,
-          easing: OomphMotion.Easing.linear,
+          easing: OomphMotion.Easing.inOutQuad,
         }
       ],
       {
@@ -249,8 +250,8 @@ class App {
 
     this.fShape = new FShape(100);
     this.fShape.shader = new FlatColorShader([229, 25, 127]);
-    this.fShape.x = 0;
-    this.fShape.z = 0;
+    this.fShape.x = 200;
+    this.fShape.y = 100;
 
     this.plane = new Plane(100, 200, 2);
     this.plane.shader = new FlatColorShader([80, 200, 80]);

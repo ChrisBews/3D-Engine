@@ -8,37 +8,21 @@ class FollowCamera {
     this._matrix = Matrix3D.createIdentity();
     this._target = [0, 0, 0];
     this._targetMesh;
-    this._x = 0;
-    this._y = 0;
-    this._z = 0;
-    this._distanceX = 0;
-    this._distanceY = 0;
-    this._distanceZ = 400;
+    this._distance = 400;
     this.resize(canvasWidth, canvasHeight);
   }
 
   get matrix() { return this._matrix; }
 
-  followMesh(mesh, distanceX, distanceY, distanceZ) {
+  followMesh(mesh, distance) {
     this._targetMesh = mesh;
-    this._distanceX = distanceX;
-    this._distanceY = distanceY;
-    this._distanceZ = distanceZ;
+    this._distance = distance;
     this.update();
   }
 
   update() {
     if (this._targetMesh) {
       this._updateTarget();
-      
-      const s = Helpers.degreesToRadians(this._targetMesh.rotationY);
-      const t = Helpers.degreesToRadians(this._targetMesh.rotationX);
-
-      // This stuff is wrong
-     /* this._x = this._targetMesh.center.x + (this._distanceZ * -Math.sin(s) * Math.cos(t));
-      this._y = this._targetMesh.center.y + (this._distanceZ * -Math.sin(t));
-      this._z = this._targetMesh.center.z + (this._distanceZ * Math.cos(s) * Math.cos(t));*/
-
       this._updateMatrix();
     }
   }
@@ -59,14 +43,12 @@ class FollowCamera {
   _updateMatrix() {
     this._projectionMatrix = Matrix3D.createPerspective(this._fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);
 
-    // Calculate the new camera position
-    //this._z = 400;
+    // New camera position
+    const cameraX = this._target[0];
+    const cameraY = this._target[1];
+    const cameraZ = this._target[2] + this._distance;
 
-    this._y = this._target[1];
-    this._x = this._target[0];
-this._z = this._target[2] + this._distanceZ;
-
-    this._matrix = Matrix3D.createTranslation(this._x, this._y, this._z);
+    this._matrix = Matrix3D.createTranslation(cameraX, cameraY, cameraZ);
     let cameraPosition = [
       this._matrix[12],
       this._matrix[13],
@@ -77,45 +59,26 @@ this._z = this._target[2] + this._distanceZ;
     const yAngleInRadians = Helpers.degreesToRadians(this._targetMesh.rotationY)
 
     // Calculate the x and y rotation from the target and camera position
-    //let directionVector = (Matrix3D.subtractVectors(cameraPosition, this._target));
+    let directionVector = Matrix3D.subtractVectors(cameraPosition, this._target);
+    directionVector[3] = 0;
 
-    let directionVector = (Matrix3D.subtractVectors(cameraPosition, this._target));
-    directionVector[3] = 0;//directionVector[2];
-
-    let upDirection = [0, 1, 0, 0];//[0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians), 0];
+    let upDirection = [0, 1, 0, 0];
     let rightDirection = [1, 0, 0, 0];
 
     /// pitch = y, yaw = x
+    let rotationMatrix = Matrix3D.createXRotation(xAngleInRadians);
+    // upDirection = Matrix3D.normalizeVector(Matrix3D.transformVector(rotMatrix, upDirection));
+    // rightDirection = Matrix3D.normalizeVector(Matrix3D.transformVector(rotMatrix, rightDirection));
 
-    let rotMatrix = Matrix3D.createXRotation(xAngleInRadians);
-
-    //upDirection = Matrix3D.transformVector(rotMatrix, upDirection);
-
-    //rotMatrix = Matrix3D.rotateX(rotMatrix, xAngleInRadians);
-    
-     //upDirection = Matrix3D.normalizeVector(Matrix3D.transformVector(rotMatrix, upDirection));
-    rightDirection = Matrix3D.normalizeVector(Matrix3D.transformVector(rotMatrix, rightDirection));
-
-    rotMatrix = Matrix3D.multiply(rotMatrix, Matrix3D.rotateOnAxis(yAngleInRadians, upDirection[0], upDirection[1], upDirection[2]));
-
-
-    directionVector = Matrix3D.transformVector(rotMatrix, directionVector);
-
-
-    upDirection = Matrix3D.transformVector(rotMatrix, [0, 1, 0, 0]);
-
-    this._x = directionVector[0] + this._target[0];
-    this._y = directionVector[1] + this._target[1];
-    this._z = directionVector[2] + this._target[2];
+    rotationMatrix = Matrix3D.rotateY(rotationMatrix, yAngleInRadians);
+    directionVector = Matrix3D.transformVector(rotationMatrix, directionVector);
+    upDirection = Matrix3D.transformVector(rotationMatrix, [0, 1, 0, 0]);
 
     cameraPosition = [
       directionVector[0] + this._target[0],
       directionVector[1] + this._target[1],
       directionVector[2] + this._target[2],
     ];
-
-
-    //console.log(directionVector);
     // up and yaw
     // right and pitch
 
@@ -127,18 +90,6 @@ this._z = this._target[2] + this._distanceZ;
 */
     let xRotation = xAngleInRadians;
     let yRotation = yAngleInRadians;
-    
-
-    function hamilton(R, P) {
-      /*return [
-        R[0] * P[0] - R[1] * P[1] - R[2] * P[2] - R[3] * P[3],
-        R[0] * P[1] + R[1] * P[0] + R[2] * P[3] - R[3] * P[2],
-        R[0] * P[2] + R[2] * P[0] + R[3] * P[1] - R[1] * P[3],
-        R[0] * P[3] + R[3] * P[0] + R[1] * P[2] - R[2] * P[1],
-      ];*/
-    }
-
-
 
     /*
     function hamilton2(q, r) {
@@ -169,7 +120,6 @@ this._z = this._target[2] + this._distanceZ;
     const H1 = hamilton2(q, p);
     const H2 = hamilton2(H1, invQ);
 
-    
     const p2 = [0, 1, 0, 0];
     const invQ2 = [q2[0], -q2[1], -q2[2], -q2[3]];
 
@@ -177,11 +127,6 @@ this._z = this._target[2] + this._distanceZ;
     const H4 = hamilton2(H3, invQ2);
 
     //const upDirection = [H4[2], H4[1], H4[3]];*/
-
-    //let upDirection = [0, Math.cos(xAngleInRadians), -Math.sin(xAngleInRadians), 0];
-
-    
-    
 
     /// pitch = y, yaw = x
 
