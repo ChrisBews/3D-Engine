@@ -4,27 +4,39 @@ class FreeCamera extends PerspectiveCamera {
     super(fieldOfView, canvasWidth, canvasHeight, zNear, zFar);
     this._MAX_SPEED = 7;
     this._START_SPEED = 4;
+    this._HORIZONTAL_DEADZONE_START = 0;
+    this._HORIZONTAL_DEADZONE_END = 0;
+    this._VERTICAL_DEADZONE = 100;
+    this._MAX_ROTATION_PER_SECOND = 75;
     this._keyDown = false;
     this._speedPerSecond = this._START_SPEED;
     this._pressedKeys = [];
     this._keyDownTime;
     this._previousUpdateTime = 0;
+    this._xRotationStrength = 0;
+    this._yRotationStrength = 0;
     this._onKeyDown = this._onKeyDown.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
     this._onMouseMove = this._onMouseMove.bind(this);
+    this._onWindowResized = this._onWindowResized.bind(this);
     this.enableControls();
+    this._updateDeadzones();
   }
 
   enableControls() {
     document.addEventListener('keydown', this._onKeyDown);
     document.addEventListener('keyup', this._onKeyUp);
     document.addEventListener('mousemove', this._onMouseMove);
+    window.addEventListener('resize', this._onWindowResized);
+    this._startKeyFrameTimer();
   }
 
   disableControls() {
     document.removeEventListener('keydown', this._onKeyDown);
     document.removeEventListener('keyup', this._onKeyUp);
     document.removeEventListener('mousemove', this._onMouseMove);
+    window.removeEventListener('resize', this._onWindowResized);
+    this._clearKeyFrameTimer();
   }
 
   _startKeyFrameTimer() {
@@ -39,6 +51,13 @@ class FreeCamera extends PerspectiveCamera {
       cancelAnimationFrame(this._keyFrameTimer);
       this._keyFrameTimer = undefined;
     }
+  }
+
+  _updateDeadzones() {
+    this._HORIZONTAL_DEADZONE_START = (window.innerWidth / 2) - Math.min(200, window.innerWidth / 8);
+    this._HORIZONTAL_DEADZONE_END = (window.innerWidth / 2) + Math.min(200, window.innerWidth / 8);
+    this._VERTICAL_DEADZONE_START = (window.innerHeight / 2) - Math.min(200, window.innerHeight / 8);
+    this._VERTICAL_DEADZONE_END = (window.innerHeight / 2) + Math.min(200, window.innerHeight / 8);
   }
 
   _updatePosition(keyCode, speedIncrement) {
@@ -65,9 +84,6 @@ class FreeCamera extends PerspectiveCamera {
   }
 
   _onKeyDown(event) {
-    if (!this._keyDown) {
-      this._startKeyFrameTimer();
-    }
     if (!this._pressedKeys.length) {
       this._previousUpdateTime = 0;
     }
@@ -84,13 +100,28 @@ class FreeCamera extends PerspectiveCamera {
     if (!this._pressedKeys.length) {
       this._speedPerSecond = this._START_SPEED;
       this._keyDownTime = 0;
-      this._previousUpdateTime = 0;
-      this._clearKeyFrameTimer();
     }
   }
 
-  _onMouseMove() {
+  _onMouseMove(e) {
+    if (e.clientX < this._HORIZONTAL_DEADZONE_START) {
+      this._xRotationStrength = 1 - (e.clientX / this._HORIZONTAL_DEADZONE_START);
+    } else if (e.clientX > this._HORIZONTAL_DEADZONE_END) {
+      this._xRotationStrength = -((e.clientX - this._HORIZONTAL_DEADZONE_END) / (window.innerWidth - this._HORIZONTAL_DEADZONE_END));
+    } else {
+      this._xRotationStrength = 0;
+    }
+    if (e.clientY < this._VERTICAL_DEADZONE_START) {
+      this._yRotationStrength = 1 - (e.clientY / this._VERTICAL_DEADZONE_START);
+    } else if (e.clientY > this._VERTICAL_DEADZONE_END) {
+      this._yRotationStrength = -((e.clientY - this._VERTICAL_DEADZONE_END) / (window.innerHeight - this._VERTICAL_DEADZONE_END));
+    } else {
+      this._yRotationStrength = 0;
+    }
+  }
 
+  _onWindowResized() {
+    this._updateDeadzones();
   }
 
   _onKeyFrameTimerTicked(updateTime) {
@@ -107,6 +138,13 @@ class FreeCamera extends PerspectiveCamera {
     this._pressedKeys.forEach(value => {
       this._updatePosition(value, speedIncrement);
     });
+
+    if (this._xRotationStrength) {
+      this.angleY += ((this._MAX_ROTATION_PER_SECOND * this._xRotationStrength) * timePassed);
+    }
+    if (this._yRotationStrength) {
+      this.angleX += ((this._MAX_ROTATION_PER_SECOND * this._yRotationStrength) * timePassed);
+    }
 
     this._updateMatrix();
     // Up the speed every second

@@ -56,7 +56,8 @@ class App {
         delay: 1000,
         duration: 1000,
         easing: OomphMotion.Easing.outQuart,
-        loops: true,
+        //loops: 5,
+        bounce: true,
         steps: 12,
       },
     )
