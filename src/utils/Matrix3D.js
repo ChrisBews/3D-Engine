@@ -361,7 +361,6 @@ class Matrix3DUtils {
   }
 
   transformVector(m, v) {
-
     const dst = [];
     for (let i = 0; i < 4; i++) {
       dst[i] = 0.0;

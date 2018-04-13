@@ -221,11 +221,13 @@ class App {
 
     //this.camera = new ProjectionCamera(canvas);
     //this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    //this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera2.z = 400;
     //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
     this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
 
     this.scene.camera = this.camera;
+    this.camera.enableControls();
     //this.scene2 = new Scene();
     this.renderer.scene = this.scene;
     //this.renderer.scene = this.scene2;

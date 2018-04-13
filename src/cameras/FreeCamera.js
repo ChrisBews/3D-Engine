@@ -15,11 +15,13 @@ class FreeCamera extends PerspectiveCamera {
     this._previousUpdateTime = 0;
     this._xRotationStrength = 0;
     this._yRotationStrength = 0;
+    this._currentDirection = [0, 0, -1];
+    this._mouseXRotating = false;
+    this._mouseYRotating = false;
     this._onKeyDown = this._onKeyDown.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
     this._onMouseMove = this._onMouseMove.bind(this);
     this._onWindowResized = this._onWindowResized.bind(this);
-    this.enableControls();
     this._updateDeadzones();
   }
 
@@ -61,25 +63,69 @@ class FreeCamera extends PerspectiveCamera {
   }
 
   _updatePosition(keyCode, speedIncrement) {
+    let rotationMatrix = Matrix3D.createIdentity();
+    if (this._angleXInRadians) rotationMatrix = Matrix3D.rotateX(rotationMatrix, this._angleXInRadians);
+    if (this._angleYInRadians) rotationMatrix = Matrix3D.rotateY(rotationMatrix, this._angleYInRadians);
+    let movementDirection = [0, 0, 0, 0];
+    
     switch(keyCode) {
       case 83:
         // Backwards (S)
-        this._z += speedIncrement;
+        movementDirection = [0, 0, 1, 0];
         break;
       case 87:
         // Forwards (W)
-        this._z -= speedIncrement;
+        movementDirection = [0, 0 , -1, 0];
         break;
       case 65:
         // Left (A)
-        this._x -= speedIncrement;
+        movementDirection = [-1, 0, 0, 0];
         break;
       case 68:
         // Right (D)
-        this._x += speedIncrement;
+        movementDirection = [1, 0, 0, 0];
         break;
       default:
         break;
+    }
+
+    // Handle rotations separately
+    if (!this._mouseXRotating) {
+      if (keyCode === 37) {
+        // Left arrow key
+        this._xRotationStrength = 1;
+      } else if (keyCode === 39) {
+        // Right arrow key
+        this._xRotationStrength = -1;
+      }
+    }
+    if (!this._mouseYRotating) {
+      if (keyCode === 38) {
+        // Up arrow key
+        this._yRotationStrength = 1;
+      } else if (keyCode === 40) {
+        // Down arrow key
+        this._yRotationStrength = -1;
+      }
+    }
+ 
+    const adjustment = Matrix3D.transformVector(rotationMatrix, movementDirection);
+    this._x += adjustment[0] * speedIncrement;
+    this._y += adjustment[1] * speedIncrement;
+    this._z += adjustment[2] * speedIncrement;
+  }
+
+  _clearKeyRotations() {
+    if (this._pressedKeys.indexOf(37) === -1
+      && this._pressedKeys.indexOf(39) === -1
+      && !this._mouseXRotating) {
+      this._xRotationStrength = 0;
+    }
+
+    if (this._pressedKeys.indexOf(38) === -1
+      && this._pressedKeys.indexOf(40) === -1
+      && !this._mouseYRotating) {
+      this._yRotationStrength = 0;
     }
   }
 
@@ -93,7 +139,6 @@ class FreeCamera extends PerspectiveCamera {
   }
 
   _onKeyUp(event) {
-    this._pressedKeys.indexOf(event.keyCode)
     if (this._pressedKeys.indexOf(event.keyCode) > -1) {
       this._pressedKeys.splice(this._pressedKeys.indexOf(event.keyCode));
     }
@@ -118,6 +163,8 @@ class FreeCamera extends PerspectiveCamera {
     } else {
       this._yRotationStrength = 0;
     }
+    this._mouseXRotating = this._xRotationStrength !== 0;
+    this._mouseYRotating = this._yRotationStrength !== 0;
   }
 
   _onWindowResized() {
@@ -126,18 +173,21 @@ class FreeCamera extends PerspectiveCamera {
 
   _onKeyFrameTimerTicked(updateTime) {
     updateTime *= 0.001;
-    if (!this._keyDownTime) this._keyDownTime = updateTime;
     if (!this._previousUpdateTime) this._previousUpdateTime = updateTime;
     
     this._clearKeyFrameTimer();
     const timePassed = (updateTime - this._previousUpdateTime);
     this._previousUpdateTime = updateTime;
 
-    const speedIncrement = timePassed * this._speedPerSecond;
+    if (this._pressedKeys.length) {
+      if (!this._keyDownTime) this._keyDownTime = updateTime;
+      const speedIncrement = timePassed * this._speedPerSecond;
+      this._pressedKeys.forEach(value => {
+        this._updatePosition(value, speedIncrement);
+      });
+    }
 
-    this._pressedKeys.forEach(value => {
-      this._updatePosition(value, speedIncrement);
-    });
+    this._clearKeyRotations();
 
     if (this._xRotationStrength) {
       this.angleY += ((this._MAX_ROTATION_PER_SECOND * this._xRotationStrength) * timePassed);
@@ -148,7 +198,11 @@ class FreeCamera extends PerspectiveCamera {
 
     this._updateMatrix();
     // Up the speed every second
-    this._speedPerSecond = Math.min((this._START_SPEED + ((updateTime - this._keyDownTime) / 2)), this._MAX_SPEED);
+    if (this._pressedKeys.length) {
+      this._speedPerSecond = Math.min((this._START_SPEED + ((updateTime - this._keyDownTime) / 2)), this._MAX_SPEED);
+    } else {
+      this._speedPerSecond = 0;
+    }
     this._startKeyFrameTimer();
   }
 }

@@ -88,8 +88,6 @@ class FollowCamera {
     let xRotation = Math.atan2(-directionVector[1], -directionVector[2]);
     let yRotation = -Math.asin(directionVector[0]);
 */
-    let xRotation = xAngleInRadians;
-    let yRotation = yAngleInRadians;
 
     /*
     function hamilton2(q, r) {

@@ -79,8 +79,9 @@ class PerspectiveCamera {
   _updateMatrix() {
     this._projectionMatrix = Matrix3D.createPerspective(this._fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);
     this._matrix = Matrix3D.createTranslation(this._x, this._y, this._z);
-    this._matrix = Matrix3D.rotateX(this._matrix, this._angleXInRadians);
+   
     this._matrix = Matrix3D.rotateY(this._matrix, this._angleYInRadians);
+    this._matrix = Matrix3D.rotateX(this._matrix, this._angleXInRadians);
     this._matrix = Matrix3D.rotateZ(this._matrix, this._angleZInRadians);
 
     const viewMatrix = Matrix3D.inverse(this._matrix);
