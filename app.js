@@ -7,6 +7,7 @@ class App {
     this.createEngine();
     this.populateScene();
     this.createLights();
+    this.createCamera();
     //this.camera.x = -500;
     //this.camera.y = 300;
     //this.camera.z = 300;
@@ -14,11 +15,6 @@ class App {
     //this.camera2.x = 0;
     //this.camera2.y = 75;
     //this.camera2.z = 200;
-
-    //this.camera.lookAt(this.cube2);
-    //this.camera.followMesh(this.fShape, 400);
-
-    this.activeCamera = this.camera;
     
     this.lightIncrement = 1;
 
@@ -218,16 +214,6 @@ class App {
     const canvas = document.getElementById('canvas');
     this.renderer = new Oomph3D(canvas);
     this.scene = new Scene();
-
-    //this.camera = new ProjectionCamera(canvas);
-    //this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera2.z = 400;
-    //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
-    this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-
-    this.scene.camera = this.camera;
-    this.camera.enableControls();
     //this.scene2 = new Scene();
     this.renderer.scene = this.scene;
     //this.renderer.scene = this.scene2;
@@ -299,6 +285,24 @@ class App {
     /*setTimeout(() => {
       this.scene.removeLight(this.directionalLight);
     }, 5000);*/
+  }
+
+  createCamera() {
+    //this.camera = new ProjectionCamera(canvas);
+    this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera.lookAt(this.fShape);
+    this.camera.z = 400;
+
+    this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    // this.camera2.z = 400;
+    //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
+    // this.camera.followMesh(this.fShape, 400);
+    //this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    // this.camera.enableControls();
+
+    this.scene.camera = this.camera;
+
+    this.activeCamera = this.camera;
   }
   
   onUpdate(elapsedTime) {
