@@ -282,6 +282,8 @@ class App {
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);
 
+    //this.modelLoader = new ObjLoader('cube.obj');
+
     /*setTimeout(() => {
       this.scene.removeChild(this.fShape);
     }, 5000);*/

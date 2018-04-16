@@ -2,8 +2,9 @@ class FreeCamera extends PerspectiveCamera {
 
   constructor(fieldOfView, canvasWidth, canvasHeight, zNear, zFar) {
     super(fieldOfView, canvasWidth, canvasHeight, zNear, zFar);
-    this._MAX_SPEED = 7;
-    this._START_SPEED = 4;
+    this._MAX_SPEED = 300;
+    this._START_SPEED = 50;
+    this._ACCELERATION_TIME = 3;
     this._HORIZONTAL_DEADZONE_START = 0;
     this._HORIZONTAL_DEADZONE_END = 0;
     this._VERTICAL_DEADZONE = 100;
@@ -133,7 +134,7 @@ class FreeCamera extends PerspectiveCamera {
     if (!this._pressedKeys.length) {
       this._previousUpdateTime = 0;
     }
-    if (!this._pressedKeys.indexOf(event.keyCode) > -1) {
+    if (this._pressedKeys.indexOf(event.keyCode) < 0) {
       this._pressedKeys.push(event.keyCode);
     }
   }
@@ -182,8 +183,8 @@ class FreeCamera extends PerspectiveCamera {
     if (this._pressedKeys.length) {
       if (!this._keyDownTime) this._keyDownTime = updateTime;
       const speedIncrement = timePassed * this._speedPerSecond;
-      this._pressedKeys.forEach(value => {
-        this._updatePosition(value, speedIncrement);
+      this._pressedKeys.forEach(keyCode => {
+        this._updatePosition(keyCode, speedIncrement);
       });
     }
 
@@ -199,7 +200,7 @@ class FreeCamera extends PerspectiveCamera {
     this._updateMatrix();
     // Up the speed every second
     if (this._pressedKeys.length) {
-      this._speedPerSecond = Math.min((this._START_SPEED + ((updateTime - this._keyDownTime) / 2)), this._MAX_SPEED);
+      this._speedPerSecond = Math.min((this._START_SPEED + ((updateTime - this._keyDownTime) / this._ACCELERATION_TIME) * (this._MAX_SPEED - this._START_SPEED)), this._MAX_SPEED);
     } else {
       this._speedPerSecond = 0;
     }
