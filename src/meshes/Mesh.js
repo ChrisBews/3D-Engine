@@ -1,6 +1,6 @@
 class Mesh {
 
-  constructor(vertices, normals) {
+  constructor(vertices, normals, indices, uvs) {
     this._id = `Mesh-${Date.now()}`;
     this._width = 0;
     this._height = 0;
@@ -22,8 +22,10 @@ class Mesh {
     this._shader;
     this._vertices = vertices;
     this._normals = normals;
+    this._indices = indices;
     this._matrix;
     this._worldMatrix;
+    if (indices) console.log(indices);
     if (vertices) {
       // If vertices were passed into the constructor, this is a custom mesh
       // We therefore need to work out the width/height/depth automatically
@@ -32,19 +34,37 @@ class Mesh {
   }
 
   _calculateBounds() {
-    
+    this._calculateWidth();
+    this._calculateHeight();
+    this._calculateDepth();
+    this._updateMatrix();
   }
 
   _calculateWidth() {
-
+    let minX = 0; let maxX = 0;
+    for (let i = 0; i < this._vertices.length - 2; i += 3) {
+      if (this._vertices[i] < minX) minX = this._vertices[i];
+      if (this._vertices[i] > maxX) maxX = this._vertices[i];
+    }
+    this._width = maxX - minX;
   }
 
   _calculateHeight() {
-
+    let minY = 0; let maxY = 0;
+    for (let i = 1; i < this._vertices.length - 1; i += 3) {
+      if (this._vertices[i] < minY) minY = this._vertices[i];
+      if (this._vertices[i] > maxY) maxY = this._vertices[i];
+    }
+    this._height = maxY - minY;
   }
 
   _calculateDepth() {
-
+    let minZ = 0; let maxZ = 0;
+    for (let i = 2; i < this._vertices.length - 1; i += 3) {
+      if (this._vertices[i] < minZ) minZ = this._vertices[i];
+      if (this._vertices[i] > maxZ) maxZ = this._vertices[i];
+    }
+    this._depth = maxZ - minZ;
   }
 
   get id() { return this._id; }
@@ -132,6 +152,11 @@ class Mesh {
   }
   set normals(value) { this._normals = value; }
 
+  get indices() {
+    return this._indices;
+  }
+  set indices(value) { this._indices = value; }
+  
   get matrix() {
     return this._matrix;
   }

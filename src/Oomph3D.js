@@ -11,6 +11,7 @@ class Oomph3D {
     this._resizeFrameRequest;
     this._positionBuffer;
     this._normalsBuffer;
+    this._indexBuffer;
     this._initGL();
     if (this._gl) {
       this._addListeners();
@@ -59,6 +60,7 @@ class Oomph3D {
   _createBuffers() {
     this._positionBuffer = this._gl.createBuffer();
     this._normalsBuffer = this._gl.createBuffer();
+    this._indexBuffer = this._gl.createBuffer();
   }
 
   _clearFrameTimer() {
@@ -116,16 +118,12 @@ class Oomph3D {
     meshes.forEach(mesh => {
       const vertices = mesh.vertices;
       const normals = mesh.normals;
+      const indices = mesh.indices;
       const material = mesh.material;
       const program = material.program;
 
       if (program) {
         this._gl.useProgram(program.glProgram);
-
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
-        this._gl.enableVertexAttribArray(program.positionLocation);
-        this._gl.vertexAttribPointer(program.positionLocation, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, vertices, this._gl.STATIC_DRAW);
         
         const meshMatrix = Matrix3D.multiply(sceneCameraMatrix, mesh.matrix);
         this._gl.uniformMatrix4fv(program.matrixLocation, false, meshMatrix);
@@ -167,8 +165,15 @@ class Oomph3D {
         this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector(lightValues));
         this._gl.uniform3fv(program.lightColorLocation, lightColor);
 
-        const primitiveType = this._gl.TRIANGLES;
-        this._gl.drawArrays(primitiveType, 0, vertices.length / 3);
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
+        this._gl.enableVertexAttribArray(program.positionLocation);
+        this._gl.vertexAttribPointer(program.positionLocation, 3, this._gl.FLOAT, false, 0, 0);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, vertices, this._gl.STATIC_DRAW);
+
+        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
+        this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, indices, this._gl.STATIC_DRAW);
+
+        this._gl.drawElements(this._gl.TRIANGLES, indices.length, this._gl.UNSIGNED_SHORT, 0);
       } else {
         console.warn(`Mesh ${mesh.id} has no shader assigned, so will not be rendered`);
       }

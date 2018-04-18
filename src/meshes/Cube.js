@@ -12,6 +12,7 @@ class Cube extends Mesh {
     this._depth = depth || this._width;
     this._vertices = this._generateVertices();
     this._normals = this._generateNormals();
+    this._indices = this._generateIndices();
     this._updateMatrix();
   }
 
@@ -25,56 +26,38 @@ class Cube extends Mesh {
       // Front face
       0, 0, 0,
       w, 0, 0,
+      w, h, 0,
       0, h, 0,
-
-      0, h, 0,
-      w, 0, 0,
-      w, h, 0,
-
-      // Top face
-      w, h, 0,
-      0, h, -d,
-      0, h, 0,
-
-      0, h, -d,
-      w, h, 0,
-      w, h, -d,
-
-      // Right face
-      w, 0, 0,
-      w, h, -d,
-      w, h, 0,
-
-      w, h, -d,
-      w, 0, 0,
-      w, 0, -d,
 
       // Back face
-      w, 0, -d,
       0, 0, -d,
-      0, h, -d,
-
       0, h, -d,
       w, h, -d,
       w, 0, -d,
 
-      // Left face
-      0, 0, 0,
+      // Top face
       0, h, -d,
-      0, 0, -d,
-
-      0, h, -d,
-      0, 0, 0,
       0, h, 0,
+      w, h, 0,
+      w, h, -d,
 
       // Bottom face
-      0, 0, 0,
+      0, 0, -d,
       w, 0, -d,
       w, 0, 0,
-
-      w, 0, -d,
       0, 0, 0,
+
+      // Right face
+      w, 0, -d,
+      w, h, -d,
+      w, h, 0,
+      w, 0, 0,
+
+      // Left face
       0, 0, -d,
+      0, 0, 0,
+      0, h, 0,
+      0, h, -d,
     ]);
 
     return vertices;
@@ -86,57 +69,50 @@ class Cube extends Mesh {
       0, 0, 1,
       0, 0, 1,
       0, 0, 1,
-
       0, 0, 1,
-      0, 0, 1,
-      0, 0, 1,
-
-      // Top face
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-
-      0, 1, 0,
-      0, 1, 0,
-      0, 1, 0,
-
-      // Right face
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
-
-      1, 0, 0,
-      1, 0, 0,
-      1, 0, 0,
 
       // Back face
       0, 0, -1,
       0, 0, -1,
       0, 0, -1,
+      0, 0, -1,
 
-      0, 0, -1,
-      0, 0, -1,
-      0, 0, -1,
+      // Top face
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+
+      // Bottom face
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+      0, -1, 0,
+
+      // Right face
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
+      1, 0, 0,
 
       // Left face
       -1, 0, 0,
       -1, 0, 0,
       -1, 0, 0,
-
       -1, 0, 0,
-      -1, 0, 0,
-      -1, 0, 0,
-      
-      // Bottom face
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
-
-      0, -1, 0,
-      0, -1, 0,
-      0, -1, 0,
     ]);
 
     return normals;
+  }
+
+  _generateIndices() {
+    return new Uint16Array([
+      0, 1, 2,     0, 2, 3,    // Front
+      4, 5, 6,     4, 6, 7,    // Back
+      8, 9, 10,    8, 10, 11,  // Top
+      12, 13, 14,  12, 14, 15, // Bottom
+      16, 17, 18,  16, 18, 19, // Right
+      20, 21, 22,  20, 22, 23, // Left
+    ]);
   }
 }

@@ -22,7 +22,8 @@ class App {
 
     this.fShape.rotationX = 0;
     this.fShape.rotationY = 0;
-    OomphMotion.timeline(
+    
+    /*OomphMotion.timeline(
       this.fShape,
       [
         {
@@ -40,9 +41,9 @@ class App {
       {
         loops: true,
       },
-    );
+    );*/
 
-    this.cubeAnimId = OomphMotion.start(
+    /*this.cubeAnimId = OomphMotion.start(
       this.cube,
       {
         to: {
@@ -56,7 +57,7 @@ class App {
         bounce: true,
         steps: 12,
       },
-    )
+    )*/
 
     /*setTimeout(() => {
       OomphMotion.pause();
@@ -222,7 +223,7 @@ class App {
 
   populateScene() {
     this.cube = new Cube(50);
-    this.cube.shader = new FlatColorShader([255, 255, 255]);
+    this.cube.shader = new FlatColorShader([255, 0, 0]);
     this.cube.x = 100;
     this.cube.y = 0;
     this.cube.z = 0;
@@ -260,15 +261,20 @@ class App {
     this.cylinder.x = -100;
     this.cylinder.z = -150;
   
-    this.scene.addChild(this.sphere);
+    //this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
-    this.scene.addChild(this.cube2);
+    /*this.scene.addChild(this.cube2);
     this.scene.addChild(this.originCube);
     this.scene.addChild(this.fShape);
     this.scene.addChild(this.plane);
-    this.scene.addChild(this.cylinder);
+    this.scene.addChild(this.cylinder);*/
 
-    //this.modelLoader = new ObjLoader('cube.obj');
+    
+    this.modelLoader = new ObjLoader('cube.obj', (indices, vertices, normals, uvs) => {
+      this.testMesh = new Mesh(vertices, normals, indices);
+      this.testMesh.shader = this.cylinderShader;
+      this.scene.addChild(this.testMesh);
+    });
 
     /*setTimeout(() => {
       this.scene.removeChild(this.fShape);
@@ -290,15 +296,17 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.fShape);
-    this.camera.z = 400;
+    this.camera.lookAt(this.cube);
+    this.camera.z = 200;
+    this.camera.y = 0;
+    this.camera.x = 0;
 
-    this.camera2 = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    // this.camera2.z = 400;
+    //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    //this.camera.z = 400;
     //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
     // this.camera.followMesh(this.fShape, 400);
     //this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    // this.camera.enableControls();
+    //this.camera.enableControls();
 
     this.scene.camera = this.camera;
 
