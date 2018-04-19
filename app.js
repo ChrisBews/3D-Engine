@@ -23,6 +23,14 @@ class App {
     //this.fShape.rotationX = 0;
     //this.fShape.rotationY = 0;
     
+    OomphMotion.start(
+      this.fShape,
+      {
+        to: { rotationY: 360 },
+        duration: 3000,
+        loops: true,
+      }
+    );
     /*OomphMotion.timeline(
       this.fShape,
       [
@@ -223,13 +231,13 @@ class App {
 
   populateScene() {
     this.cube = new Cube(50);
-    this.cube.shader = new FlatColorShader([255, 0, 0]);
+    this.cube.shader = new FlatColorShader([200, 200, 200]);
     this.cube.x = 100;
     this.cube.y = 0;
     this.cube.z = 0;
     this.cube.rotationY = 0;
 
-    /*this.cube2 = new Cube(100, 100, 3);
+    this.cube2 = new Cube(100, 100, 3);
     this.cube2.temp = true;
     this.cube2.shader = new FlatColorShader([255, 0, 0]);
     this.cube2.x = 200;
@@ -244,7 +252,7 @@ class App {
     this.fShape.shader = new FlatColorShader([229, 25, 127]);
     this.fShape.x = 200;
     this.fShape.y = 100;
-
+/*
     this.plane = new Plane(100, 200, 2);
     this.plane.shader = new FlatColorShader([80, 200, 80]);
     this.plane.x = 0;
@@ -263,20 +271,28 @@ class App {
   
     //this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
-    /*this.scene.addChild(this.cube2);
     this.scene.addChild(this.originCube);
+    this.scene.addChild(this.cube2);
     this.scene.addChild(this.fShape);
+    /*
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);*/
 
     
     this.modelLoader = new ObjLoader('cube.obj', (indices, vertices, normals, uvs) => {
       this.testMesh = new Mesh(vertices, normals, indices);
-      this.testMesh.x = 200;
-      this.testMesh.y = 200;
-      this.testMesh.z = -200;
-      this.testMesh.scale = 25;
+      this.testMesh.x = 0;
+      this.testMesh.y = 0;
+      this.testMesh.z = 0;
+      this.testMesh.scale = 1;
       this.testMesh.shader = new FlatColorShader([0, 255, 200]);
+      OomphMotion.start(this.testMesh,
+        {
+          to: { rotationY: 360 },
+          duration: 3000,
+          loops: true
+        }
+      );
       this.scene.addChild(this.testMesh);
     });
 
@@ -300,9 +316,9 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.cube);
+    this.camera.lookAt(this.fShape);
     this.camera.z = 200;
-    this.camera.y = 0;
+    this.camera.y = 400;
     this.camera.x = 0;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);

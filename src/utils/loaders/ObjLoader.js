@@ -26,7 +26,6 @@ class ObjLoader {
 
   _onModelLoadComplete(data) {
     this._modelData = data.trim() + '\n';
-    console.log(data);
     this._parseModelData(true);
   }
 
@@ -102,7 +101,7 @@ class ObjLoader {
               itemArray = item[i].split('/');
               // Parse vertex data and save final version ordered correctly by index
               index = (parseInt(itemArray[0])-1) * 3;
-              fVert.push(cVert[index], cVert[index+1], cVert[index+2]);
+              fVert.push(cVert[index] * 10, cVert[index+1] * 10, cVert[index+2] * 10);
 
               // Parse normal data and save final version ordered correctly by index
               index = (parseInt(itemArray[2])-1) * 3;
