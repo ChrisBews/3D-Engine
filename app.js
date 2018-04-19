@@ -20,8 +20,8 @@ class App {
 
     OomphMotion.outputColorsAsArrays = true;
 
-    this.fShape.rotationX = 0;
-    this.fShape.rotationY = 0;
+    //this.fShape.rotationX = 0;
+    //this.fShape.rotationY = 0;
     
     /*OomphMotion.timeline(
       this.fShape,
@@ -229,7 +229,7 @@ class App {
     this.cube.z = 0;
     this.cube.rotationY = 0;
 
-    this.cube2 = new Cube(100, 100, 3);
+    /*this.cube2 = new Cube(100, 100, 3);
     this.cube2.temp = true;
     this.cube2.shader = new FlatColorShader([255, 0, 0]);
     this.cube2.x = 200;
@@ -259,7 +259,7 @@ class App {
     this.cylinder = new Cylinder(50, 200);
     this.cylinder.shader = this.cylinderShader;
     this.cylinder.x = -100;
-    this.cylinder.z = -150;
+    this.cylinder.z = -150;*/
   
     //this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
@@ -272,7 +272,11 @@ class App {
     
     this.modelLoader = new ObjLoader('cube.obj', (indices, vertices, normals, uvs) => {
       this.testMesh = new Mesh(vertices, normals, indices);
-      this.testMesh.shader = this.cylinderShader;
+      this.testMesh.x = 200;
+      this.testMesh.y = 200;
+      this.testMesh.z = -200;
+      this.testMesh.scale = 25;
+      this.testMesh.shader = new FlatColorShader([0, 255, 200]);
       this.scene.addChild(this.testMesh);
     });
 

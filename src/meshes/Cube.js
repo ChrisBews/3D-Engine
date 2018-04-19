@@ -13,6 +13,9 @@ class Cube extends Mesh {
     this._vertices = this._generateVertices();
     this._normals = this._generateNormals();
     this._indices = this._generateIndices();
+    console.log('my cube indices', this._indices.length);
+    console.log('my cube vertices', this._vertices.length);
+    console.log('my cube normals', this._normals.length);
     this._updateMatrix();
   }
 

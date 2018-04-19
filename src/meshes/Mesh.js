@@ -20,12 +20,11 @@ class Mesh {
     this._program;
     this._gl;
     this._shader;
-    this._vertices = vertices;
-    this._normals = normals;
-    this._indices = indices;
+    this._vertices = vertices ? new Float32Array(vertices) : [];
+    this._normals = normals ? new Float32Array(normals) : [];
+    this._indices = indices ? new Uint16Array(indices) : [];
     this._matrix;
     this._worldMatrix;
-    if (indices) console.log(indices);
     if (vertices) {
       // If vertices were passed into the constructor, this is a custom mesh
       // We therefore need to work out the width/height/depth automatically
