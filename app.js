@@ -23,14 +23,14 @@ class App {
     //this.fShape.rotationX = 0;
     //this.fShape.rotationY = 0;
     
-    OomphMotion.start(
+    /*OomphMotion.start(
       this.plane,
       {
         to: { rotationX: 360 },
         duration: 3000,
         loops: true,
       }
-    );
+    );*/
     /*OomphMotion.timeline(
       this.fShape,
       [
@@ -250,7 +250,7 @@ class App {
 
     this.fShape = new FShape(100);
     this.fShape.shader = new FlatColorShader([229, 25, 127]);
-    this.fShape.x = 0;
+    this.fShape.x = 100;
     this.fShape.y = 0;
 
     this.plane = new Plane(100, 200, 1);
@@ -260,7 +260,7 @@ class App {
     this.plane.z = 0;
 
     this.sphere = new Sphere(50);
-    this.sphere.y = 0;
+    this.sphere.y = -100;
     this.sphere.shader = new FlatColorShader([80, 40, 250]);
 
     this.cylinderShader = new FlatColorShader([244, 232, 66]);
@@ -278,16 +278,16 @@ class App {
     this.scene.addChild(this.cylinder);
 
     
-    this.modelLoader = new ObjLoader('pirate-girl.obj', (meshData) => {
+    this.modelLoader = new ObjLoader('tree.obj', (meshData) => {
       this.testMesh = new Mesh(meshData.vertices, meshData.normals, meshData.indices);
       this.testMesh.x = 0;
       this.testMesh.y = 0;
       this.testMesh.z = 0;
-      this.testMesh.scale = 20;
+      this.testMesh.scale = 10;
       this.testMesh.shader = new FlatColorShader([255, 255, 200]);
       OomphMotion.start(this.testMesh,
         {
-          to: { rotationX: 360 },
+          to: { rotationY: 360 },
           duration: 3000,
           loops: true
         }
@@ -317,10 +317,10 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.sphere);
-    this.camera.z = 400;
-    this.camera.y = 0;
-    this.camera.x = 0;
+    this.camera.lookAt(this.originCube);
+    this.camera.z = 300;
+    this.camera.y = 200;
+    this.camera.x = -100;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera.z = 400;
