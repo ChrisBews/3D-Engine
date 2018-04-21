@@ -24,6 +24,7 @@ class Cylinder extends Mesh {
     const normalsArray = [];
     const indicesArray = [];
     const h = this._height;
+    let startIndex = 0;
     for (let i = 0; i < this._segments; i++) {
       // Theta = the angle within this segment
       const theta = Helpers.degreesToRadians((360 / this._segments) * i);
@@ -52,8 +53,8 @@ class Cylinder extends Mesh {
         0, -1, 0,
         0, -1, 0,
       );
-      let bottomCapIndex = (i * 6) + (i * (this._heightSegments * 4));
-      indicesArray.push(bottomCapIndex, bottomCapIndex + 1, bottomCapIndex + 2);
+      indicesArray.push(startIndex, startIndex + 1, startIndex + 2);
+      startIndex += 3;
 
       // Draw the middle segments
       for (let k = 0; k < this._heightSegments; k++) {
@@ -72,11 +73,11 @@ class Cylinder extends Mesh {
           nX2, 0, nZ2,
           nX2, 0, nZ2,
         );
-        const startIndex = bottomCapIndex + 3 + (k * 4);
         indicesArray.push(
           startIndex, startIndex + 1, startIndex + 2,
           startIndex, startIndex + 2, startIndex + 3,
         );
+        startIndex += 4;
       }
 
       // Draw the top triangle
@@ -91,10 +92,10 @@ class Cylinder extends Mesh {
         0, 1, 0,
       );
 
-      const topCapIndex = bottomCapIndex + 3 + (this._heightSegments * 4);
       indicesArray.push(
-        topCapIndex, topCapIndex + 1, topCapIndex + 2
+        startIndex, startIndex + 1, startIndex + 2
       );
+      startIndex += 3;
     }
 
     this._vertices = new Float32Array(vertexArray);

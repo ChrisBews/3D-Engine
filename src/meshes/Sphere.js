@@ -60,6 +60,8 @@ class Sphere extends Mesh {
     //
     // Note that at the two caps we just create one triangle
     // which hits the top/bottom point of the sphere
+    const tempIndices = [];
+    let startIndex = 0;
     for (let i = 0; i < this._longitudeBands; i++) {
       const theta1 = (i / this._longitudeBands) * Math.PI;
       const theta2 = ((i+1)/this._longitudeBands) * Math.PI;
@@ -72,33 +74,45 @@ class Sphere extends Mesh {
         const point2 = this.createPointData(theta1, phi2);
         const point3 = this.createPointData(theta2, phi2);
         const point4 = this.createPointData(theta2, phi1);
-
         if (i === 0) {
           // Top cap of the sphere
           this._addVertex(point1);
           this._addVertex(point3);
           this._addVertex(point4);
-        } else if (i === this._longitudeBands.length) {
+          tempIndices.push(
+            startIndex,
+            startIndex + 1,
+            startIndex + 2
+          );
+          startIndex += 3;
+        } else if (i === this._longitudeBands - 1) {
           // End cap
           this._addVertex(point3);
           this._addVertex(point1);
           this._addVertex(point2);
+          tempIndices.push(
+            startIndex,
+            startIndex + 1,
+            startIndex + 2
+          );
+          startIndex += 3;
         } else {
           // Body
-          this._addVertex(point1);
-          this._addVertex(point2);
-          this._addVertex(point4);
-
-          this._addVertex(point2);
           this._addVertex(point3);
           this._addVertex(point4);
+          this._addVertex(point1);
+          this._addVertex(point2);
+          tempIndices.push(
+            startIndex, startIndex + 1, startIndex + 2,
+            startIndex, startIndex + 2, startIndex + 3
+          );
+          startIndex += 4;
         }
       }
     }
     // Generate the typed arrays that WebGL requires
-    this._vertices = new Float32Array(this._vertexArray.length);
-    this._normals = new Float32Array(this._normalsArray.length);
-    this._vertices.set(this._vertexArray);
-    this._normals.set(this._normalsArray);
+    this._vertices = new Float32Array(this._vertexArray);
+    this._normals = new Float32Array(this._normalsArray);
+    this._indices = new Uint16Array(tempIndices);
   }
 }

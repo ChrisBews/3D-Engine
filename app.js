@@ -258,27 +258,24 @@ class App {
     this.plane.x = 0;
     this.plane.y = 0;
     this.plane.z = 0;
-/*
+
     this.sphere = new Sphere(50);
     this.sphere.y = 0;
     this.sphere.shader = new FlatColorShader([80, 40, 250]);
-*/
+
     this.cylinderShader = new FlatColorShader([244, 232, 66]);
     this.cylinder = new Cylinder(50, 200);
     this.cylinder.shader = this.cylinderShader;
     this.cylinder.x = -100;
     this.cylinder.z = -150;
   
-    //this.scene.addChild(this.sphere);
+    this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
     this.scene.addChild(this.originCube);
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.fShape);
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);
-    /*
-    this.scene.addChild(this.plane);
-    this.scene.addChild(this.cylinder);*/
 
     
     this.modelLoader = new ObjLoader('pirate-girl.obj', (indices, vertices, normals, uvs) => {
@@ -320,9 +317,9 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.cylinder);
+    this.camera.lookAt(this.sphere);
     this.camera.z = 200;
-    this.camera.y = 400;
+    this.camera.y = 200;
     this.camera.x = 0;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
