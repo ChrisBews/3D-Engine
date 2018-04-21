@@ -175,7 +175,7 @@ class App {
       },
     );*/
 
-    /*OomphMotion.timeline(
+    OomphMotion.timeline(
       this.camera,
       [
         {
@@ -202,7 +202,7 @@ class App {
       {
         bounce: true,
       },
-    );*/
+    );
 
     //this.toggleCamera();
   }
@@ -262,12 +262,12 @@ class App {
     this.sphere = new Sphere(50);
     this.sphere.y = 0;
     this.sphere.shader = new FlatColorShader([80, 40, 250]);
-
+*/
     this.cylinderShader = new FlatColorShader([244, 232, 66]);
     this.cylinder = new Cylinder(50, 200);
     this.cylinder.shader = this.cylinderShader;
     this.cylinder.x = -100;
-    this.cylinder.z = -150;*/
+    this.cylinder.z = -150;
   
     //this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
@@ -275,6 +275,7 @@ class App {
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.fShape);
     this.scene.addChild(this.plane);
+    this.scene.addChild(this.cylinder);
     /*
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);*/
@@ -308,7 +309,7 @@ class App {
     this.lightDirection = 120;
     const lightDirX = Math.cos(Helpers.degreesToRadians(this.lightDirection));
     const lightDirZ = Math.sin(Helpers.degreesToRadians(this.lightDirection));
-    this.directionalLight = new DirectionalLight(lightDirX, 20, lightDirZ);
+    this.directionalLight = new DirectionalLight(lightDirX, 0, lightDirZ);
     this.directionalLight.color = [255, 255, 255];
     this.scene.addLight(this.directionalLight);
     /*setTimeout(() => {
@@ -319,9 +320,9 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.originCube);
-    this.camera.z = 400;
-    this.camera.y = 200;
+    this.camera.lookAt(this.cylinder);
+    this.camera.z = 200;
+    this.camera.y = 400;
     this.camera.x = 0;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);

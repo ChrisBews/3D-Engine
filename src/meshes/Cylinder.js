@@ -22,6 +22,7 @@ class Cylinder extends Mesh {
   _generateVerticesAndNormals() {
     const vertexArray = [];
     const normalsArray = [];
+    const indicesArray = [];
     const h = this._height;
     for (let i = 0; i < this._segments; i++) {
       // Theta = the angle within this segment
@@ -51,6 +52,8 @@ class Cylinder extends Mesh {
         0, -1, 0,
         0, -1, 0,
       );
+      let bottomCapIndex = (i * 6) + (i * (this._heightSegments * 4));
+      indicesArray.push(bottomCapIndex, bottomCapIndex + 1, bottomCapIndex + 2);
 
       // Draw the middle segments
       for (let k = 0; k < this._heightSegments; k++) {
@@ -59,21 +62,20 @@ class Cylinder extends Mesh {
 
         vertexArray.push(
           vX1, h1, vZ1,
+          vX1, h2, vZ1,
           vX2, h2, vZ2,
           vX2, h1, vZ2,
-
-          vX2, h2, vZ2,
-          vX1, h1, vZ1,
-          vX1, h2, vZ1,
         );
         normalsArray.push(
           nX1, 0, nZ1,
-          nX2, 0, nZ2,
-          nX2, 0, nZ2,
-
-          nX2, 0, nZ2,
           nX1, 0, nZ1,
-          nX1, 0, nZ1,
+          nX2, 0, nZ2,
+          nX2, 0, nZ2,
+        );
+        const startIndex = bottomCapIndex + 3 + (k * 4);
+        indicesArray.push(
+          startIndex, startIndex + 1, startIndex + 2,
+          startIndex, startIndex + 2, startIndex + 3,
         );
       }
 
@@ -88,11 +90,15 @@ class Cylinder extends Mesh {
         0, 1, 0,
         0, 1, 0,
       );
+
+      const topCapIndex = bottomCapIndex + 3 + (this._heightSegments * 4);
+      indicesArray.push(
+        topCapIndex, topCapIndex + 1, topCapIndex + 2
+      );
     }
 
-    this._vertices = new Float32Array(vertexArray.length);
-    this._normals = new Float32Array(normalsArray.length);
-    this._vertices.set(vertexArray);
-    this._normals.set(normalsArray);
+    this._vertices = new Float32Array(vertexArray);
+    this._normals = new Float32Array(normalsArray);
+    this._indices = new Uint16Array(indicesArray);
   }
 }
