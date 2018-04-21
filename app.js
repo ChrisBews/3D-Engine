@@ -252,13 +252,13 @@ class App {
     this.fShape.shader = new FlatColorShader([229, 25, 127]);
     this.fShape.x = 200;
     this.fShape.y = 100;
-/*
-    this.plane = new Plane(100, 200, 2);
+
+    this.plane = new Plane(100, 200, 1);
     this.plane.shader = new FlatColorShader([80, 200, 80]);
     this.plane.x = 0;
     this.plane.y = 0;
     this.plane.z = 0;
-
+/*
     this.sphere = new Sphere(50);
     this.sphere.y = 0;
     this.sphere.shader = new FlatColorShader([80, 40, 250]);
@@ -274,18 +274,19 @@ class App {
     this.scene.addChild(this.originCube);
     this.scene.addChild(this.cube2);
     this.scene.addChild(this.fShape);
+    this.scene.addChild(this.plane);
     /*
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);*/
 
     
-    this.modelLoader = new ObjLoader('cube.obj', (indices, vertices, normals, uvs) => {
+    this.modelLoader = new ObjLoader('pirate-girl.obj', (indices, vertices, normals, uvs) => {
       this.testMesh = new Mesh(vertices, normals, indices);
       this.testMesh.x = 0;
       this.testMesh.y = 0;
       this.testMesh.z = 0;
       this.testMesh.scale = 1;
-      this.testMesh.shader = new FlatColorShader([0, 255, 200]);
+      this.testMesh.shader = new FlatColorShader([255, 255, 200]);
       OomphMotion.start(this.testMesh,
         {
           to: { rotationY: 360 },
@@ -294,6 +295,8 @@ class App {
         }
       );
       this.scene.addChild(this.testMesh);
+      //this.camera.lookAt(this.testMesh);
+      //this.camera.followMesh(this.testMesh, 100);
     });
 
     /*setTimeout(() => {
@@ -302,10 +305,10 @@ class App {
   }
 
   createLights() {
-    this.lightDirection = 90;
+    this.lightDirection = 120;
     const lightDirX = Math.cos(Helpers.degreesToRadians(this.lightDirection));
     const lightDirZ = Math.sin(Helpers.degreesToRadians(this.lightDirection));
-    this.directionalLight = new DirectionalLight(lightDirX, 0, lightDirZ);
+    this.directionalLight = new DirectionalLight(lightDirX, 20, lightDirZ);
     this.directionalLight.color = [255, 255, 255];
     this.scene.addLight(this.directionalLight);
     /*setTimeout(() => {
@@ -316,20 +319,19 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.fShape);
-    this.camera.z = 200;
-    this.camera.y = 400;
+    this.camera.lookAt(this.originCube);
+    this.camera.z = 400;
+    this.camera.y = 200;
     this.camera.x = 0;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera.z = 400;
     //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
-    // this.camera.followMesh(this.fShape, 400);
+    //this.camera.followMesh(this.fShape, 400);
     //this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera.enableControls();
 
     this.scene.camera = this.camera;
-
     this.activeCamera = this.camera;
   }
   
