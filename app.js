@@ -278,12 +278,12 @@ class App {
     this.scene.addChild(this.cylinder);
 
     
-    this.modelLoader = new ObjLoader('pirate-girl.obj', (indices, vertices, normals, uvs) => {
-      this.testMesh = new Mesh(vertices, normals, indices);
+    this.modelLoader = new ObjLoader('pirate-girl.obj', (meshData) => {
+      this.testMesh = new Mesh(meshData.vertices, meshData.normals, meshData.indices);
       this.testMesh.x = 0;
       this.testMesh.y = 0;
-      this.testMesh.z = 0;
-      this.testMesh.scale = 1;
+      this.testMesh.z = 200;
+      this.testMesh.scale = 20;
       this.testMesh.shader = new FlatColorShader([255, 255, 200]);
       OomphMotion.start(this.testMesh,
         {
