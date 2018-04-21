@@ -24,9 +24,9 @@ class App {
     //this.fShape.rotationY = 0;
     
     OomphMotion.start(
-      this.fShape,
+      this.plane,
       {
-        to: { rotationY: 360 },
+        to: { rotationX: 360 },
         duration: 3000,
         loops: true,
       }
@@ -175,7 +175,7 @@ class App {
       },
     );*/
 
-    OomphMotion.timeline(
+    /*OomphMotion.timeline(
       this.camera,
       [
         {
@@ -202,7 +202,7 @@ class App {
       {
         bounce: true,
       },
-    );
+    );*/
 
     //this.toggleCamera();
   }
@@ -250,8 +250,8 @@ class App {
 
     this.fShape = new FShape(100);
     this.fShape.shader = new FlatColorShader([229, 25, 127]);
-    this.fShape.x = 200;
-    this.fShape.y = 100;
+    this.fShape.x = 0;
+    this.fShape.y = 0;
 
     this.plane = new Plane(100, 200, 1);
     this.plane.shader = new FlatColorShader([80, 200, 80]);
@@ -267,7 +267,7 @@ class App {
     this.cylinder = new Cylinder(50, 200);
     this.cylinder.shader = this.cylinderShader;
     this.cylinder.x = -100;
-    this.cylinder.z = -150;
+    this.cylinder.z = 0;
   
     this.scene.addChild(this.sphere);
     this.scene.addChild(this.cube);
@@ -282,12 +282,12 @@ class App {
       this.testMesh = new Mesh(meshData.vertices, meshData.normals, meshData.indices);
       this.testMesh.x = 0;
       this.testMesh.y = 0;
-      this.testMesh.z = 200;
+      this.testMesh.z = 0;
       this.testMesh.scale = 20;
       this.testMesh.shader = new FlatColorShader([255, 255, 200]);
       OomphMotion.start(this.testMesh,
         {
-          to: { rotationY: 360 },
+          to: { rotationX: 360 },
           duration: 3000,
           loops: true
         }
@@ -318,8 +318,8 @@ class App {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     this.camera.lookAt(this.sphere);
-    this.camera.z = 200;
-    this.camera.y = 200;
+    this.camera.z = 400;
+    this.camera.y = 0;
     this.camera.x = 0;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);

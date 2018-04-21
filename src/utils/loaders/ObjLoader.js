@@ -127,6 +127,7 @@ class ObjLoader {
     let isQuad = false;
     const previousFaceData = {};
     let index = 0;
+    let vertexData;
     // Loop through each vertex in the face (each item is a string like '1/1/1')
     for (let i = 0; i < valueArray.length; i++) {
       // If i == 3, we know this line describes a quad
@@ -136,10 +137,10 @@ class ObjLoader {
       }
       // Check if this face has already been processed
       if (valueArray[i] in previousFaceData) {
-        this._tempIndices.push(previousFaceData[valueArray[i]]);
+        this._finalIndices.push(previousFaceData[valueArray[i]]);
       } else {
         // New vertex data
-        const vertexData = valueArray[i].split('/');
+        vertexData = valueArray[i].split('/');
         // New index will be vertex index + 3 (x,y,z)
         index = (parseInt(vertexData[0]) - 1) * 3;
         this._finalVertices.push(
@@ -156,7 +157,7 @@ class ObjLoader {
         );
         // And for UVs - but check a value exists first as they're optional
         if (vertexData[1] !== '') {
-          index = (parseInt(vertexData[1]) - 1) * 3;
+          index = (parseInt(vertexData[1]) - 1) * 2;
           this._finalUVs.push(
             this._tempUVs[index],
             1 - this._tempUVs[index + 1] // Flip the Y so that Y is upwards to match our WebGL co-ordinate space
@@ -169,7 +170,7 @@ class ObjLoader {
 
       // In a quad, the last vertex of the second triangle is the first vertex in the first triangle
       if (i === 3 && isQuad) {
-        this._finalIndices.push(previousFaceData[vertexData[0]]);
+        this._finalIndices.push(previousFaceData[valueArray[0]]);
       }
     }
   }

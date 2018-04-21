@@ -18,105 +18,107 @@ class FShape extends Mesh {
   }
 
   _generateVertices() {
-    const w = this._width;
+    const w = this._width / 2;
+    const thirdW = -w + (this._width / 3);
+    const twoThirdsW = -w + ((this._width / 3) * 2);
     const h = this._height;
-    const d = this._depth;
+    const d = this._depth / 2;
     const vertices = new Float32Array([
       // Left column front
-      0, 0, 0,
-      w/3, 0, 0,
-      w/3, h, 0,
-      0, h, 0,
+      -w, 0, d,
+      thirdW, 0, d,
+      thirdW, h, d,
+      -w, h, d,
 
       // top rung front
-      w/3, h,  0,
-      w/3, (h/5)*4,  0,
-      w, (h/5)*4,  0,
-      w, h, 0,
+      thirdW, h, d,
+      thirdW, (h/5)*4, d,
+      w, (h/5)*4, d,
+      w, h, d,
 
       // middle rung front
-      w/3, (h/5) * 3, 0,
-      w/3, (h/5) * 2, 0,
-      (w/3)*2, (h/5)*2, 0,
-      (w/3)*2, (h/5)*3, 0,
+      thirdW, (h/5) * 3, d,
+      thirdW, (h/5) * 2, d,
+      twoThirdsW, (h/5)*2, d,
+      twoThirdsW, (h/5)*3, d,
 
       // left column back
-      0, 0, -d,
-      0, h, -d,
-      w/3, h, -d,
-      w/3, 0, -d,
+      -w, 0, -d,
+      -w, h, -d,
+      thirdW, h, -d,
+      thirdW, 0, -d,
 
       // top rung back
       w, h, -d,
       w, (h/5)*4, -d,
-      w/3, (h/5)*4, -d,
-      w/3, h, -d,
+      thirdW, (h/5)*4, -d,
+      thirdW, h, -d,
 
       // middle rung back
-      (w/3)*2, (h/5)*3, -d,
-      (w/3)*2, (h/5) * 2, -d,
-      w/3, (h/5) * 2, -d,
-      w/3, (h/5) * 3, -d,
+      twoThirdsW, (h/5)*3, -d,
+      twoThirdsW, (h/5) * 2, -d,
+      thirdW, (h/5) * 2, -d,
+      thirdW, (h/5) * 3, -d,
 
       // top
-      0, h, 0,
-      w, h, 0,
+      -w, h, d,
+      w, h, d,
       w, h, -d,
-      0, h, -d,
+      -w, h, -d,
 
       // top rung right
-      w, h, 0,
-      w, (h/5)*4, 0,
+      w, h, d,
+      w, (h/5)*4, d,
       w, (h/5)*4, -d,
       w, h, -d,
 
       // under top rung
-      w/3, (h/5)*4, -d,
+      thirdW, (h/5)*4, -d,
       w, (h/5)*4, -d,
-      w, (h/5)*4, 0,
-      w/3, (h/5)*4, 0,
+      w, (h/5)*4, d,
+      thirdW, (h/5)*4, d,
 
       // between top rung and middle
-      w/3, (h/5)*4, 0,
-      w/3, (h/5)*3, 0,
-      w/3, (h/5)*3, -d,
-      w/3, (h/5)*4, -d,
+      thirdW, (h/5)*4, d,
+      thirdW, (h/5)*3, d,
+      thirdW, (h/5)*3, -d,
+      thirdW, (h/5)*4, -d,
 
       // top of middle rung
-      w/3, (h/5)*3, 0,
-      (w/3)*2, (h/5)*3, 0,
-      (w/3)*2, (h/5)*3, -d,
-      w/3, (h/5)*3, -d,
+      thirdW, (h/5)*3, d,
+      twoThirdsW, (h/5)*3, d,
+      twoThirdsW, (h/5)*3, -d,
+      thirdW, (h/5)*3, -d,
 
       // right of middle rung
-      (w/3)*2, (h/5)*3, 0,
-      (w/3)*2, (h/5)*2, 0,
-      (w/3)*2, (h/5)*2, -d,
-      (w/3)*2, (h/5)*3, -d,
+      twoThirdsW, (h/5)*3, d,
+      twoThirdsW, (h/5)*2, d,
+      twoThirdsW, (h/5)*2, -d,
+      twoThirdsW, (h/5)*3, -d,
 
       // bottom of middle rung.
-      w/3, (h/5)*2, 0,
-      w/3, (h/5)*2, -d,
-      (w/3)*2, (h/5)*2, -d,
-      (w/3)*2, (h/5)*2, 0,
+      thirdW, (h/5)*2, d,
+      thirdW, (h/5)*2, -d,
+      twoThirdsW, (h/5)*2, -d,
+      twoThirdsW, (h/5)*2, d,
       
       // right of bottom
-      w/3, (h/5)*2, -d,
-      w/3, (h/5)*2, 0,
-      w/3, 0, 0,
-      w/3, 0, -d,
+      thirdW, (h/5)*2, -d,
+      thirdW, (h/5)*2, d,
+      thirdW, 0, d,
+      thirdW, 0, -d,
 
       // bottom
-      0, 0, -d,
-      w/3, 0, -d,
-      w/3, 0, 0,
-      0, 0, 0,
+      -w, 0, -d,
+      thirdW, 0, -d,
+      thirdW, 0, d,
+      -w, 0, d,
       
       // left side
-      0, 0, 0,
-      0, h, 0,
-      0, h, -d,
-      0, 0, -d,
+      -w, 0, d,
+      -w, h, d,
+      -w, h, -d,
+      -w, 0, -d,
     ]);
 
     return vertices;

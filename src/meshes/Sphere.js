@@ -8,6 +8,7 @@ class Sphere extends Mesh {
     }
     this._id = `Sphere-${Date.now()}`;
     this._radius = radius;
+    this._width = this._height = this._depth = 2 * this._radius;
     this._latitudeBands = segments || 20;
     this._longitudeBands = segments || 20;
     this._vertexArray = [];

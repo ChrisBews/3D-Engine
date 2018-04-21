@@ -9,6 +9,7 @@ class Plane extends Mesh {
     }
     this._id = `Plane-${Date.now()}`;
     this._width = width;
+    this._height = 0;
     this._depth = depth || width;
     this._divisions = divisions || 0;
     this._sections = this._divisions + 1;
@@ -24,12 +25,11 @@ class Plane extends Mesh {
 
     this._vertices = new Float32Array(length);
     this._normals = new Float32Array(length);
-
-    let previousX = 0;
-    let previousZ = 0;
+    let previousX = -(this._width / 2);
+    let previousZ = this._depth / 2;
     for (let i = 0; i < this._sections; i++) {
       const newZ = previousZ + (-this._depth / this._sections);
-      previousX = 0;
+      previousX = -(this._width / 2);
 
       for (let k = 0; k < this._sections; k++) {
         const newX = previousX + (this._width / this._sections);

@@ -17,47 +17,47 @@ class Cube extends Mesh {
   }
 
   _generateVertices() {
-    const w = this._width;
+    const w = this._width / 2;
     const h = this._height;
-    const d = this._depth;
-    // We want 0,0,0 at bottom of mesh, and in the center
+    const d = this._depth / 2;
+    // We want 0,0,0 at center of the mesh
     // Negative depth because -z is into the screen
     const vertices = new Float32Array([
       // Front face
-      0, 0, 0,
-      w, 0, 0,
-      w, h, 0,
-      0, h, 0,
+      -w, 0, d,
+      w, 0, d,
+      w, h, d,
+      -w, h, d,
 
       // Back face
-      0, 0, -d,
-      0, h, -d,
+      -w, 0, -d,
+      -w, h, -d,
       w, h, -d,
       w, 0, -d,
 
       // Top face
-      0, h, -d,
-      0, h, 0,
-      w, h, 0,
+      -w, h, -d,
+      -w, h, d,
+      w, h, d,
       w, h, -d,
 
       // Bottom face
-      0, 0, -d,
+      -w, 0, -d,
       w, 0, -d,
-      w, 0, 0,
-      0, 0, 0,
+      w, 0, d,
+      -w, 0, d,
 
       // Right face
       w, 0, -d,
       w, h, -d,
-      w, h, 0,
-      w, 0, 0,
+      w, h, d,
+      w, 0, d,
 
       // Left face
-      0, 0, -d,
-      0, 0, 0,
-      0, h, 0,
-      0, h, -d,
+      -w, 0, -d,
+      -w, 0, d,
+      -w, h, d,
+      -w, h, -d,
     ]);
 
     return vertices;

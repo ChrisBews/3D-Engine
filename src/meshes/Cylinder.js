@@ -58,8 +58,8 @@ class Cylinder extends Mesh {
 
       // Draw the middle segments
       for (let k = 0; k < this._heightSegments; k++) {
-        const h1 = k * (this._height / this._heightSegments);
-        const h2 = (k+1) * (this._height / this._heightSegments);
+        const h1 = (k * (h / this._heightSegments));
+        const h2 = ((k+1) * (h / this._heightSegments));
 
         vertexArray.push(
           vX1, h1, vZ1,

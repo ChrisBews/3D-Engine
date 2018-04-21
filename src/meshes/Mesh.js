@@ -184,21 +184,21 @@ class Mesh {
     const scaledWidth = this._width * this._scaleX;
     const scaledHeight = this._height * this._scaleY;
     const scaledDepth = this._depth * this._scaleZ;
-    const xPos = this._x - (scaledWidth/2);
+    const xPos = this._x;// - (scaledWidth/2);
     const yPos = this._y;
-    const zPos = this._z + (scaledDepth/2);
+    const zPos = this._z;// + (scaledDepth/2);
     this._matrix = Matrix3D.createTranslation(xPos, yPos, zPos);
     this._worldMatrix = Matrix3D.createIdentity();
 
     if (this._rotationX || this._rotationY || this._rotationZ) {
       // Translate so that the origin is at the center of the shape for rotation
-      this._matrix = Matrix3D.translate(this._matrix, scaledWidth/2, scaledHeight/2, -scaledDepth / 2);
+      this._matrix = Matrix3D.translate(this._matrix, 0, scaledHeight/2, 0);
       this._matrix = Matrix3D.rotateX(this._matrix, this._rotationXRadians);
       this._matrix = Matrix3D.rotateY(this._matrix, this._rotationYRadians);
       this._matrix = Matrix3D.rotateZ(this._matrix, this._rotationZRadians);
       
       // Translate back. Rotation has now happened in the center
-      this._matrix = Matrix3D.translate(this._matrix, -scaledWidth/2, -scaledHeight/2, scaledDepth / 2);
+      this._matrix = Matrix3D.translate(this._matrix, 0, -scaledHeight/2, 0);
 
       this._worldMatrix = Matrix3D.rotateX(this._worldMatrix, this._rotationXRadians);
       this._worldMatrix = Matrix3D.rotateY(this._worldMatrix, this._rotationYRadians);
