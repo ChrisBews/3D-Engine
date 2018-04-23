@@ -120,7 +120,7 @@ class ObjLoader {
     // (vertex / uv / normal indices)
     // Quad: f 1/1/1 2/2/1 3/3/1 4/4/1
     // Triangle: f 1/1/1 2/2/1 3/3/1
-    // Triangle without UVs: 1//1 2//1 3//1
+    // Triangle without UVs: f 1//1 2//1 3//1
     const valueArray = lineToParse.split(' ');
     // Remove the 'f' from the array
     valueArray.shift();

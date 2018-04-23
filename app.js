@@ -283,7 +283,7 @@ class App {
       this.testMesh.x = 0;
       this.testMesh.y = 0;
       this.testMesh.z = 0;
-      this.testMesh.scale = 10;
+      this.testMesh.scale = 4;
       this.testMesh.shader = new FlatColorShader([255, 255, 200]);
       OomphMotion.start(this.testMesh,
         {
