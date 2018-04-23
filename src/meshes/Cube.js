@@ -13,6 +13,7 @@ class Cube extends Mesh {
     this._vertices = this._generateVertices();
     this._normals = this._generateNormals();
     this._indices = this._generateIndices();
+    this._uvs = this._generateUVs();
     this._updateMatrix();
   }
 
@@ -113,6 +114,46 @@ class Cube extends Mesh {
       12, 13, 14,  12, 14, 15, // Bottom
       16, 17, 18,  16, 18, 19, // Right
       20, 21, 22,  20, 22, 23, // Left
+    ]);
+  }
+
+  _generateUVs() {
+    return new Float32Array([
+      // Front face
+      0, 1,
+      1, 1,
+      1, 0,
+      0, 0,
+      
+      // Back face
+      1, 1,
+      1, 0,
+      0, 0,
+      0, 1,
+      
+      // Top face
+      0, 0,
+      0, 1,
+      1, 1,
+      1, 0,
+      
+      // Bottom face
+      0, 1,
+      1, 1,
+      1, 0,
+      0, 0,
+      
+      // Right face
+      1, 1,
+      1, 0,
+      0, 0,
+      0, 1,
+
+      // Left face
+      0, 1,
+      1, 1,
+      1, 0,
+      0, 0,
     ]);
   }
 }

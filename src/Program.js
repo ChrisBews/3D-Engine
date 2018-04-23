@@ -2,6 +2,8 @@ class Program {
 
   constructor(glContext, shader) {
     this._gl = glContext;
+    this._shader = shader;
+    if (this._shader.setGL) this._shader.setGL(glContext);
     this._vertexShader = this._createShader(this._gl.VERTEX_SHADER, shader.vertexShader);
     this._fragmentShader = this._createShader(this._gl.FRAGMENT_SHADER, shader.fragmentShader);
     this._glProgram = this._createGLProgram();
@@ -9,6 +11,7 @@ class Program {
     this._positionLocation;
     this._normalsLocation;
     this._colorLocation;
+    this._uvLocation;
     this._matrixLocation;
     this._worldMatrixLocation;
 
@@ -26,6 +29,10 @@ class Program {
 
   get colorLocation() {
     return this._colorLocation;
+  }
+
+  get uvLocation() {
+    return this._uvLocation;
   }
 
   get lightDirectionLocation() {
@@ -76,6 +83,7 @@ class Program {
   _getAttributeLocations() {
     this._positionLocation = this._gl.getAttribLocation(this._glProgram, 'a_position');
     this._normalsLocation = this._gl.getAttribLocation(this._glProgram, 'a_normal');
+    this._uvLocation = this._gl.getAttribLocation(this._glProgram, 'a_texcoord');
   }
 
   _getUniformLocations() {

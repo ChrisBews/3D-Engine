@@ -23,6 +23,7 @@ class Mesh {
     this._vertices = vertices ? new Float32Array(vertices) : [];
     this._normals = normals ? new Float32Array(normals) : [];
     this._indices = indices ? new Uint16Array(indices) : [];
+    this._uvs = uvs ? new Float32Array(uvs) : undefined;
     this._matrix;
     this._worldMatrix;
     if (vertices) {
@@ -156,6 +157,11 @@ class Mesh {
   }
   set indices(value) { this._indices = value; }
   
+  get uvs() {
+    return this._uvs;
+  }
+  set uvs(value) { this._uvs = value; }
+
   get matrix() {
     return this._matrix;
   }

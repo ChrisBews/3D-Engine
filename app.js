@@ -22,6 +22,18 @@ class App {
 
     //this.fShape.rotationX = 0;
     //this.fShape.rotationY = 0;
+
+    OomphMotion.start(
+      this.cube,
+      {
+        to: {
+          rotationX: 360,
+          rotationY: 360,
+        },
+        duration: 5000,
+        loops: true,
+      }
+    );
     
     /*OomphMotion.start(
       this.plane,
@@ -231,10 +243,10 @@ class App {
 
   populateScene() {
     this.cube = new Cube(50);
-    this.cube.shader = new FlatColorShader([200, 200, 200]);
+    this.cube.shader = new TextureShader('crate-2.jpg');//new FlatColorShader([200, 200, 200]);
     this.cube.x = 100;
     this.cube.y = 0;
-    this.cube.z = 0;
+    this.cube.z = 100;
     this.cube.rotationY = 0;
 
     this.cube2 = new Cube(100, 100, 3);

@@ -12,6 +12,7 @@ class Oomph3D {
     this._positionBuffer;
     this._normalsBuffer;
     this._indexBuffer;
+    this._uvBuffer;
     this._initGL();
     if (this._gl) {
       this._addListeners();
@@ -61,6 +62,7 @@ class Oomph3D {
     this._positionBuffer = this._gl.createBuffer();
     this._normalsBuffer = this._gl.createBuffer();
     this._indexBuffer = this._gl.createBuffer();
+    this._uvBuffer = this._gl.createBuffer();
   }
 
   _clearFrameTimer() {
@@ -119,6 +121,8 @@ class Oomph3D {
       const vertices = mesh.vertices;
       const normals = mesh.normals;
       const indices = mesh.indices;
+      const uvs = mesh.uvs;
+
       const material = mesh.material;
       const program = material.program;
 
@@ -138,7 +142,9 @@ class Oomph3D {
         this._gl.vertexAttribPointer(program.normalsLocation, 3, this._gl.FLOAT, false, 0, 0);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, normals, this._gl.STATIC_DRAW);
 
-        this._gl.uniform4fv(program.colorLocation, material.shader.colorInUnits);
+        if (program.colorLocation) {
+          this._gl.uniform4fv(program.colorLocation, material.shader.colorInUnits);
+        }
 
         // Apply lighting
         const lightValues = [0, 0, 0];
@@ -165,6 +171,15 @@ class Oomph3D {
         this._gl.uniform3fv(program.lightDirectionLocation, Matrix3D.normalizeVector(lightValues));
         this._gl.uniform3fv(program.lightColorLocation, lightColor);
 
+        // UVs are optional
+        if (program.uvLocation && program.uvLocation !== -1 && uvs.length) {
+          this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._uvBuffer);
+          this._gl.enableVertexAttribArray(program.uvLocation);
+          this._gl.vertexAttribPointer(program.uvLocation, 2, this._gl.FLOAT, true, 0, 0);
+          this._gl.bufferData(this._gl.ARRAY_BUFFER, uvs, this._gl.STATIC_DRAW);
+        }
+
+        // Vertex positions
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
         this._gl.enableVertexAttribArray(program.positionLocation);
         this._gl.vertexAttribPointer(program.positionLocation, 3, this._gl.FLOAT, false, 0, 0);
