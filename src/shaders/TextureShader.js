@@ -13,6 +13,7 @@ class TextureShader {
     if (this._gl) this._prepareTexture();
   }
 
+  get image() { return this._image; }
   get texture() { return this._texture; }
   
   get vertexShader() {

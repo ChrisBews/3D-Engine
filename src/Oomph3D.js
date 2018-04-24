@@ -172,7 +172,9 @@ class Oomph3D {
         this._gl.uniform3fv(program.lightColorLocation, lightColor);
 
         // UVs are optional
-        if (program.uvLocation && program.uvLocation !== -1 && uvs.length) {
+        if (program.uvLocation && program.uvLocation !== -1 && uvs && uvs.length) {
+          this._gl.bindTexture(this._gl.TEXTURE_2D, material.shader.texture);
+
           this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._uvBuffer);
           this._gl.enableVertexAttribArray(program.uvLocation);
           this._gl.vertexAttribPointer(program.uvLocation, 2, this._gl.FLOAT, true, 0, 0);

@@ -290,13 +290,13 @@ class App {
     this.scene.addChild(this.cylinder);
 
     
-    this.modelLoader = new ObjLoader('tree.obj', (meshData) => {
-      this.testMesh = new Mesh(meshData.vertices, meshData.normals, meshData.indices);
+    this.modelLoader = new ObjLoader('girl.obj', (meshData) => {
+      this.testMesh = new Mesh(meshData.vertices, meshData.normals, meshData.indices, meshData.uvs);
       this.testMesh.x = 0;
       this.testMesh.y = 0;
-      this.testMesh.z = 0;
-      this.testMesh.scale = 4;
-      this.testMesh.shader = new FlatColorShader([255, 255, 200]);
+      this.testMesh.z = 40;
+      this.testMesh.scale = 24;
+      this.testMesh.shader = new TextureShader('girl.png');//new FlatColorShader([255, 255, 200]);
       OomphMotion.start(this.testMesh,
         {
           to: { rotationY: 360 },
@@ -305,7 +305,7 @@ class App {
         }
       );
       this.scene.addChild(this.testMesh);
-      //this.camera.lookAt(this.testMesh);
+      this.camera.lookAt(this.testMesh);
       //this.camera.followMesh(this.testMesh, 100);
     });
 
@@ -330,8 +330,8 @@ class App {
     //this.camera = new ProjectionCamera(canvas);
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     this.camera.lookAt(this.originCube);
-    this.camera.z = 300;
-    this.camera.y = 200;
+    this.camera.z = 100;
+    this.camera.y = 0;
     this.camera.x = -100;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
