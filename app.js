@@ -43,7 +43,7 @@ class App {
         loops: true,
       }
     );*/
-    /*OomphMotion.timeline(
+    OomphMotion.timeline(
       this.fShape,
       [
         {
@@ -61,10 +61,10 @@ class App {
       {
         loops: true,
       },
-    );*/
+    );
 
-    /*this.cubeAnimId = OomphMotion.start(
-      this.cube,
+    this.cubeAnimId = OomphMotion.start(
+      this.cube3,
       {
         to: {
           rotationX: 360,
@@ -77,7 +77,7 @@ class App {
         bounce: true,
         steps: 12,
       },
-    )*/
+    )
 
     /*setTimeout(() => {
       OomphMotion.pause();
@@ -108,7 +108,7 @@ class App {
       },
     );*/
 
-    /*OomphMotion.timeline(
+    OomphMotion.timeline(
       this.cylinderShader,
       [
         {
@@ -133,12 +133,12 @@ class App {
         },
       ],
       {
-        loops: 2,
+        loops: true,
       },
-    );*/
+    );
 
 
-    /*OomphMotion.timeline(
+    OomphMotion.timeline(
       this.cube2,
       [
         {
@@ -171,10 +171,10 @@ class App {
         bounce: true,
         // onUpdate,
         onComplete: () => {
-          console.log('Timeline complete!');
+          //console.log('Timeline complete!');
         },
       },
-    );*/
+    );
 
     //Oomph3D
     /*OomphMotion.start(
@@ -257,6 +257,10 @@ class App {
     this.cube2.z = 0;
     this.cube2.scale = 1;
 
+    this.cube3 = new Cube(50);
+    this.cube3.shader = new FlatColorShader([255, 255, 255]);
+    this.cube3.x = 200;
+
     this.originCube = new Cube(3, 200, 3);
     this.originCube.shader = new FlatColorShader([0, 127, 0]);
 
@@ -272,7 +276,8 @@ class App {
     this.plane.z = 0;
 
     this.sphere = new Sphere(50);
-    this.sphere.y = -100;
+    this.sphere.y = 100;
+    this.sphere.x = 300;
     this.sphere.shader = new FlatColorShader([80, 40, 250]);
 
     this.cylinderShader = new FlatColorShader([244, 232, 66]);
@@ -288,6 +293,7 @@ class App {
     this.scene.addChild(this.fShape);
     this.scene.addChild(this.plane);
     this.scene.addChild(this.cylinder);
+    this.scene.addChild(this.cube3);
 
     
     this.modelLoader = new ObjLoader('girl.obj', (meshData) => {
@@ -306,6 +312,7 @@ class App {
       );
       this.scene.addChild(this.testMesh);
       this.camera.lookAt(this.testMesh);
+
       //this.camera.followMesh(this.testMesh, 100);
     });
 
@@ -328,16 +335,20 @@ class App {
 
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
+    
     this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    this.camera.lookAt(this.originCube);
+    this.camera.lookAt(this.fShape);
     this.camera.z = 100;
     this.camera.y = 0;
     this.camera.x = -100;
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera.z = 400;
-    //this.camera = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
-    //this.camera.followMesh(this.fShape, 400);
+
+    this.camera2 = new FollowCamera(60, canvas.clientWidth, canvas.clientHeight);
+    this.camera2.followMesh(this.fShape, 400);
+
+
     //this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera.enableControls();
 
