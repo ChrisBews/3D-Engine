@@ -10,6 +10,8 @@ class FreeCamera extends PerspectiveCamera {
     this._VERTICAL_DEADZONE = 100;
     this._MAX_ROTATION_PER_SECOND = 75;
     this._keyDown = false;
+    this._alwaysRotateToMouse = false;
+    this._dragInprogress = false;
     this._speedPerSecond = this._START_SPEED;
     this._pressedKeys = [];
     this._keyDownTime;
@@ -19,11 +21,21 @@ class FreeCamera extends PerspectiveCamera {
     this._currentDirection = [0, 0, -1];
     this._mouseXRotating = false;
     this._mouseYRotating = false;
+    this._previousMouseX = 0;
+    this._previousMouseY = 0;
     this._onKeyDown = this._onKeyDown.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
+    this._onMouseDown = this._onMouseDown.bind(this);
     this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseUp = this._onMouseUp.bind(this);
     this._onWindowResized = this._onWindowResized.bind(this);
     this._updateDeadzones();
+  }
+
+  set alwaysRotateToMouse(value) {
+    this.disableControls();
+    this._alwaysRotateToMouse = value;
+    this.enableControls();
   }
 
   enableControls() {
@@ -31,14 +43,26 @@ class FreeCamera extends PerspectiveCamera {
     document.addEventListener('keyup', this._onKeyUp);
     document.addEventListener('mousemove', this._onMouseMove);
     window.addEventListener('resize', this._onWindowResized);
+    if (!this._alwaysRotateToMouse) {
+      document.addEventListener('mousedown', this._onMouseDown);
+    } else {
+      document.addEventListener('mousemove', this._onMouseMove);
+    }
     this._startKeyFrameTimer();
   }
 
   disableControls() {
     document.removeEventListener('keydown', this._onKeyDown);
     document.removeEventListener('keyup', this._onKeyUp);
-    document.removeEventListener('mousemove', this._onMouseMove);
     window.removeEventListener('resize', this._onWindowResized);
+    if (!this._alwaysRotateToMouse) {
+      document.removeEventListener('mousedown', this._onMouseDown);
+      if (this._dragInprogress) {
+        this._onMouseUp();
+      }
+    } else {
+      document.removeEventListener('mousemove', this._onMouseMove);
+    }
     this._clearKeyFrameTimer();
   }
 
@@ -149,23 +173,48 @@ class FreeCamera extends PerspectiveCamera {
     }
   }
 
+  _onMouseDown(e) {
+    if (!this._alwaysRotateToMouse) {
+      this._dragInprogress = true;
+      this._previousMouseX = e.pageX;
+      this._previousMouseY = e.pageY;
+      document.addEventListener('mousemove', this._onMouseMove);
+      document.addEventListener('mouseup', this._onMouseUp);
+    }
+  }
+
   _onMouseMove(e) {
-    if (e.clientX < this._HORIZONTAL_DEADZONE_START) {
-      this._xRotationStrength = 1 - (e.clientX / this._HORIZONTAL_DEADZONE_START);
-    } else if (e.clientX > this._HORIZONTAL_DEADZONE_END) {
-      this._xRotationStrength = -((e.clientX - this._HORIZONTAL_DEADZONE_END) / (window.innerWidth - this._HORIZONTAL_DEADZONE_END));
-    } else {
-      this._xRotationStrength = 0;
+    if (this._alwaysRotateToMouse) {
+      if (e.clientX < this._HORIZONTAL_DEADZONE_START) {
+        this._xRotationStrength = 1 - (e.clientX / this._HORIZONTAL_DEADZONE_START);
+      } else if (e.clientX > this._HORIZONTAL_DEADZONE_END) {
+        this._xRotationStrength = -((e.clientX - this._HORIZONTAL_DEADZONE_END) / (window.innerWidth - this._HORIZONTAL_DEADZONE_END));
+      } else {
+        this._xRotationStrength = 0;
+      }
+      if (e.clientY < this._VERTICAL_DEADZONE_START) {
+        this._yRotationStrength = 1 - (e.clientY / this._VERTICAL_DEADZONE_START);
+      } else if (e.clientY > this._VERTICAL_DEADZONE_END) {
+        this._yRotationStrength = -((e.clientY - this._VERTICAL_DEADZONE_END) / (window.innerHeight - this._VERTICAL_DEADZONE_END));
+      } else {
+        this._yRotationStrength = 0;
+      }
+      this._mouseXRotating = this._xRotationStrength !== 0;
+      this._mouseYRotating = this._yRotationStrength !== 0;
+    } else if (!this._alwaysRotateToMouse && this._dragInprogress) {
+      const diffX = e.pageX - this._previousMouseX;
+      const diffY = e.pageY - this._previousMouseY;
+      this.angleY += (diffX / window.innerWidth) * 180;
+      this.angleX += (diffY / window.innerHeight) * 180;
+      this._previousMouseX = e.pageX;
+      this._previousMouseY = e.pageY;
     }
-    if (e.clientY < this._VERTICAL_DEADZONE_START) {
-      this._yRotationStrength = 1 - (e.clientY / this._VERTICAL_DEADZONE_START);
-    } else if (e.clientY > this._VERTICAL_DEADZONE_END) {
-      this._yRotationStrength = -((e.clientY - this._VERTICAL_DEADZONE_END) / (window.innerHeight - this._VERTICAL_DEADZONE_END));
-    } else {
-      this._yRotationStrength = 0;
-    }
-    this._mouseXRotating = this._xRotationStrength !== 0;
-    this._mouseYRotating = this._yRotationStrength !== 0;
+  }
+
+  _onMouseUp(e) {
+    this._dragInprogress = false;
+    document.removeEventListener('mousemove', this._onMouseMove);
+    document.removeEventListener('mouseup', this._onMouseUp);
   }
 
   _onWindowResized() {
@@ -190,11 +239,13 @@ class FreeCamera extends PerspectiveCamera {
 
     this._clearKeyRotations();
 
-    if (this._xRotationStrength) {
-      this.angleY += ((this._MAX_ROTATION_PER_SECOND * this._xRotationStrength) * timePassed);
-    }
-    if (this._yRotationStrength) {
-      this.angleX += ((this._MAX_ROTATION_PER_SECOND * this._yRotationStrength) * timePassed);
+    if (this._alwaysRotateToMouse) {
+      if (this._xRotationStrength) {
+        this.angleY += ((this._MAX_ROTATION_PER_SECOND * this._xRotationStrength) * timePassed);
+      }
+      if (this._yRotationStrength) {
+        this.angleX += ((this._MAX_ROTATION_PER_SECOND * this._yRotationStrength) * timePassed);
+      }
     }
 
     this._updateMatrix();

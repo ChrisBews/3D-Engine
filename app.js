@@ -311,7 +311,7 @@ class App {
         }
       );
       this.scene.addChild(this.testMesh);
-      this.camera.lookAt(this.testMesh);
+      //this.camera.lookAt(this.testMesh);
 
       //this.camera.followMesh(this.testMesh, 100);
     });
@@ -336,11 +336,11 @@ class App {
   createCamera() {
     //this.camera = new ProjectionCamera(canvas);
     
-    this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    /*this.camera = new LookAtCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     this.camera.lookAt(this.fShape);
     this.camera.z = 100;
     this.camera.y = 0;
-    this.camera.x = -100;
+    this.camera.x = -100;*/
 
     //this.camera = new PerspectiveCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
     //this.camera.z = 400;
@@ -349,8 +349,9 @@ class App {
     this.camera2.followMesh(this.fShape, 400);
 
 
-    //this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-    //this.camera.enableControls();
+    this.camera = new FreeCamera(60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+    this.camera.z = 400;
+    this.camera.enableControls();
 
     this.scene.camera = this.camera;
     this.activeCamera = this.camera;
