@@ -11,6 +11,20 @@ export default {
   },
   plugins: [
     typescript(),
-    babel(),
+    babel({
+      presets: [
+        [
+          "env",
+          {
+            modules: false,
+          },
+        ],
+      ],
+      plugins: [
+        'external-helpers'
+      ],
+      externalHelpers: true,
+      exclude: 'node_modules/**',
+    }),
   ]
 }
