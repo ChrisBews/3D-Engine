@@ -1,0 +1,15 @@
+{
+  "name": "oomph3d",
+  "version": "0.0.1",
+  "description": "A basic, from the ground up, 3D library",
+  "main": "src/index.ts",
+  "repository": "https://github.com/ChrisBews/3D-Engine.git",
+  "author": "Chris Bews <chris@snowbeat.uk>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "rollup": "0.58.2",
+    "rollup-plugin-typescript2": "0.13.0",
+    "typescript": "2.8.3"
+  }
+}
