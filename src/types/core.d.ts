@@ -1,3 +1,7 @@
+interface IWorld {
+  
+}
+
 interface IScene {
 
 }

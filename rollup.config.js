@@ -23,7 +23,7 @@ export default {
       plugins: [
         'external-helpers'
       ],
-      externalHelpers: true,
+
       exclude: 'node_modules/**',
     }),
   ]
