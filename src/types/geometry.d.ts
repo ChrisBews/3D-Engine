@@ -1,17 +1,17 @@
-type vector3 = {
+type Vector3 = {
   x: number;
   y: number;
   z: number;
 }
 
-type vector4 = {
+type Vector4 = {
   x: number;
   y: number;
   z: number;
   w: number;
 }
 
-type point = {
+type Point = {
   x: number;
   y: number;
 }
