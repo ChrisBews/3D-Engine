@@ -101,6 +101,10 @@ export class Matrix4 {
     ];
   }
 
+  copyZToW(distanceMultiplier: number) {
+    this._currentValue[11] = this._currentValue[10] * distanceMultiplier;
+  }
+
   translate(x: number, y: number, z: number) {
     this.multiply([
       1, 0, 0, 0,

@@ -2,11 +2,14 @@ interface ICamera {
   resize: (canvasWidth: number, canvasHeight: number) => void;
 }
 
-interface IFollowCameraOptions {
+interface IPerspectiveCameraOptions {
   fieldOfView: number;
   canvasWidth: number;
   canvasHeight: number;
   zNear?: number;
   zFar?: number;
+}
+
+interface IFollowCameraOptions extends IPerspectiveCameraOptions {
   distance?: number;
 }
