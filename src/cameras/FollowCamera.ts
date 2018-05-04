@@ -65,20 +65,19 @@ export class FollowCamera {
     this._matrix.setToIdentity();
     this._matrix.translate(cameraX, cameraY, cameraZ);
 
-    let cameraPosition: vec3 = {
+    const cameraPosition: vec3 = {
       x: this._matrix[12],
       y: this._matrix[13],
       z: this._matrix[14],
     };
 
-    const xAngleInRadians = degreesToRadians(this._targetMesh.rotation.x)
-    const yAngleInRadians = degreesToRadians(this._targetMesh.rotation.y)
+    const xAngleInRadians = degreesToRadians(this._targetMesh.rotation.x);
+    const yAngleInRadians = degreesToRadians(this._targetMesh.rotation.y);
 
     // Calculate the x and y rotation from the target and camera position
     let directionVector: vec4 = {...subtractVectors(cameraPosition, this._target), w: 0};
 
     let upDirection: vec4 = {x: 0, y: 1, z: 0, w: 0};
-    let rightDirection: vec4 = {x: 1, y: 0, z: 0, w: 0};
 
     /// pitch = y, yaw = x
     const rotationMatrix: Matrix4 = new Matrix4();
