@@ -3,21 +3,21 @@ import { Matrix4 } from '../utils/Matrix4';
 
 export class Mesh implements IMesh {
 
-  private _id: string;
-  private _width: number = 0;
-  private _height: number = 0;
-  private _depth: number = 0;
-  private _position: vec3 = {x: 0, y: 0, z: 0};
-  private _rotation: vec3 = {x: 0, y: 0, z: 0};
-  private _rotationRadians: vec3 = {x: 0, y: 0, z: 0};
-  private _scale: vec3 = {x: 0, y: 0, z: 0};
-  private _material: IMaterial;
-  private _vertices: Float32Array;
-  private _normals: Float32Array;
-  private _indices: Uint16Array;
-  private _uvs: Float32Array;
-  private _matrix: Matrix4;
-  private _normalMatrix: Matrix4;
+  protected _id: string;
+  protected _width: number = 0;
+  protected _height: number = 0;
+  protected _depth: number = 0;
+  protected _position: vec3 = {x: 0, y: 0, z: 0};
+  protected _rotation: vec3 = {x: 0, y: 0, z: 0};
+  protected _rotationRadians: vec3 = {x: 0, y: 0, z: 0};
+  protected _scale: vec3 = {x: 0, y: 0, z: 0};
+  protected _material: IMaterial;
+  protected _vertices: Float32Array;
+  protected _normals: Float32Array;
+  protected _indices: Uint16Array;
+  protected _uvs: Float32Array;
+  protected _matrix: Matrix4;
+  protected _normalMatrix: Matrix4;
 
   constructor(options: IMeshOptions = {}) {
     this._id = `Mesh-${Date.now()}`;
