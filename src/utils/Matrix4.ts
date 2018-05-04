@@ -18,7 +18,10 @@ export class Matrix4 {
     this._currentValue = matrix || this._identity;
   }
 
-  get currentValue(): mat4 { return this._currentValue; }
+  get value(): mat4 { return this._currentValue; }
+  set value(value: mat4) {
+    this._currentValue = value;
+  }
 
   setToIdentity() {
     this._currentValue = this._identity;

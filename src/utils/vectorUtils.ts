@@ -1,3 +1,5 @@
+import { Matrix4 } from './Matrix4';
+
 export const normalizeVector = (vector: vec3): vec3 => {
   const length: number = Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
   // Don't divide by zero
@@ -28,16 +30,17 @@ export const crossVectors = (vectorA: vec3, vectorB: vec3): vec3 => {
   };
 };
 
-export const transformVector = (matrix: mat4, vector: vec3): vec3 => {
+export const transformVector = (matrix: Matrix4, vector: vec4): vec4 => {
   const result: number[] = [0, 0, 0, 0];
   for (let i: number = 0; i < 4; i++) {
     for (let j: number = 0; j < 4; j++) {
-      result[i] += vector[j] * matrix[j * 4 + i];
+      result[i] += vector[j] * matrix.value[j * 4 + i];
     }
   }
   return {
     x: result[0],
     y: result[1],
     z: result[2],
+    w: 0,
   };
 };

@@ -2,7 +2,7 @@ interface ILight {
 
 }
 
-interface IDirectionalLightOptions {
+type directionalLightOptions = {
   directionX: number;
   directionY: number;
   directionZ: number;

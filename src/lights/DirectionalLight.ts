@@ -6,7 +6,7 @@ export class DirectionalLight implements ILight {
   private _color: rgb;
   private _colorUnits: rgb;
 
-  constructor(options: IDirectionalLightOptions) {
+  constructor(options: directionalLightOptions) {
     if (typeof options.directionX === 'undefined') throw new Error('DirectionalLight options object missing directionX attribute');
     if (typeof options.directionY === 'undefined') throw new Error('DirectionalLight options object missing directionY attribute');
     if (typeof options.directionZ === 'undefined') throw new Error('DirectionalLight options object missing directionZ attribute');

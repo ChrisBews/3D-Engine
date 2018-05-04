@@ -1,5 +1,6 @@
 interface IMesh {
-
+  center: vec3;
+  rotation: vec3;
 }
 
 interface IMeshOptions {
