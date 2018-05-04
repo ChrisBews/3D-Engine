@@ -28,7 +28,7 @@ export class Cylinder extends Mesh {
     const vertexArray: number[] = [];
     const normalsArray: number[] = [];
     const indicesArray: number[] = [];
-    const uvsArray: number[] = [];
+    // const uvsArray: number[] = [];
     const segmentAngle: number = (360 / this._segments);
     let startIndex: number = 0;
     for (let i: number = 0; i < this._segments; i++) {
@@ -65,7 +65,7 @@ export class Cylinder extends Mesh {
       // Draw the middle segments
       for (let k: number = 0; k < this._heightSegments; k++) {
         const h1: number = (k * (this._height / this._heightSegments));
-        const h2: number = ((k+1) * (this._height / this._heightSegments));
+        const h2: number = ((k + 1) * (this._height / this._heightSegments));
 
         vertexArray.push(
           vX1, h1, vZ1,

@@ -43,11 +43,11 @@ export class Sphere extends Mesh {
     let startIndex: number = 0;
     for (let i: number = 0; i < this._longitudeBands; i++) {
       const theta1: number = (i / this._longitudeBands) * Math.PI;
-      const theta2: number = ((i+1)/this._longitudeBands) * Math.PI;
+      const theta2: number = ((i + 1) / this._longitudeBands) * Math.PI;
 
       for (let k: number = 0; k < this._latitudeBands; k++) {
-        const phi1: number = (k/this._latitudeBands) * 2 * Math.PI;
-        const phi2 = ((k+1)/this._latitudeBands) * 2 * Math.PI;
+        const phi1: number = (k / this._latitudeBands) * 2 * Math.PI;
+        const phi2 = ((k + 1) / this._latitudeBands) * 2 * Math.PI;
 
         const normal1: vec3 = this._createNormal(theta1, phi1);
         const normal2: vec3 = this._createNormal(theta1, phi2);
@@ -128,6 +128,6 @@ export class Sphere extends Mesh {
       x: normal.x * this._radius,
       y: (normal.y * this._radius) + this._radius,
       z: normal.z * this._radius,
-    }
+    };
   }
 }

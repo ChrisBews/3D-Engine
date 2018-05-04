@@ -20,6 +20,9 @@ export class FShape extends Mesh {
     const w: number = this._width / 2;
     const thirdW: number = -w + (this._width / 3);
     const twoThirdsW: number = -w + ((this._width / 3) * 2);
+    const twoFifthsH: number = (this._height / 5) * 2;
+    const threeFifthsH: number = (this._height / 5) * 3;
+    const fourFifthsH: number = (this._height / 5) * 4;
     const h: number = this._height;
     const d: number = this._depth / 2;
     this._vertices = new Float32Array([
@@ -31,15 +34,15 @@ export class FShape extends Mesh {
 
       // top rung front
       thirdW, h, d,
-      thirdW, (h/5)*4, d,
-      w, (h/5)*4, d,
+      thirdW, fourFifthsH, d,
+      w, fourFifthsH, d,
       w, h, d,
 
       // middle rung front
-      thirdW, (h/5) * 3, d,
-      thirdW, (h/5) * 2, d,
-      twoThirdsW, (h/5)*2, d,
-      twoThirdsW, (h/5)*3, d,
+      thirdW, threeFifthsH, d,
+      thirdW, twoFifthsH, d,
+      twoThirdsW, twoFifthsH, d,
+      twoThirdsW, threeFifthsH, d,
 
       // left column back
       -w, 0, -d,
@@ -49,15 +52,15 @@ export class FShape extends Mesh {
 
       // top rung back
       w, h, -d,
-      w, (h/5)*4, -d,
-      thirdW, (h/5)*4, -d,
+      w, fourFifthsH, -d,
+      thirdW, fourFifthsH, -d,
       thirdW, h, -d,
 
       // middle rung back
-      twoThirdsW, (h/5)*3, -d,
-      twoThirdsW, (h/5) * 2, -d,
-      thirdW, (h/5) * 2, -d,
-      thirdW, (h/5) * 3, -d,
+      twoThirdsW, threeFifthsH, -d,
+      twoThirdsW, twoFifthsH, -d,
+      thirdW, twoFifthsH, -d,
+      thirdW, threeFifthsH, -d,
 
       // top
       -w, h, d,
@@ -67,43 +70,43 @@ export class FShape extends Mesh {
 
       // top rung right
       w, h, d,
-      w, (h/5)*4, d,
-      w, (h/5)*4, -d,
+      w, fourFifthsH, d,
+      w, fourFifthsH, -d,
       w, h, -d,
 
       // under top rung
-      thirdW, (h/5)*4, -d,
-      w, (h/5)*4, -d,
-      w, (h/5)*4, d,
-      thirdW, (h/5)*4, d,
+      thirdW, fourFifthsH, -d,
+      w, fourFifthsH, -d,
+      w, fourFifthsH, d,
+      thirdW, fourFifthsH, d,
 
       // between top rung and middle
-      thirdW, (h/5)*4, d,
-      thirdW, (h/5)*3, d,
-      thirdW, (h/5)*3, -d,
-      thirdW, (h/5)*4, -d,
+      thirdW, fourFifthsH, d,
+      thirdW, threeFifthsH, d,
+      thirdW, threeFifthsH, -d,
+      thirdW, fourFifthsH, -d,
 
       // top of middle rung
-      thirdW, (h/5)*3, d,
-      twoThirdsW, (h/5)*3, d,
-      twoThirdsW, (h/5)*3, -d,
-      thirdW, (h/5)*3, -d,
+      thirdW, threeFifthsH, d,
+      twoThirdsW, threeFifthsH, d,
+      twoThirdsW, threeFifthsH, -d,
+      thirdW, threeFifthsH, -d,
 
       // right of middle rung
-      twoThirdsW, (h/5)*3, d,
-      twoThirdsW, (h/5)*2, d,
-      twoThirdsW, (h/5)*2, -d,
-      twoThirdsW, (h/5)*3, -d,
+      twoThirdsW, threeFifthsH, d,
+      twoThirdsW, twoFifthsH, d,
+      twoThirdsW, twoFifthsH, -d,
+      twoThirdsW, threeFifthsH, -d,
 
       // bottom of middle rung.
-      thirdW, (h/5)*2, d,
-      thirdW, (h/5)*2, -d,
-      twoThirdsW, (h/5)*2, -d,
-      twoThirdsW, (h/5)*2, d,
+      thirdW, twoFifthsH, d,
+      thirdW, twoFifthsH, -d,
+      twoThirdsW, twoFifthsH, -d,
+      twoThirdsW, twoFifthsH, d,
 
       // right of bottom
-      thirdW, (h/5)*2, -d,
-      thirdW, (h/5)*2, d,
+      thirdW, twoFifthsH, -d,
+      thirdW, twoFifthsH, d,
       thirdW, 0, d,
       thirdW, 0, -d,
 

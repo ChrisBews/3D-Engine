@@ -37,7 +37,7 @@ export class Plane extends Mesh {
 
       for (let k = 0; k < this._widthSections; k++) {
         const newX = previousX + (this._width / this._widthSections);
-        const counter = (i * (this._depthSections * 12)) + (k * 12);
+        // const counter = (i * (this._depthSections * 12)) + (k * 12);
         this._addDivision(previousX, previousZ, newX, newZ);
         previousX = newX;
       }
@@ -47,7 +47,7 @@ export class Plane extends Mesh {
   }
 
   _addDivision(startX: number, startZ: number, endX: number, endZ: number) {
-    let indexArrayCounter = (this._vertices.length / 3);
+    const indexArrayCounter = (this._vertices.length / 3);
     if (this._vertices.length === 0) {
       this.indices.set(
         [0, 1, 2, 0, 2, 3],
