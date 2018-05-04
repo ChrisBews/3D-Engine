@@ -30,19 +30,19 @@ export class Mesh implements IMesh {
 
   get id(): string { return this._id; }
 
-  get x() { return this._position.x; }
+  get x(): number { return this._position.x; }
   set x(value: number) {
     this._position.x = value;
     this._updateMatrix();
   }
 
-  get y() { return this._position.y; }
+  get y(): number { return this._position.y; }
   set y(value: number) {
     this._position.y = value;
     this._updateMatrix();
   }
 
-  get z() { return this._position.z; }
+  get z(): number { return this._position.z; }
   set z(value: number) {
     this._position.z = value;
     this._updateMatrix();
@@ -127,8 +127,9 @@ export class Mesh implements IMesh {
   }
 
   _getMaxVertexDistance(startIndex: number, endIndex: number): number {
-    let min: number = 0, max: number = 0;
-    for (let i = startIndex; i < endIndex; i+= 3) {
+    let min: number = 0;
+    let max: number = 0;
+    for (let i = startIndex; i < endIndex; i += 3) {
       const vertexCoord = this._vertices[i];
       if (vertexCoord < min) min = vertexCoord;
       if (vertexCoord > max) max = vertexCoord;
@@ -138,9 +139,9 @@ export class Mesh implements IMesh {
 
   _updateMatrix() {
     const scaledHeight: number = this._height * this._scale.y;
-    let updatedMatrix: Matrix4 = new Matrix4();
+    const updatedMatrix: Matrix4 = new Matrix4();
     updatedMatrix.translate(this._position.x, this._position.y, this._position.z);
-    let updatedNormalMatrix: Matrix4 = new Matrix4();
+    const updatedNormalMatrix: Matrix4 = new Matrix4();
 
     // If rotation has been applied
     if (this._rotation.x || this._rotation.y || this._rotation.z) {

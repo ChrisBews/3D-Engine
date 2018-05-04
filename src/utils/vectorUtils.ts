@@ -28,7 +28,7 @@ export const crossVectors = (vectorA: vec3, vectorB: vec3): vec3 => {
   };
 };
 
-export const transformVector = (matrix: mat4, vector: vec3) : vec3 => {
+export const transformVector = (matrix: mat4, vector: vec3): vec3 => {
   const result: number[] = [0, 0, 0, 0];
   for (let i: number = 0; i < 4; i++) {
     for (let j: number = 0; j < 4; j++) {
