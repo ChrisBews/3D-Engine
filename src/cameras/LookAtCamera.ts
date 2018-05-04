@@ -96,12 +96,12 @@ export class LookAtCamera {
         z: this._matrix[14],
       };
 
-      const upDirection = [0, 1, 0];
+      const upDirection = {x: 0, y: 1, z: 0};
       this._viewMatrix.setToLookAt(cameraPosition, this._targetCoords, upDirection);
 
       this._viewMatrix.invert();
       this._matrix.value = this._projectionMatrix.value;
-      this._matrix.multiply(this._viewMatrix);
+      this._matrix.multiply(this._viewMatrix.value);
     }
   }
 }

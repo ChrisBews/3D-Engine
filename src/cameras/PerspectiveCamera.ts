@@ -96,6 +96,6 @@ export class PerspectiveCamera {
     this._viewMatrix.invert();
 
     this._matrix.value = this._projectionMatrix.value;
-    this._matrix.multiply(this._viewMatrix);
+    this._matrix.multiply(this._viewMatrix.value);
   }
 }
