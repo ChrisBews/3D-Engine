@@ -6,6 +6,7 @@ export class Cube extends Mesh {
     super();
     if (!options.width) throw new Error('Cube options object is missing a width attribute');
     if (!options.material) throw new Error('Cube options object is missing a material attribute');
+    this._id = `Cube-${Date.now()}`;
     this._width = options.width;
     this._height = options.height || this._width;
     this._depth = options.depth || this._width;
