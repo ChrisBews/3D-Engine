@@ -17,7 +17,7 @@ export class Cube extends Mesh {
     this._updateMatrix();
   }
 
-  _generateVertices() {
+  private _generateVertices() {
     const w: number = this._width / 2;
     const h: number = this._height;
     const d: number = this._depth / 2;
@@ -60,7 +60,7 @@ export class Cube extends Mesh {
     ]);
   }
 
-  _generateNormals() {
+  private _generateNormals() {
     this._normals = new Float32Array([
       // Front face
       0, 0, 1,
@@ -100,7 +100,7 @@ export class Cube extends Mesh {
     ]);
   }
 
-  _generateIndices() {
+  private _generateIndices() {
     this._indices = new Uint16Array([
       0, 1, 2,     0, 2, 3,    // Front
       4, 5, 6,     4, 6, 7,    // Back
@@ -111,7 +111,7 @@ export class Cube extends Mesh {
     ]);
   }
 
-  _generateUVs() {
+  private _generateUVs() {
     this._uvs = new Float32Array([
       // Front face
       0, 1,

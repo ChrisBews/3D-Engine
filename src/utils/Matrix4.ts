@@ -23,11 +23,11 @@ export class Matrix4 {
     this._currentValue = value;
   }
 
-  setToIdentity() {
+  public setToIdentity() {
     this._currentValue = this._identity;
   }
 
-  setToProjection(width: number, height: number, depth: number) {
+  public setToProjection(width: number, height: number, depth: number) {
     // Converts from pixels to clipspace
     // Scale by 1.0/resolution
     // Scale by 2.0
@@ -41,7 +41,7 @@ export class Matrix4 {
     ];
   }
 
-  setToOrthographic(left: number, right: number, bottom: number, top: number, near: number, far: number) {
+  public setToOrthographic(left: number, right: number, bottom: number, top: number, near: number, far: number) {
     // Similar to setToPerspective, but allows you to define the full 3D space
     this._currentValue = [
       2 / (right - left), 0, 0, 0,
@@ -55,7 +55,7 @@ export class Matrix4 {
     ];
   }
 
-  setToPerspective(fieldOfViewInRadians: number, aspect: number, near: number, far: number) {
+  public setToPerspective(fieldOfViewInRadians: number, aspect: number, near: number, far: number) {
     // Adjust the units so they're in clip space
     // Calculate (via Math.tan) the field of view from radians
     // The field of view is basically the rectangle at 'near' and
@@ -82,7 +82,7 @@ export class Matrix4 {
     ];
   }
 
-  setToLookAt(cameraPosition: vec3, target: vec3, up: vec3) {
+  public setToLookAt(cameraPosition: vec3, target: vec3, up: vec3) {
     // Get the axis found between the camera and the target
     const zAxis = normalizeVector(subtractVectors(cameraPosition, target));
     // Work out the X axis - it's perpendicular to up and the zAxis
@@ -101,11 +101,11 @@ export class Matrix4 {
     ];
   }
 
-  copyZToW(distanceMultiplier: number) {
+  public copyZToW(distanceMultiplier: number) {
     this._currentValue[11] = this._currentValue[10] * distanceMultiplier;
   }
 
-  translate(x: number, y: number, z: number) {
+  public translate(x: number, y: number, z: number) {
     this.multiply([
       1, 0, 0, 0,
       0, 1, 0, 0,
@@ -114,13 +114,13 @@ export class Matrix4 {
     ]);
   }
 
-  rotate(angleXRadians: number, angleYRadians: number, angleZRadians: number) {
+  public rotate(angleXRadians: number, angleYRadians: number, angleZRadians: number) {
     if (angleXRadians) this.rotateX(angleXRadians);
     if (angleYRadians) this.rotateY(angleYRadians);
     if (angleZRadians) this.rotateZ(angleZRadians);
   }
 
-  rotateX(angleInRadians: number) {
+  public rotateX(angleInRadians: number) {
     const cos = Math.cos(angleInRadians);
     const sin = Math.sin(angleInRadians);
     this.multiply([
@@ -131,7 +131,7 @@ export class Matrix4 {
     ]);
   }
 
-  rotateY(angleInRadians: number) {
+  public rotateY(angleInRadians: number) {
     const cos = Math.cos(angleInRadians);
     const sin = Math.sin(angleInRadians);
     this.multiply([
@@ -142,7 +142,7 @@ export class Matrix4 {
     ]);
   }
 
-  rotateZ(angleInRadians: number) {
+  public rotateZ(angleInRadians: number) {
     const cos = Math.cos(angleInRadians);
     const sin = Math.sin(angleInRadians);
     this.multiply([
@@ -153,7 +153,7 @@ export class Matrix4 {
     ]);
   }
 
-  scale(x: number, y: number, z: number) {
+  public scale(x: number, y: number, z: number) {
     this.multiply([
       x, 0, 0, 0,
       0, y, 0, 0,
@@ -162,7 +162,7 @@ export class Matrix4 {
     ]);
   }
 
-  rotateOnAxis(angleInRadians: number, xAxis: number, yAxis: number, zAxis: number) {
+  public rotateOnAxis(angleInRadians: number, xAxis: number, yAxis: number, zAxis: number) {
     const cos = Math.cos(angleInRadians);
     const sin = Math.sin(angleInRadians);
     const length = Math.sqrt(xAxis * xAxis + yAxis * yAxis + zAxis * zAxis);
@@ -199,7 +199,7 @@ export class Matrix4 {
     ]);
   }
 
-  multiply(matrix: mat4) {
+  public multiply(matrix: mat4) {
     const a00 = this._currentValue[0 * 4 + 0];
     const a01 = this._currentValue[0 * 4 + 1];
     const a02 = this._currentValue[0 * 4 + 2];
@@ -252,7 +252,7 @@ export class Matrix4 {
     ];
   }
 
-  invert() {
+  public invert() {
     // Create the inverse of the current matrix
     // ie. it should do the opposite of whatever
     // transformation it currently does
@@ -339,7 +339,7 @@ export class Matrix4 {
     ];
   }
 
-  transpose() {
+  public transpose() {
     // AKA swap the columns of a matrix for rows
     this._currentValue = [
       this._currentValue[0], this._currentValue[4], this._currentValue[8], this._currentValue[12],

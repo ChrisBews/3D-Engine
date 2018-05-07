@@ -16,7 +16,7 @@ export class FShape extends Mesh {
     this._generateUVs();
   }
 
-  _generateVertices() {
+  private _generateVertices() {
     const w: number = this._width / 2;
     const thirdW: number = -w + (this._width / 3);
     const twoThirdsW: number = -w + ((this._width / 3) * 2);
@@ -124,7 +124,7 @@ export class FShape extends Mesh {
     ]);
   }
 
-  _generateNormals() {
+  private _generateNormals() {
     this._normals = new Float32Array([
       // left column front
       0, 0, 1,
@@ -224,7 +224,7 @@ export class FShape extends Mesh {
     ]);
   }
 
-  _generateIndices() {
+  private _generateIndices() {
     this._indices = new Uint16Array([
       0, 1, 2,     0, 2, 3,    // Left column front
       4, 5, 6,     4, 6, 7,    // top rung front

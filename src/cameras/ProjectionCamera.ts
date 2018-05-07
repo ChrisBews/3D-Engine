@@ -31,7 +31,7 @@ export class ProjectionCamera {
     return this._matrix;
   }
 
-  _updateMatrix() {
+  private _updateMatrix() {
     this._matrix.setToIdentity();
     this._matrix.copyZToW(distanceMultiplier);
     this._matrix.multiply(this._orthoMatrix.value);

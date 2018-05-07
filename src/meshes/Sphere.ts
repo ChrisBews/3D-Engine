@@ -25,7 +25,7 @@ export class Sphere extends Mesh {
     this._updateMatrix();
   }
 
-  _generateMeshData() {
+  private _generateMeshData() {
     // Explained here: https://gamedev.stackexchange.com/a/60107
     // Helpful ASCII diagram showing how the triangles are built up
     // phi2     phi1
@@ -100,13 +100,13 @@ export class Sphere extends Mesh {
     this._indices = new Uint16Array(tempIndices);
   }
 
-  _addVertex(vertex: vec3, normal: vec3) {
+  private _addVertex(vertex: vec3, normal: vec3) {
     // Add a single vertex and it's normal to the JS arrays being built up
     this._vertexArray.push(vertex.x, vertex.y, vertex.z);
     this._normalsArray.push(normal.x, normal.y, normal.z);
   }
 
-  _createNormal(theta, phi): vec3 {
+  private _createNormal(theta, phi): vec3 {
     const sinTheta = Math.sin(theta);
     const cosTheta = Math.cos(theta);
     const sinPhi = Math.sin(phi);
@@ -123,7 +123,7 @@ export class Sphere extends Mesh {
     };
   }
 
-  _createVertex(normal: vec3): vec3 {
+  private _createVertex(normal: vec3): vec3 {
     return {
       x: normal.x * this._radius,
       y: (normal.y * this._radius) + this._radius,

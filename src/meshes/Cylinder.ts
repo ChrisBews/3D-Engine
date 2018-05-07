@@ -24,7 +24,7 @@ export class Cylinder extends Mesh {
     this._updateMatrix();
   }
 
-  _generateMeshData() {
+  private _generateMeshData() {
     const vertexArray: number[] = [];
     const normalsArray: number[] = [];
     const indicesArray: number[] = [];

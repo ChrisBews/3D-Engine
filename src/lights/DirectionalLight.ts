@@ -35,7 +35,7 @@ export class DirectionalLight implements ILight {
 
   get colorUnits(): rgb { return this._colorUnits; }
 
-  _updateUnitColor() {
+  private _updateUnitColor() {
     this._colorUnits = convertColorToUnits(this._color);
   }
 }

@@ -1,6 +1,14 @@
 interface IMesh {
   center: vec3;
-  rotation: vec3;
+  x: number;
+  y: number;
+  z: number;
+  rotationX: number;
+  rotationY: number;
+  rotationZ: number;
+  scaleX: number;
+  scaleY: number;
+  scaleZ: number;
 }
 
 interface IMeshOptions {

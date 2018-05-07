@@ -76,16 +76,16 @@ export class PerspectiveCamera {
     this._updateMatrix();
   }
 
-  setPosition(x: number, y: number, z: number) {
+  public setPosition(x: number, y: number, z: number) {
     this._position = {x, y, z};
   }
 
-  resize(canvasWidth: number, canvasHeight: number) {
+  public resize(canvasWidth: number, canvasHeight: number) {
     this._aspectRatio = canvasWidth / canvasHeight;
     this._updateMatrix();
   }
 
-  _updateMatrix() {
+  protected _updateMatrix() {
     this._projectionMatrix.setToPerspective(this._fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);
     this._viewMatrix.setToIdentity();
     this._viewMatrix.translate(this._position.x, this._position.y, this._position.z);

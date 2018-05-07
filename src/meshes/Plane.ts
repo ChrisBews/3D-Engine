@@ -23,7 +23,7 @@ export class Plane extends Mesh {
     this._updateMatrix();
   }
 
-  _generateMeshData() {
+  private _generateMeshData() {
     // Create the surface with as many faces as required
     const length: number = (this._widthSections * this._depthSections * 12);
 
@@ -46,7 +46,7 @@ export class Plane extends Mesh {
     }
   }
 
-  _addDivision(startX: number, startZ: number, endX: number, endZ: number) {
+  private _addDivision(startX: number, startZ: number, endX: number, endZ: number) {
     const indexArrayCounter = (this._vertices.length / 3);
     if (this._vertices.length === 0) {
       this.indices.set(

@@ -1,5 +1,6 @@
 import { Matrix4 } from '../utils/Matrix4';
 import { degreesToRadians } from '../utils/mathUtils';
+import { Mesh } from '../meshes/Mesh';
 
 export class LookAtCamera {
 
@@ -9,7 +10,6 @@ export class LookAtCamera {
   private _zNear: number;
   private _zFar: number;
   private _position: vec3;
-  private _lookingAtMesh: boolean = false;
   private _target: IMesh | vec3;
   private _targetCoords: vec3;
   private _matrix: Matrix4;
@@ -53,38 +53,39 @@ export class LookAtCamera {
     this._updateMatrix();
   }
 
-  setPosition(x: number, y: number, z: number) {
+  public setPosition(x: number, y: number, z: number) {
     this._position.x = x;
     this._position.y = y;
     this._position.z = z;
     this._updateMatrix();
   }
 
-  resize(canvasWidth: number, canvasHeight: number) {
+  public resize(canvasWidth: number, canvasHeight: number) {
     this._aspectRatio = canvasWidth / canvasHeight;
     this._updateMatrix();
   }
 
-  lookAt(meshOrPosition: IMesh | vec3) {
+  public lookAt(meshOrPosition: IMesh | vec3) {
     this._target = meshOrPosition;
-    this._lookingAtMesh = this._target.constructor !== Array;
     this._updateMatrix();
   }
 
-  update() {
-    if (this._lookingAtMesh) {
+  public update() {
+    if (this._target instanceof Mesh) {
       this._updateTargetCoords();
     }
     this._updateMatrix();
   }
 
-  _updateTargetCoords() {
-    this._targetCoords = this._lookingAtMesh
-      ? [this._target.center.x, this._target.center.y, this._target.center.z]
-      : this._target;
+  private _updateTargetCoords() {
+    if (this._target instanceof Mesh) {
+      this._targetCoords = this._target.center;
+    } else {
+      this._targetCoords = this._target;
+    }
   }
 
-  _updateMatrix() {
+  private _updateMatrix() {
     if (this._target) {
       this._updateTargetCoords();
       this._projectionMatrix.setToPerspective(this._fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);

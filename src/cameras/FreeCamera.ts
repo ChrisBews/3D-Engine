@@ -45,7 +45,7 @@ export class FreeCamera extends PerspectiveCamera {
     this.enableControls();
   }
 
-  enableControls() {
+  public enableControls() {
     document.addEventListener('keydown', this._onKeyDown);
     document.addEventListener('keyup', this._onKeyUp);
     document.addEventListener('mousemove', this._onMouseMove);
@@ -58,7 +58,7 @@ export class FreeCamera extends PerspectiveCamera {
     this._startKeyFrameTimer();
   }
 
-  disableControls() {
+  public disableControls() {
     document.removeEventListener('keydown', this._onKeyDown);
     document.removeEventListener('keyup', this._onKeyUp);
     window.removeEventListener('resize', this._onWindowResized);
@@ -73,28 +73,28 @@ export class FreeCamera extends PerspectiveCamera {
     this._clearKeyFrameTimer();
   }
 
-  _startKeyFrameTimer() {
+  private _startKeyFrameTimer() {
     this._clearKeyFrameTimer();
     if (!this._keyFrameTimer) {
       this._keyFrameTimer = requestAnimationFrame(this._onKeyFrameTimerTicked.bind(this));
     }
   }
 
-  _clearKeyFrameTimer() {
+  private _clearKeyFrameTimer() {
     if (this._keyFrameTimer) {
       cancelAnimationFrame(this._keyFrameTimer);
       this._keyFrameTimer = undefined;
     }
   }
 
-  _updateDeadzones() {
+  private _updateDeadzones() {
     this._horizontalDeadzoneStart = (window.innerWidth / 2) - Math.min(200, window.innerWidth / 8);
     this._horizontalDeadzoneEnd = (window.innerWidth / 2) + Math.min(200, window.innerWidth / 8);
     this._verticalDeadzoneStart = (window.innerHeight / 2) - Math.min(200, window.innerHeight / 8);
     this._verticalDeadzoneEnd = (window.innerHeight / 2) + Math.min(200, window.innerHeight / 8);
   }
 
-  _updatePosition(key: string, speedIncrement: number) {
+  private _updatePosition(key: string, speedIncrement: number) {
     this._rotationMatrix.setToIdentity();
     if (this._angleXInRadians) this._rotationMatrix.rotateX(this._angleXInRadians);
     if (this._angleYInRadians) this._rotationMatrix.rotateY(this._angleYInRadians);
@@ -149,7 +149,7 @@ export class FreeCamera extends PerspectiveCamera {
     };
   }
 
-  _clearKeyRotations() {
+  private _clearKeyRotations() {
     if (this._pressedKeys.indexOf('LeftArrow') === -1
       && this._pressedKeys.indexOf('RightArrow') === -1
       && !this._mouseXRotating) {
@@ -163,7 +163,7 @@ export class FreeCamera extends PerspectiveCamera {
     }
   }
 
-  _onKeyDown = (e: KeyboardEvent) => {
+  private _onKeyDown = (e: KeyboardEvent) => {
     if (!this._pressedKeys.length) {
       this._previousUpdateTime = 0;
     }
@@ -172,7 +172,7 @@ export class FreeCamera extends PerspectiveCamera {
     }
   }
 
-  _onKeyUp = (e: KeyboardEvent) => {
+  private _onKeyUp = (e: KeyboardEvent) => {
     if (this._pressedKeys.indexOf(e.key) > -1) {
       this._pressedKeys.splice(this._pressedKeys.indexOf(e.key));
     }
@@ -182,7 +182,7 @@ export class FreeCamera extends PerspectiveCamera {
     }
   }
 
-  _onMouseDown = (e: MouseEvent) => {
+  private _onMouseDown = (e: MouseEvent) => {
     if (!this._alwaysRotateToMouse) {
       this._dragInProgress = true;
       this._previousMouseX = e.pageX;
@@ -192,7 +192,7 @@ export class FreeCamera extends PerspectiveCamera {
     }
   }
 
-  _onMouseMove = (e: MouseEvent) => {
+  private _onMouseMove = (e: MouseEvent) => {
     if (this._alwaysRotateToMouse) {
       if (e.clientX < this._horizontalDeadzoneStart) {
         this._xRotationStrength = 1 - (e.clientX / this._horizontalDeadzoneStart);
@@ -220,17 +220,17 @@ export class FreeCamera extends PerspectiveCamera {
     }
   }
 
-  _onMouseUp = (e?: MouseEvent) => {
+  private _onMouseUp = (e?: MouseEvent) => {
     this._dragInProgress = false;
     document.removeEventListener('mousemove', this._onMouseMove);
     document.removeEventListener('mouseup', this._onMouseUp);
   }
 
-  _onWindowResized = () => {
+  private _onWindowResized = () => {
     this._updateDeadzones();
   }
 
-  _onKeyFrameTimerTicked = (updateTime: number) => {
+  private _onKeyFrameTimerTicked = (updateTime: number) => {
     updateTime *= 0.001;
     if (!this._previousUpdateTime) this._previousUpdateTime = updateTime;
 

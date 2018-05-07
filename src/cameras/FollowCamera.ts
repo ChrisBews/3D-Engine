@@ -31,29 +31,29 @@ export class FollowCamera {
 
   get matrix(): Matrix4 { return this._matrix; }
 
-  followMesh(mesh: IMesh, distance?: number) {
+  public followMesh(mesh: IMesh, distance?: number) {
     this._targetMesh = mesh;
     if (distance) this._distance = distance;
     this.update();
   }
 
-  resize(canvasWidth: number, canvasHeight: number) {
+  public resize(canvasWidth: number, canvasHeight: number) {
     this._aspectRatio = canvasWidth / canvasHeight;
     this.update();
   }
 
-  update() {
+  public update() {
     if (this._targetMesh) {
       this._updateTarget();
       this._updateMatrix();
     }
   }
 
-  _updateTarget() {
+  private _updateTarget() {
     this._target = this._targetMesh.center;
   }
 
-  _updateMatrix() {
+  private _updateMatrix() {
     const projectionMatrix: Matrix4 = new Matrix4();
     projectionMatrix.setToPerspective(this._fieldOfView, this._aspectRatio, this._zNear, this._zFar);
 
