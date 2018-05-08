@@ -1,4 +1,3 @@
-
 export class ObjLoader {
 
   private _url: string;
@@ -39,16 +38,16 @@ export class ObjLoader {
   }
 
   private _parseModelData() {
-    let previousLineBreakIndex = 0,
-    lineBreakIndex = this._modelData.indexOf('\n', 0),
-    lineToParse = '';
+    let previousLineBreakIndex: number = 0;
+    let lineBreakIndex: number = this._modelData.indexOf('\n', 0);
+    let lineToParse: string = '';
 
     // While a new line break remains in the file
     while (lineBreakIndex > -1) {
       // Get the next line of the file to check
       lineToParse = this._modelData.substring(previousLineBreakIndex, lineBreakIndex).trim();
 
-      switch(lineToParse.charAt(0)) {
+      switch (lineToParse.charAt(0)) {
         case 'v':
           this._processVertexLine(lineToParse);
           break;
@@ -83,7 +82,7 @@ export class ObjLoader {
     const valueArray: string[] = lineToParse.split(' ');
     // Remove the v/vt/vn part from the array
     valueArray.shift();
-    switch(lineToParse.charAt(1)) {
+    switch (lineToParse.charAt(1)) {
       case ' ':
         // Vertex position
         this._tempVertices.push(
@@ -141,14 +140,14 @@ export class ObjLoader {
         // New vertex data
         vertexData = valueArray[i].split('/');
         // New index will be vertex index + 3 (x,y,z)
-        index = (parseInt(vertexData[0]) - 1) * 3;
+        index = (parseInt(vertexData[0], 10) - 1) * 3;
         this._finalVertices.push(
           this._tempVertices[index],
           this._tempVertices[index + 1],
           this._tempVertices[index + 2]
         );
         // Do the same for the normals
-        index = (parseInt(vertexData[2]) - 1) * 3;
+        index = (parseInt(vertexData[2], 10) - 1) * 3;
         this._finalNormals.push(
           this._tempNormals[index],
           this._tempNormals[index + 1],
@@ -156,7 +155,7 @@ export class ObjLoader {
         );
         // And for UVs - but check a value exists first as they're optional
         if (vertexData[1] !== '') {
-          index = (parseInt(vertexData[1]) - 1) * 2;
+          index = (parseInt(vertexData[1], 10) - 1) * 2;
           this._finalUVs.push(
             this._tempUVs[index],
             1 - this._tempUVs[index + 1] // Flip the Y so that Y is upwards to match our WebGL co-ordinate space
