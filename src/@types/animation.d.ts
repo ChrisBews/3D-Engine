@@ -54,10 +54,18 @@ interface processedAnimationData {
   isColor?: boolean;
   startColorType?: number;
   endColorType?: number;
-};
+}
+
+interface singleAnimationData {
+  value: animationValue;
+  isNumberArray: boolean;
+  isColor: boolean;
+  colorType: number;
+}
 
 type animationOptions = {
   duration?: number;
+  easing?: easingObject;
   delay?: number;
   loops?: number;
   steps?: number;
@@ -74,23 +82,30 @@ type animationProgressData = {
   progress: number;
 };
 
-interface IActiveAnimation {
+interface IAnimator {
   id: number;
   complete: boolean;
+  stop: () => void;
+  pause: () => void;
+  resume: () => void;
+  update: (elapsed: number) => void;
+}
+
+interface IActiveAnimation extends IAnimator {
   value: animationValue;
   paused: boolean;
   startValues: animationValue;
   endValues: animationValue;
-  stop: () => void;
-  pause: () => void;
-  resume: () => void;
+  source: animationValue;
+  currentValue: animationValue;
+  progress: number;
   restart: () => void;
-  update: (elapsed: number) => void;
   reverseEasing: () => void;
+  reverseDirection: () => void;
   updateStartValues: (values: animationValue) => void;
   updateEndValues: (values: animationValue) => void;
 }
 
-interface ITimeline extends IActiveAnimation{
+interface ITimeline extends IAnimator {
 
 }

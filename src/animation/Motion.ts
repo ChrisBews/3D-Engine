@@ -50,7 +50,7 @@ class MotionCore {
   }
 
   stop(id: number) {
-    let remainingAnimations: Array<IActiveAnimation|ITimeline> = [];
+    const remainingAnimations: Array<IActiveAnimation|ITimeline> = [];
     for (let i: number = 0; i < this._activeAnimations.length; i++) {
       if (this._activeAnimations[i].id === id || !id) {
         this._activeAnimations[i].stop();
@@ -110,10 +110,11 @@ class MotionCore {
       throw new Error(`Motion: Start and end values don't match.`);
     }
 
-    const stats: animationInfo = {
+    const animationInfo: animationInfo = {
       isNumber: sourceIsNumber && destIsNumber,
-      sourceColorType: sourceColorType,
-      destColorType: destColorType,
+      sourceColorType,
+      destColorType,
+      isColor: !!(sourceColorType && destColorType),
       isNumberArray: sourceIsNumberArray && destIsNumberArray,
     };
 
@@ -126,7 +127,7 @@ class MotionCore {
       this._startAnimFrameRequest();
     }
 
-    return new ActiveAnimation(source, destination, options, stats);
+    return new ActiveAnimation(source, destination, options, animationInfo);
   }
 
   _startAnimFrameRequest() {

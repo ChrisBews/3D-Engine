@@ -120,23 +120,6 @@ export class Mesh implements IMesh {
 
   get normalsMatrix(): Matrix4 { return this._normalMatrix; }
 
-  private _calculateBounds() {
-    this._width = this._getMaxVertexDistance(0, this._vertices.length - 2);
-    this._height = this._getMaxVertexDistance(1, this._vertices.length - 1);
-    this._depth = this._getMaxVertexDistance(2, this._vertices.length - 1);
-  }
-
-  private _getMaxVertexDistance(startIndex: number, endIndex: number): number {
-    let min: number = 0;
-    let max: number = 0;
-    for (let i = startIndex; i < endIndex; i += 3) {
-      const vertexCoord = this._vertices[i];
-      if (vertexCoord < min) min = vertexCoord;
-      if (vertexCoord > max) max = vertexCoord;
-    }
-    return max - min;
-  }
-
   protected _updateMatrix() {
     const scaledHeight: number = this._height * this._scale.y;
     const updatedMatrix: Matrix4 = new Matrix4();
@@ -156,5 +139,22 @@ export class Mesh implements IMesh {
 
     this._matrix = updatedMatrix;
     this._normalMatrix = updatedNormalMatrix;
+  }
+
+  private _calculateBounds() {
+    this._width = this._getMaxVertexDistance(0, this._vertices.length - 2);
+    this._height = this._getMaxVertexDistance(1, this._vertices.length - 1);
+    this._depth = this._getMaxVertexDistance(2, this._vertices.length - 1);
+  }
+
+  private _getMaxVertexDistance(startIndex: number, endIndex: number): number {
+    let min: number = 0;
+    let max: number = 0;
+    for (let i = startIndex; i < endIndex; i += 3) {
+      const vertexCoord = this._vertices[i];
+      if (vertexCoord < min) min = vertexCoord;
+      if (vertexCoord > max) max = vertexCoord;
+    }
+    return max - min;
   }
 }

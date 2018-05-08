@@ -7,9 +7,9 @@ export class ActiveAnimation implements IActiveAnimation {
   private _destination: animationValue;
   private _options: animationOptions;
   private _info: animationInfo;
-  private _startValues: animationValue;
-  private _endValues: animationValue;
-  private _currentValues: animationValue;
+  private _startValues: any;
+  private _endValues: any;
+  private _currentValues: any;
   private _id: number;
   private _endTime: number;
   private _elapsedSinceStart: number = 0;
@@ -44,6 +44,9 @@ export class ActiveAnimation implements IActiveAnimation {
   get paused(): boolean { return this._paused; }
   get startValues(): animationValue { return this._startValues; }
   get endValues(): animationValue { return this._endValues; }
+  get source(): animationValue { return this._source; }
+  get currentValue(): animationValue { return this._currentValues; }
+  get progress(): number { return this._progress; }
 
   public stop() {
     this._animBackwards = false;
@@ -73,8 +76,7 @@ export class ActiveAnimation implements IActiveAnimation {
   public updateStartValues(values)  {
     if (!this._info.isNumber && !this._info.isColor && !this._info.isNumberArray) {
       // Properties of an object instead of a raw number or color
-      for (let key in values) {
-
+      for (const key in values) {
         if (this._startValues[key]) {
           this._startValues[key] = values[key];
         }
@@ -87,8 +89,7 @@ export class ActiveAnimation implements IActiveAnimation {
   public updateEndValues(values) {
     if (!this._info.isNumber && !this._info.isColor && !this._info.isNumberArray) {
       // Properties of an object instead of a raw number or color
-      for (let key in values) {
-
+      for (const key in values) {
         if (this._endValues[key]) {
           this._endValues[key] = values[key];
         }
@@ -96,52 +97,6 @@ export class ActiveAnimation implements IActiveAnimation {
     } else {
       this._endValues = values;
     }
-  }
-
-  private _processValues() {
-    if (!this._info.isNumber && !this._info.isColor && !this._info.isNumberArray) {
-      // Properties of an object instead of a raw number or color
-      this._startValues = {};
-      for (let key: string in <Object>this._destination) {
-        const startValue: number | string = this._source[key];
-        const endValue: number | string = this._destination[key];
-        const valueData = this._prepareStartAndEndValue(startValue, endValue);
-        this._startValues[key] = {
-          value: valueData.start,
-          isNumberArray: Array.isArray(valueData.start),
-          isColor: valueData.isColor,
-          colorType: valueData.startColorType,
-        };
-        this._endValues[key] = {
-          value: valueData.end,
-          isNumberArray: Array.isArray(valueData.end),
-          isColor: valueData.isColor,
-          colorType: valueData.endColorType,
-        };
-        this._currentValues[key] = valueData.start;
-      }
-    } else {
-      // Either a raw number or a raw color string
-      const valueData = this._prepareStartAndEndValue(this._startValues, this._endValues);
-      this._startValues = valueData.start;
-      this._endValues = valueData.end;
-    }
-  }
-
-  private _prepareStartAndEndValue(startValue, endValue): processedAnimationData {
-    const isColor: boolean = (this._info.sourceColorType >= 0 && this._info.destColorType >= 0);
-    if (isColor) {
-      startValue = convertToRGBA(startValue, startValue.colorType);
-      endValue = convertToRGBA(endValue, endValue.colorType);
-    }
-
-    return {
-      start: startValue,
-      end: endValue,
-      isColor,
-      startColorType: this._info.sourceColorType,
-      endColorType: this._info.destColorType,
-    };
   }
 
   public update(elapsed: number) {
@@ -155,12 +110,12 @@ export class ActiveAnimation implements IActiveAnimation {
     }
     if (!this._paused) {
       if (this._options.steps) {
-        const stepDuration = (this._options.duration / (this._options.steps-1));
+        const stepDuration = (this._options.duration / (this._options.steps - 1));
         let currentStep = Math.floor(this._elapsedSinceStart / stepDuration);
         if (this._animBackwards) {
-          currentStep = (this._options.steps-1) - currentStep;
+          currentStep = (this._options.steps - 1) - currentStep;
         }
-        this._progress = currentStep / (this._options.steps-1);
+        this._progress = currentStep / (this._options.steps - 1);
       } else {
         this._progress = Math.min(this._elapsedSinceStart / this._options.duration, 1);
         if (this._animBackwards) this._progress = 1 - this._progress;
@@ -196,9 +151,9 @@ export class ActiveAnimation implements IActiveAnimation {
             this.restart();
           }
         } else if (this._options.alternate) {
-          this._reverseDirection();
+          this.reverseDirection();
         } else if (this._options.bounce) {
-          this._reverseEasing();
+          this.reverseEasing();
         } else {
           this._complete = true;
           if (this._options.onComplete) this._options.onComplete();
@@ -207,23 +162,69 @@ export class ActiveAnimation implements IActiveAnimation {
     }
   }
 
-  private restart() {
+  public restart() {
     this._complete = false;
     this._progress = 0;
     this._easedProgress = 0;
     this._elapsedSinceStart = 0;
   }
 
-  private _reverseDirection() {
+  public reverseEasing() {
+    this.restart();
+    this._animBackwards = !this._animBackwards;
+  }
+
+  public reverseDirection() {
     this.restart();
     const newStartValues = this._endValues;
     this._endValues = this._startValues;
     this._startValues = newStartValues;
   }
 
-  private _reverseEasing() {
-    this.restart();
-    this._animBackwards = !this._animBackwards;
+  private _processValues() {
+    if (!this._info.isNumber && !this._info.isColor && !this._info.isNumberArray) {
+      // Properties of an object instead of a raw number or color
+      this._startValues = {};
+      Object.keys(this._destination).forEach(key => {
+        const startValue: number | string = this._source[key];
+        const endValue: number | string = this._destination[key];
+        const valueData: processedAnimationData = this._prepareStartAndEndValue(startValue, endValue);
+        this._startValues[key] = {
+          value: valueData.start,
+          isNumberArray: Array.isArray(valueData.start),
+          isColor: valueData.isColor,
+          colorType: valueData.startColorType,
+        };
+        this._endValues[key] = {
+          value: valueData.end,
+          isNumberArray: Array.isArray(valueData.end),
+          isColor: valueData.isColor,
+          colorType: valueData.endColorType,
+        };
+        this._currentValues[key] = valueData.start;
+      });
+    } else {
+      // Either a raw number or a raw color string
+      const valueData: processedAnimationData = this._prepareStartAndEndValue(this._startValues, this._endValues);
+      this._startValues = valueData.start;
+      this._endValues = valueData.end;
+    }
+  }
+
+  private _prepareStartAndEndValue(startValue, endValue): processedAnimationData {
+    const isColor: boolean = (this._info.sourceColorType >= 0 && this._info.destColorType >= 0);
+    if (isColor) {
+      startValue = convertToRGBA(startValue, startValue.colorType);
+      endValue = convertToRGBA(endValue, endValue.colorType);
+    }
+
+    return {
+      start: startValue,
+      end: endValue,
+      isColor,
+      startColorType: this._info.sourceColorType,
+      endColorType: this._info.destColorType,
+    };
   }
 
   private _updateNumberValue() {
@@ -242,7 +243,7 @@ export class ActiveAnimation implements IActiveAnimation {
   }
 
   private _updateObjectValues() {
-    for (let key in <Object>this._endValues) {
+    Object.keys(this._endValues).forEach(key => {
       let newValue;
       if (this._startValues[key].isColor) {
         newValue = getColorBetweenRGBA(this._startValues[key].value, this._endValues[key].value, this._easedProgress);
@@ -256,6 +257,6 @@ export class ActiveAnimation implements IActiveAnimation {
       }
       this._source[key] = newValue;
       this._currentValues[key] = newValue;
-    }
+    });
   }
 }

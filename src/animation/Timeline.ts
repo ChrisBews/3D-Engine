@@ -1,6 +1,7 @@
 
 export class Timeline implements ITimeline {
 
+  private _id: number;
   private _source: animationValue;
   private _animations: IActiveAnimation[];
   private _options: animationOptions;
@@ -12,6 +13,7 @@ export class Timeline implements ITimeline {
   private _totalLoops: number = undefined;
 
   constructor(source, newAnimations, options) {
+    this._id = Math.random() + Date.now();
     this._source = source;
     this._animations = newAnimations;
     this._options = options || {};
@@ -19,6 +21,7 @@ export class Timeline implements ITimeline {
     this._totalLoops = typeof options.loops === 'number' ? options.loops : undefined;
   }
 
+  get id(): number { return this._id; }
   get complete(): boolean { return this._complete; }
 
   public stop() {
@@ -53,7 +56,12 @@ export class Timeline implements ITimeline {
     }
     this._activeAnimation.update(elapsed);
     if (this._options.onUpdate) {
-      this._options.onUpdate(this._activeAnimation);
+      this._options.onUpdate({
+        id: this._activeAnimation.id,
+        source: this._activeAnimation.source,
+        value: this._activeAnimation.currentValue,
+        progress: this._activeAnimation.progress,
+      });
     }
   }
 
@@ -70,7 +78,7 @@ export class Timeline implements ITimeline {
   }
 
   private _restart() {
-    for (let i = this._animations.length-1; i >= 0; i--) {
+    for (let i = this._animations.length - 1; i >= 0; i--) {
       this._animations[i].restart();
     }
     const previousEndValues = this._animations.length > 1
@@ -83,7 +91,7 @@ export class Timeline implements ITimeline {
 
   private _reverseDirection() {
     this._reversing = !this._reversing;
-    for (let i = this._animations.length-1; i >= 0; i--) {
+    for (let i = this._animations.length - 1; i >= 0; i--) {
       this._animations[i].reverseDirection();
     }
   }

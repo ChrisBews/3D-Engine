@@ -4,4 +4,4 @@ export enum colorType {
   rgba,
   hsl,
   hsla,
-};
+}

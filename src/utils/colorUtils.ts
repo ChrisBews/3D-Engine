@@ -78,7 +78,7 @@ export const hexToRGBA = (color: string): string => {
       colorArray = [colorArray[0], colorArray[0], colorArray[1], colorArray[1], colorArray[2], colorArray[2]];
     }
     newColorValue = `0x${colorArray.join('')}`;
-    return `rgba(${[(newColorValue>>16)&255, (newColorValue>>8)&255, newColorValue&255].join(',')}, 1)`;
+    return `rgba(${[(newColorValue >> 16) & 255, (newColorValue >> 8) & 255, newColorValue & 255].join(',')}, 1)`;
   }
   throw new Error('colorUtils.hexToRGBA: Invalid hex color');
 };
@@ -88,8 +88,8 @@ export const hslToRGBA = (color: string): string => {
   newColor = newColor.replace(/%|deg/g, '');
   newColor = newColor.replace('hsl(', '');
   newColor = newColor.replace(')', '');
-  let colorArray: string[] = newColor.split(',');
-  let h: any = newColor[0];
+  const colorArray: string[] = newColor.split(',');
+  let h: any = colorArray[0];
   if (h !== '0') {
     // Check for radians or turns as units
     if (h.search('rad') > -1) {
@@ -100,18 +100,20 @@ export const hslToRGBA = (color: string): string => {
   }
 
   h = parseFloat(h) / 360;
-  const s = parseFloat(newColor[1]) / 100;
-  const l = parseFloat(newColor[2]) / 100;
-  const a = newColor[3] ? parseFloat(newColor[3]) : 1;
-  let r, g, b;
+  const s = parseFloat(colorArray[1]) / 100;
+  const l = parseFloat(colorArray[2]) / 100;
+  const a = colorArray[3] ? parseFloat(colorArray[3]) : 1;
+  let r;
+  let g;
+  let b;
   if (s === 0) {
     r = g = b = 0;
   } else {
     const q = (l < 0.5) ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
-    r = this.hueToRGB(p, q, h + 1/3) * 255;
+    r = this.hueToRGB(p, q, h + 1 / 3) * 255;
     g = this.hueToRGB(p, q, h) * 255;
-    b = this.hueToRGB(p, q, h - 1/3) * 255;
+    b = this.hueToRGB(p, q, h - 1 / 3) * 255;
   }
 
   return `rgba(${r}, ${g}, ${b}, ${a})`;
@@ -120,9 +122,9 @@ export const hslToRGBA = (color: string): string => {
 export const hueToRGB = (p: number, q: number, t: number): number => {
   if (t < 0) t += 1;
   if (t > 1) t -= 1;
-  if (t < 1/6) return p + (q - p) * 6 * t;
-  if (t < 1/2) return q;
-  if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+  if (t < 1 / 6) return p + (q - p) * 6 * t;
+  if (t < 1 / 2) return q;
+  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
 
   return p;
 };
@@ -134,10 +136,10 @@ export const getColorBetweenRGBA = (start: string, end: string, percentage: numb
     startValues[value] = parseFloat(startValues[value]);
     endValues[value] = parseFloat(endValues[value]);
   });
-  let r = Math.round(startValues.r + ((endValues.r - startValues.r) * percentage));
-  let g = Math.round(startValues.g + ((endValues.g - startValues.g) * percentage));
-  let b = Math.round(startValues.b + ((endValues.b - startValues.b) * percentage));
-  let a = startValues.a + ((endValues.a - startValues.a) * percentage);
+  const r = Math.round(startValues.r + ((endValues.r - startValues.r) * percentage));
+  const g = Math.round(startValues.g + ((endValues.g - startValues.g) * percentage));
+  const b = Math.round(startValues.b + ((endValues.b - startValues.b) * percentage));
+  const a = startValues.a + ((endValues.a - startValues.a) * percentage);
 
   return {r, g, b, a};
   /*return Oomph3D.motion.outputColorsAsStrings

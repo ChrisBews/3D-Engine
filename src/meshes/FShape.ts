@@ -246,7 +246,7 @@ export class FShape extends Mesh {
     ]);
   }
 
-  _generateUVs() {
+  private _generateUVs() {
 
   }
 }
