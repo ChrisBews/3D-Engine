@@ -106,10 +106,10 @@ export class World implements IWorld {
   _draw() {
     this._gl.clearColor(0, 0, 0, 0);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-    const sceneCameraMatrix = this._activeScene.camera.matrix;
+    //const sceneCameraMatrix = this._activeScene.camera.matrix;
     const meshes = this._activeScene.children;
     meshes.forEach(mesh => {
-      const program = mesh.material.program;
+      //const program = mesh.material.program;
     });
   }
 
