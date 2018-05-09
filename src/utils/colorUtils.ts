@@ -6,7 +6,7 @@ export const convertColorToUnits = (color: rgb | rgba): rgba => {
     r: color.r / 255,
     g: color.g / 255,
     b: color.b / 255,
-    a: color['a'] ? color['a'] : 1,
+    a: color['a'] || 1,
   };
 };
 
@@ -48,7 +48,7 @@ export const expandHex = (color: string): string => {
   return color;
 };
 
-export const convertToRGBA = (color: string, type: colorType): string => {
+export const convertToRGBA = (color: color, type: colorType): string => {
   if (type === colorType.rgb) {
     return this.rgbToRGBA(color);
   } else if (type === colorType.hex) {

@@ -18,6 +18,7 @@ export class Mesh implements IMesh {
   protected _uvs: Float32Array;
   protected _matrix: Matrix4;
   protected _normalMatrix: Matrix4;
+  private _onMaterialUpdated: (mesh: IMesh) => void;
 
   constructor(options: IMeshOptions = {}) {
     this._id = `Mesh-${Date.now()}`;
@@ -114,11 +115,19 @@ export class Mesh implements IMesh {
   set uvs(value: Float32Array) { this._uvs = value; }
 
   get material() { return this._material; }
-  set material(value: any) { this._material = value; }
+  set material(value: any) {
+    this._material = value;
+    if (this._onMaterialUpdated) this._onMaterialUpdated(this);
+  }
 
   get matrix(): Matrix4 { return this._matrix; }
 
   get normalsMatrix(): Matrix4 { return this._normalMatrix; }
+
+  set onMaterialUpdated(value: () => void) {
+    this._onMaterialUpdated = value;
+    if (this._material) this._onMaterialUpdated(this);
+  }
 
   protected _updateMatrix() {
     const scaledHeight: number = this._height * this._scale.y;

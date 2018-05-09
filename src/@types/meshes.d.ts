@@ -9,6 +9,8 @@ interface IMesh {
   scaleX: number;
   scaleY: number;
   scaleZ: number;
+  material: IMaterial;
+  onMaterialUpdated: (mesh: IMesh) => void;
 }
 
 interface IMeshOptions {

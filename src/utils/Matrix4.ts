@@ -4,7 +4,7 @@ import {
   crossVectors,
 } from '../utils/vectorUtils';
 
-export class Matrix4 {
+export class Matrix4 implements IMatrix4 {
 
   private _currentValue: mat4;
   private _identity: mat4 = [
@@ -41,7 +41,7 @@ export class Matrix4 {
     ];
   }
 
-  public setToOrthographic(left: number, right: number, bottom: number, top: number, near: number, far: number) {
+  public setToOrthographic(top: number, right: number, bottom: number, left: number, near: number, far: number) {
     // Similar to setToPerspective, but allows you to define the full 3D space
     this._currentValue = [
       2 / (right - left), 0, 0, 0,
@@ -55,7 +55,7 @@ export class Matrix4 {
     ];
   }
 
-  public setToPerspective(fieldOfViewInRadians: number, aspect: number, near: number, far: number) {
+  public setToPerspective(fieldOfViewInRadians: number, aspectRatio: number, near: number, far: number) {
     // Adjust the units so they're in clip space
     // Calculate (via Math.tan) the field of view from radians
     // The field of view is basically the rectangle at 'near' and
@@ -75,7 +75,7 @@ export class Matrix4 {
     // X is just the x-coord multiplied by the 'aspect', which is usually
     // the width of the display area divided by it's height
     this._currentValue = [
-      f / aspect, 0, 0, 0,
+      f / aspectRatio, 0, 0, 0,
       0, f, 0, 0,
       0, 0, (near + far) * rangeInv, -1,
       0, 0, near * far * rangeInv * 2, 0,
