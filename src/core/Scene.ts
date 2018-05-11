@@ -5,6 +5,7 @@ export class Scene implements IScene {
   private _lights: ILight[];
   private _directionalLight: IDirectionalLight;
   private _onChildAdded: (mesh: IMesh) => void;
+  private _onCameraAdded: (camera: ICamera) => void;
   private _onMeshMaterialUpdated: (mesh: IMesh) => void;
 
   constructor() {
@@ -12,7 +13,13 @@ export class Scene implements IScene {
   }
 
   get children(): IMesh[] { return this._children; }
+
   get camera(): ICamera { return this._camera; }
+  set camera(camera: ICamera) {
+    this._camera = camera;
+    if (this._onCameraAdded) this._onCameraAdded(camera);
+  }
+
   get lights(): ILight[] { return this._lights; }
   get directionalLight(): IDirectionalLight { return this._directionalLight; }
 
@@ -24,8 +31,12 @@ export class Scene implements IScene {
     this._onMeshMaterialUpdated = value;
   }
 
+  set onCameraAdded(value: (camera: ICamera) => void) {
+    this._onCameraAdded = value;
+  }
+
   addChild(mesh: IMesh) {
-    if (!this._children.includes(mesh)) {
+    if (this._children.indexOf(mesh)  -1) {
       this._children.push(mesh);
       mesh.onMaterialUpdated = this._onMeshMaterialUpdated;
       if (this._onChildAdded) this._onChildAdded(mesh);
@@ -37,7 +48,7 @@ export class Scene implements IScene {
   }
 
   addLight(light: ILight) {
-    if (!this._lights.includes(light)) {
+    if (this._lights.indexOf(light) > -1) {
       if (light.isDirectional) {
         if (this._directionalLight) {
           throw new Error('Scene: Scene already contains a directional light. Remove the existing one before adding a new one');

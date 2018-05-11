@@ -1,7 +1,7 @@
 import { degreesToRadians } from "../utils/mathUtils";
 import { Matrix4 } from "../utils/Matrix4";
 
-export class PerspectiveCamera {
+export class PerspectiveCamera implements ICamera {
 
   protected _aspectRatio: number;
   protected _zNear: number;
@@ -18,8 +18,6 @@ export class PerspectiveCamera {
 
   constructor(options: IPerspectiveCameraOptions) {
     if (!options.fieldOfView) throw new Error('PerspectiveCamera options object is missing fieldOfView attribute');
-    if (!options.canvasWidth) throw new Error('PerspectiveCamera options object is missing canvasWidth attribute');
-    if (!options.canvasHeight) throw new Error('PerspectiveCamera options object is missing canvasHeight attribute');
 
     this._fieldOfView = options.fieldOfView;
     this._fieldOfViewRadians = degreesToRadians(this._fieldOfView);
@@ -31,11 +29,10 @@ export class PerspectiveCamera {
     this._position = {x: 0, y: 0, z: 0};
     this._angle = {x: 0, y: 0, z: 0};
     this._angleInRadians = {x: 0, y: 0, z: 0};
-    this.resize(options.canvasWidth, options.canvasHeight);
     this._updateMatrix();
   }
 
-  get matrix(): Matrix4 { return this._matrix; }
+  get matrix(): mat4 { return this._matrix.value; }
 
   get x(): number { return this._position.x; }
   set x(value: number) {

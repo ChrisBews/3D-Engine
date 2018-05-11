@@ -2,7 +2,7 @@ import { Matrix4 } from "../utils/Matrix4";
 
 const distanceMultiplier: number = 1;
 
-export class ProjectionCamera {
+export class ProjectionCamera implements ICamera {
 
   private _left: number = 0;
   private _right: number = 0;
@@ -13,11 +13,7 @@ export class ProjectionCamera {
   private _matrix: Matrix4;
   private _orthoMatrix: Matrix4;
 
-  constructor(canvas, zNear, zFar) {
-    this._left = 0;
-    this._right = canvas.clientWidth;
-    this._top = 0;
-    this._bottom = canvas.clientHeight;
+  constructor(zNear, zFar) {
     this._zNear = zNear || 400;
     this._zFar = zFar || -200;
     this._matrix = new Matrix4();
@@ -26,9 +22,15 @@ export class ProjectionCamera {
     this._updateMatrix();
   }
 
-  get matrix() {
+  get matrix(): mat4 {
     this._updateMatrix();
-    return this._matrix;
+    return this._matrix.value;
+  }
+
+  public resize(canvasWidth: number, canvasHeight: number) {
+    this._right = canvasWidth;
+    this._bottom = canvasHeight;
+    this._orthoMatrix.setToOrthographic(this._left, this._right, this._bottom, this._top, this._zNear, this._zFar);
   }
 
   private _updateMatrix() {

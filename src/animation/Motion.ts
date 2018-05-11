@@ -1,8 +1,8 @@
 import { easing } from '../constants/easing';
 import { colorType } from '../constants/colors';
 import { getColorType } from '../utils/colorUtils';
-import { ActiveAnimation } from 'ActiveAnimation';
-import { Timeline } from 'Timeline';
+import { ActiveAnimation } from './ActiveAnimation';
+import { Timeline } from './Timeline';
 
 class MotionCore {
 

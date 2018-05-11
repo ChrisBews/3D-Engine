@@ -2,7 +2,7 @@ import { Matrix4 } from '../utils/Matrix4';
 import { degreesToRadians } from '../utils/mathUtils';
 import { Mesh } from '../meshes/Mesh';
 
-export class LookAtCamera {
+export class LookAtCamera implements ICamera {
 
   private _fieldOfView: number;
   private _fieldOfViewRadians: number;
@@ -33,7 +33,7 @@ export class LookAtCamera {
     this._updateMatrix();
   }
 
-  get matrix(): Matrix4 { return this._matrix; }
+  get matrix(): mat4 { return this._matrix.value; }
 
   get x(): number { return this._position.x; }
   set x(value: number) {

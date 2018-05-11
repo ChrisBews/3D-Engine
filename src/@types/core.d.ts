@@ -9,6 +9,7 @@ interface IScene {
   directionalLight: IDirectionalLight;
   onChildAdded: (mesh: IMesh) => void;
   onMeshMaterialUpdated: (mesh: IMesh) => void;
+  onCameraAdded: (camera: ICamera) => void;
 }
 
 interface IProgram {

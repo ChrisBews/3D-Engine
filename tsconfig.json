@@ -1,10 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2015",
+    "module": "es2015",
     "typeRoots": [
       "src/@types",
       "node_modules/@types"
     ],
+    "baseUrl": "./",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "paths": {
+      "@oomph3d/*": ["src/*"],
+    }
   },
   "exclude": [
     "node_modules",

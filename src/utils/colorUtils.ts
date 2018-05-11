@@ -1,4 +1,4 @@
-import { radiansToDegrees } from 'utils/mathUtils';
+import { radiansToDegrees } from '../utils/mathUtils';
 import { colorType } from '../constants/colors';
 
 export const convertColorToUnits = (color: rgb | rgba): rgba => {
@@ -56,7 +56,7 @@ export const convertToRGBA = (color: color, type: colorType): string => {
   } else if (type === colorType.hsl || type === colorType.hsla) {
     return this.hslToRGBA(color);
   } else {
-    return color;
+    return undefined;
   }
 };
 
@@ -129,7 +129,7 @@ export const hueToRGB = (p: number, q: number, t: number): number => {
   return p;
 };
 
-export const getColorBetweenRGBA = (start: string, end: string, percentage: number): rgba | string => {
+export const getColorBetweenRGBA = (start: string, end: string, percentage: number): rgba => {
   const startValues: rgba = this.getColorValuesFromRGBAString(start);
   const endValues: rgba = this.getColorValuesFromRGBAString(end);
   ['r', 'g', 'b', 'a'].forEach(value => {

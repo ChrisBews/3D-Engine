@@ -21,7 +21,13 @@ export default {
         ],
       ],
       plugins: [
-        'external-helpers'
+        'external-helpers',
+        ["module-resolver", {
+          "root": ["/"],
+          "alias": {
+            "@oomph3d": "src"
+          }
+        }],
       ],
 
       exclude: 'node_modules/**',

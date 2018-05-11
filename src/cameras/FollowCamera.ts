@@ -2,7 +2,7 @@ import { Matrix4 } from '../utils/Matrix4';
 import { degreesToRadians } from '../utils/mathUtils';
 import { subtractVectors, transformVector } from '../utils/vectorUtils';
 
-export class FollowCamera {
+export class FollowCamera implements ICamera {
 
   private _fieldOfView: number;
   private _fieldOfViewRadians: number;
@@ -16,9 +16,6 @@ export class FollowCamera {
 
   constructor(options: IFollowCameraOptions) {
     if (!options.fieldOfView) throw new Error('FollowCamera options object is missing fieldOfView attribute');
-    if (!options.canvasWidth) throw new Error('FollowCamera options object is missing canvasWidth attribute');
-    if (!options.canvasHeight) throw new Error('FollowCamera options object is missing canvasHeight attribute');
-
     this._fieldOfView = options.fieldOfView;
     this._fieldOfViewRadians = degreesToRadians(options.fieldOfView);
     this._zNear = options.zNear || 1;
@@ -26,10 +23,9 @@ export class FollowCamera {
     this._matrix = new Matrix4();
     this._target = {x: 0, y: 0, z: 0};
     this._distance = options.distance || 400;
-    this.resize(options.canvasWidth, options.canvasHeight);
   }
 
-  get matrix(): Matrix4 { return this._matrix; }
+  get matrix(): mat4 { return this._matrix.value; }
 
   public followMesh(mesh: IMesh, distance?: number) {
     this._targetMesh = mesh;
@@ -71,8 +67,8 @@ export class FollowCamera {
       z: this._matrix[14],
     };
 
-    const xAngleInRadians = degreesToRadians(this._targetMesh.rotation.x);
-    const yAngleInRadians = degreesToRadians(this._targetMesh.rotation.y);
+    const xAngleInRadians = degreesToRadians(this._targetMesh.rotationX);
+    const yAngleInRadians = degreesToRadians(this._targetMesh.rotationY);
 
     // Calculate the x and y rotation from the target and camera position
     let directionVector: vec4 = {...subtractVectors(cameraPosition, this._target), w: 0};

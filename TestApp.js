@@ -13,6 +13,10 @@ TestApp.prototype.init = function() {
 TestApp.prototype.createWorld = function() {
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
+  // 60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
+  this.camera = new Oomph3D.PerspectiveCamera({
+    fieldOfView: 60,
+  });
   this.world.scene = this.scene;
   this.world.onUpdate = this.onUpdate.bind(this);
 }

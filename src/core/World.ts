@@ -32,6 +32,7 @@ export class World implements IWorld {
     this._activeScene = scene;
     this._activeScene.onChildAdded = this._onMeshAddedToScene;
     this._activeScene.onMeshMaterialUpdated = this._onMeshMaterialUpdated;
+    this._activeScene.onCameraAdded = this._onCameraAdded;
   }
 
   set onUpdate(callback: (timeElapsed: number) => void) {
@@ -75,6 +76,9 @@ export class World implements IWorld {
       this._canvas.width = displayWidth;
       this._canvas.height = displayHeight;
     }
+    if (this._activeScene && this._activeScene.camera) {
+      this._activeScene.camera.resize(displayWidth, displayHeight);
+    }
   }
 
   _startFrameTimer() {
@@ -115,6 +119,9 @@ export class World implements IWorld {
   _draw() {
     this._gl.clearColor(0, 0, 0, 0);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+    const sceneCamera: ICamera = this._activeScene.camera;
+    if (!sceneCamera) return;
+
     const sceneCameraMatrix: mat4 = this._activeScene.camera.matrix;
     const meshes = this._activeScene.children;
     meshes.forEach(mesh => {
@@ -190,6 +197,10 @@ export class World implements IWorld {
 
   _onMeshMaterialUpdated = (child: IMesh) => {
     this._processMeshMaterial(child);
+  }
+
+  _onCameraAdded = (camera: ICamera) => {
+    camera.resize(this._canvas.clientWidth, this._canvas.clientHeight);
   }
 
   _onWindowResized = () => {
