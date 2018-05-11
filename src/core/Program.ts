@@ -1,4 +1,4 @@
-export class Program {
+export class Program implements IProgram {
 
   private _vertexShader: WebGLShader;
   private _fragmentShader: WebGLShader;
@@ -28,7 +28,7 @@ export class Program {
   get lightDirectionUniform(): WebGLUniformLocation { return this._lightDirectionUniform; }
   get lightColorUniform(): WebGLUniformLocation { return this._lightColorUniform; }
 
-  get glProgram() { return this._glProgram; }
+  get glProgram(): WebGLProgram { return this._glProgram; }
 
   private _createShader(glContext: WebGLRenderingContext, type: number, source: string): WebGLShader {
     const shader: WebGLShader = glContext.createShader(type);

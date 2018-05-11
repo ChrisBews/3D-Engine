@@ -1,5 +1,11 @@
 interface ILight {
+  isDirectional: boolean;
+  color: rgb;
+  colorInUnits: number[];
+}
 
+interface IDirectionalLight extends ILight {
+  direction: vec3;
 }
 
 type IDirectionalLightOptions = {

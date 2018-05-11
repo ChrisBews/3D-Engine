@@ -1,18 +1,20 @@
 import { Scene } from './Scene';
 import { Program } from './Program';
+import { Matrix4 } from '../utils/Matrix4';
+import { normalizeVector } from '../utils/vectorUtils';
 
 export class World implements IWorld {
 
-  private _gl: any;
+  private _gl: WebGL2RenderingContext;
   private _canvas: HTMLCanvasElement;
   private _activeScene: IScene;
-  private _vao: any;
-  private _positionBuffer: any;
-  private _normalsBuffer: any;
-  private _indexBuffer: any;
-  private _uvBuffer: any;
-  private _resizeFrameRequest: any;
-  private _frameTimer: any;
+  private _vao: WebGLVertexArrayObject;
+  private _positionBuffer: WebGLBuffer;
+  private _normalsBuffer: WebGLBuffer;
+  private _indexBuffer: WebGLBuffer;
+  private _uvBuffer: WebGLBuffer;
+  private _resizeFrameRequest: number;
+  private _frameTimer: number;
   private _previousRenderTime: number = 0;
   private _onUpdate: (timeElapsed: number) => void;
 
@@ -42,7 +44,7 @@ export class World implements IWorld {
   }
 
   _initGL() {
-    this._gl = this._canvas.getContext('webgl2');
+    this._gl = this._canvas.getContext('webgl2') as WebGL2RenderingContext;
     if (!this._gl) throw new Error('World: Failed to instantiate a WebGL2 context');
     this._vao = this._gl.createVertexArray();
     this._gl.bindVertexArray(this._vao);
@@ -87,6 +89,13 @@ export class World implements IWorld {
     }
   }
 
+  _processMeshMaterial(mesh: IMesh) {
+    if (!mesh.material.program) {
+      // Instantiate the material as required
+      mesh.material.program = new Program(this._gl, mesh.material.vertexShader, mesh.material.fragmentShader);
+    }
+  }
+
   _update = (renderTime: number) => {
     // Convert from milliseconds to seconds
     renderTime *= 0.001;
@@ -106,18 +115,73 @@ export class World implements IWorld {
   _draw() {
     this._gl.clearColor(0, 0, 0, 0);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-    //const sceneCameraMatrix = this._activeScene.camera.matrix;
+    const sceneCameraMatrix: mat4 = this._activeScene.camera.matrix;
     const meshes = this._activeScene.children;
     meshes.forEach(mesh => {
-      //const program = mesh.material.program;
-    });
-  }
+      const program: IProgram = mesh.material.program;
 
-  _processMeshMaterial(mesh: IMesh) {
-    if (!mesh.material.program) {
-      // Instantiate the material as required
-      mesh.material.program = new Program(this._gl, mesh.material.vertexShader, mesh.material.fragmentShader);
-    }
+      if (program) {
+        // Render the mesh
+        this._gl.useProgram(program);
+        const meshMatrix: Matrix4 = new Matrix4(sceneCameraMatrix);
+        meshMatrix.multiply(mesh.matrix);
+        this._gl.uniformMatrix4fv(program.matrixUniform, false, meshMatrix.value);
+        const normalsMatrix: Matrix4 = new Matrix4(mesh.normalsMatrix);
+        normalsMatrix.invert();
+        normalsMatrix.transpose();
+        this._gl.uniformMatrix4fv(program.normalMatrixUniform, false, normalsMatrix.value);
+
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._normalsBuffer);
+        this._gl.enableVertexAttribArray(program.normalAttribute);
+        this._gl.vertexAttribPointer(program.normalAttribute, 3, this._gl.FLOAT, false, 0, 0);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.normals, this._gl.STATIC_DRAW);
+
+        if (program.colorUniform) {
+          this._gl.uniform4fv(program.colorUniform, [
+            mesh.material.colorInUnits.r,
+            mesh.material.colorInUnits.g,
+            mesh.material.colorInUnits.b,
+          ]);
+        }
+
+        // Lights
+        let lightValues: vec3 = {x: 0, y: 0, z: 0};
+        let lightColor: number[] = [0, 0, 0];
+        const directionalLight: IDirectionalLight = this._activeScene.directionalLight;
+        if (directionalLight) {
+          lightValues = directionalLight.direction;
+          lightColor = directionalLight.colorInUnits;
+        }
+        const normalizedLightValues: vec3 = normalizeVector(lightValues);
+        this._gl.uniform3fv(
+          program.lightDirectionUniform,
+          new Float32Array([normalizedLightValues.x, normalizedLightValues.y, normalizedLightValues.z])
+        );
+        this._gl.uniform3fv(program.lightColorUniform, lightColor);
+
+        // UVs
+        if (program.uvAttribute && program.uvAttribute !== -1 && mesh.uvs.length && mesh.material.isTextureMap) {
+          this._gl.bindTexture(this._gl.TEXTURE_2D, mesh.material.texture);
+          this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._uvBuffer);
+          this._gl.enableVertexAttribArray(program.uvAttribute);
+          this._gl.vertexAttribPointer(program.uvAttribute, 2, this._gl.FLOAT, true, 0, 0);
+          this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.uvs, this._gl.STATIC_DRAW);
+        }
+
+        // Vertices
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
+        this._gl.enableVertexAttribArray(program.positionAttribute);
+        this._gl.vertexAttribPointer(program.positionAttribute, 2, this._gl.FLOAT, false, 0, 0);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.vertices, this._gl.STATIC_DRAW);
+
+        // Indices
+        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
+        this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, mesh.indices, this._gl.STATIC_DRAW);
+        this._gl.drawElements(this._gl.TRIANGLES, mesh.indices.length, this._gl.UNSIGNED_SHORT, 0);
+      } else {
+        throw new Error(`Mesh ${mesh.id} has no material assigned, so will not be rendered`);
+      }
+    });
   }
 
   _onMeshAddedToScene = (newChild: IMesh) => {

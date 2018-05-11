@@ -3,4 +3,6 @@ interface IMaterial {
   vertexShader: string;
   fragmentShader: string;
   program: IProgram;
+  colorInUnits?: rgba;
+  texture?: WebGLTexture;
 }

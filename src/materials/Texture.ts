@@ -1,7 +1,7 @@
 export class Texture implements IMaterial {
 
   private _imageUrl: string;
-  private _texture;
+  private _texture: WebGLTexture;
   private _image;
   private _program: IProgram;
 
@@ -21,8 +21,8 @@ export class Texture implements IMaterial {
     this._imageUrl = value;
   }
 
-  get texture() { return this._texture; }
-  set texture(value) {
+  get texture(): WebGLTexture { return this._texture; }
+  set texture(value: WebGLTexture) {
     this._texture = value;
   }
 

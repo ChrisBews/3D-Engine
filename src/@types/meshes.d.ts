@@ -1,4 +1,5 @@
 interface IMesh {
+  id: string;
   center: vec3;
   x: number;
   y: number;
@@ -10,6 +11,12 @@ interface IMesh {
   scaleY: number;
   scaleZ: number;
   material: IMaterial;
+  matrix: mat4;
+  normalsMatrix: mat4;
+  vertices: Float32Array;
+  normals: Float32Array;
+  indices: Uint16Array;
+  uvs: Float32Array;
   onMaterialUpdated: (mesh: IMesh) => void;
 }
 

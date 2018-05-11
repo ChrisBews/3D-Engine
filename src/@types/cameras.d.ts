@@ -1,5 +1,5 @@
 interface ICamera {
-  matrix: IMatrix4;
+  matrix: mat4;
   resize: (canvasWidth: number, canvasHeight: number) => void;
 }
 

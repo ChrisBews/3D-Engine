@@ -120,9 +120,9 @@ export class Mesh implements IMesh {
     if (this._onMaterialUpdated) this._onMaterialUpdated(this);
   }
 
-  get matrix(): Matrix4 { return this._matrix; }
+  get matrix(): mat4 { return this._matrix.value; }
 
-  get normalsMatrix(): Matrix4 { return this._normalMatrix; }
+  get normalsMatrix(): mat4 { return this._normalMatrix.value; }
 
   set onMaterialUpdated(value: () => void) {
     this._onMaterialUpdated = value;

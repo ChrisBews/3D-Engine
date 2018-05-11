@@ -1,6 +1,6 @@
 import { convertColorToUnits } from '../utils/colorUtils';
 
-export class DirectionalLight implements ILight {
+export class DirectionalLight implements IDirectionalLight {
 
   private _direction: vec3;
   private _color: rgb;
@@ -33,7 +33,13 @@ export class DirectionalLight implements ILight {
     this._updateUnitColor();
   }
 
-  get colorUnits(): rgb { return this._colorUnits; }
+  get colorInUnits(): number[] {
+    return [
+      this._colorUnits.r,
+      this._colorUnits.g,
+      this._colorUnits.b,
+    ];
+  }
 
   private _updateUnitColor() {
     this._colorUnits = convertColorToUnits(this._color);
