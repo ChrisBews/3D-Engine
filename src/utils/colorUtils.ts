@@ -11,22 +11,34 @@ export const convertColorToUnits = (color: rgb | rgba): rgba => {
 };
 
 export const getColorType = (color: any): colorType => {
-  if (typeof color !== 'string') return undefined;
-  if (validHex(color)) return colorType.hex;
-  if (validRGB(color)) return colorType.rgb;
-  if (validRGBA(color)) return colorType.rgba;
-  if (validHSL(color)) return colorType.hsl;
-  if (validHSLA(color)) return colorType.hsla;
+  if (typeof color === 'object') {
+    if (color.r && color.g && color.b) {
+      return color.a ? colorType.rgba : colorType.rgb;
+    } else if (color.h && color.s && color.l) {
+      return color.a ? colorType.hsla : colorType.hsl;
+    } else {
+      return undefined;
+    }
+  } else if (typeof color === 'string') {
+    if (validHex(color)) return colorType.hex;
+    if (validRGB(color)) return colorType.rgb;
+    if (validRGBA(color)) return colorType.rgba;
+    if (validHSL(color)) return colorType.hsl;
+    if (validHSLA(color)) return colorType.hsla;
+    return undefined;
+  } else {
+    return undefined;
+  }
 };
 
 export const validHex = (color: string): boolean => {
-  color = this.expandHex(color);
+  color = expandHex(color);
 
   return /^#[0-9A-F]{6}$/i.test(color);
 };
 
 export const validRGB = (color: string): boolean => {
-  return /^rgb[(](?:\s*0*(?:\d\d?(?:\.\d+)?(?:\s*%)?|\.\d+\s*%|100(?:\.0*)?\s*%|(?:1\d\d|2[0-4]\d|25[0-5])(?:\.\d+)?)\s*(?:,(?![)])|(?=[)]))){3}[)]$/i.test(color);
+  return /^(rgb)?\(?([01]?\d\d?|2[0-4]\d|25[0-5])(\W+)([01]?\d\d?|2[0-4]\d|25[0-5])\W+(([01]?\d\d?|2[0-4]\d|25[0-5])\)?)$/i.test(color);
 };
 
 export const validRGBA = (color: string): boolean => {
@@ -48,20 +60,20 @@ export const expandHex = (color: string): string => {
   return color;
 };
 
-export const convertToRGBA = (color: color, type: colorType): string => {
+export const convertToRGBA = (color: string, type: colorType): string => {
   if (type === colorType.rgb) {
-    return this.rgbToRGBA(color);
+    return rgbToRGBA(color);
   } else if (type === colorType.hex) {
-    return this.hexToRGBA(color);
+    return hexToRGBA(color);
   } else if (type === colorType.hsl || type === colorType.hsla) {
-    return this.hslToRGBA(color);
+    return hslToRGBA(color);
   } else {
     return undefined;
   }
 };
 
 export const rgbToRGBA = (color: string): string => {
-  if (this.validRGB(color)) {
+  if (typeof color === 'string' && validRGB(color)) {
     color = color.replace('rgb', 'rgba');
     color = color.replace(')', ', 1)');
   }
@@ -111,9 +123,9 @@ export const hslToRGBA = (color: string): string => {
   } else {
     const q = (l < 0.5) ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
-    r = this.hueToRGB(p, q, h + 1 / 3) * 255;
-    g = this.hueToRGB(p, q, h) * 255;
-    b = this.hueToRGB(p, q, h - 1 / 3) * 255;
+    r = hueToRGB(p, q, h + 1 / 3) * 255;
+    g = hueToRGB(p, q, h) * 255;
+    b = hueToRGB(p, q, h - 1 / 3) * 255;
   }
 
   return `rgba(${r}, ${g}, ${b}, ${a})`;
@@ -130,8 +142,8 @@ export const hueToRGB = (p: number, q: number, t: number): number => {
 };
 
 export const getColorBetweenRGBA = (start: string, end: string, percentage: number): rgba => {
-  const startValues: rgba = this.getColorValuesFromRGBAString(start);
-  const endValues: rgba = this.getColorValuesFromRGBAString(end);
+  const startValues: rgba = getColorValuesFromRGBAString(start);
+  const endValues: rgba = getColorValuesFromRGBAString(end);
   ['r', 'g', 'b', 'a'].forEach(value => {
     startValues[value] = parseFloat(startValues[value]);
     endValues[value] = parseFloat(endValues[value]);
@@ -147,8 +159,8 @@ export const getColorBetweenRGBA = (start: string, end: string, percentage: numb
     : {r, g, b, a};*/
 };
 
-export const getColorValuesFromRGBA = (color: string): rgba => {
-  color = color.replace(/ |rgba\(|rgb\(|, |,|)/, '');
+export const getColorValuesFromRGBAString = (color: string): rgba => {
+  color = color.replace(/ |rgba\(|rgb\(|, |,|\)/, '');
   const colorArray: string[] = color.split(',');
   let r: any = colorArray[0];
   let g: any = colorArray[1];

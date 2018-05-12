@@ -9,7 +9,7 @@ export class LookAtCamera implements ICamera {
   private _aspectRatio: number;
   private _zNear: number;
   private _zFar: number;
-  private _position: vec3;
+  private _position: vec3 = {x: 0, y: 0, z: 0};
   private _target: IMesh | vec3;
   private _targetCoords: vec3;
   private _matrix: Matrix4;
@@ -18,16 +18,16 @@ export class LookAtCamera implements ICamera {
 
   constructor(options: IPerspectiveCameraOptions) {
     if (!options.fieldOfView) throw new Error('LookAtCamera options object is missing fieldOfView attribute');
-    if (!options.canvasWidth) throw new Error('LookAtCamera options object is missing canvasWidth attribute');
-    if (!options.canvasHeight) throw new Error('LookAtCamera options object is missing canvasHeight attribute');
-
+    if (options.x) this._position.x = options.x;
+    if (options.y) this._position.y = options.y;
+    if (options.z) this._position.z = options.z;
     this._fieldOfView = options.fieldOfView;
     this._fieldOfViewRadians = degreesToRadians(this._fieldOfView);
     this._zNear = options.zNear || 1;
     this._zFar = options.zFar || 2000;
     this._matrix = new Matrix4();
     this._projectionMatrix = new Matrix4();
-    this._position = {x: 0, y: 0, z: 0};
+    this._viewMatrix = new Matrix4();
     this._targetCoords = {x: 0, y: 0, z: 0};
     this.resize(options.canvasWidth, options.canvasHeight);
     this._updateMatrix();
@@ -92,15 +92,15 @@ export class LookAtCamera implements ICamera {
       this._matrix.setToIdentity();
       this._matrix.translate(this._position.x, this._position.y, this._position.z);
       const cameraPosition = {
-        x: this._matrix[12],
-        y: this._matrix[13],
-        z: this._matrix[14],
+        x: this._matrix.value[12],
+        y: this._matrix.value[13],
+        z: this._matrix.value[14],
       };
 
       const upDirection = {x: 0, y: 1, z: 0};
       this._viewMatrix.setToLookAt(cameraPosition, this._targetCoords, upDirection);
 
-      this._viewMatrix.invert();
+      //this._viewMatrix.invert();
       this._matrix.value = this._projectionMatrix.value;
       this._matrix.multiply(this._viewMatrix.value);
     }

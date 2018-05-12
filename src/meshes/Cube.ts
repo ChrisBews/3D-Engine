@@ -3,7 +3,7 @@ import { Mesh } from './Mesh';
 export class Cube extends Mesh {
 
   constructor(options: ICubeOptions) {
-    super();
+    super(options);
     if (!options.width) throw new Error('Cube options object is missing a width attribute');
     if (!options.material) throw new Error('Cube options object is missing a material attribute');
     this._id = `Cube-${Date.now()}`;
@@ -21,6 +21,7 @@ export class Cube extends Mesh {
     const w: number = this._width / 2;
     const h: number = this._height;
     const d: number = this._depth / 2;
+    console.log(w, h, d);
     this._vertices = new Float32Array([
       // Front face
       -w, 0, d,

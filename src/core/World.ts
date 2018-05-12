@@ -33,6 +33,12 @@ export class World implements IWorld {
     this._activeScene.onChildAdded = this._onMeshAddedToScene;
     this._activeScene.onMeshMaterialUpdated = this._onMeshMaterialUpdated;
     this._activeScene.onCameraAdded = this._onCameraAdded;
+    if (scene.camera) this._onCameraAdded(scene.camera);
+    if (scene.children.length) {
+      scene.children.forEach(mesh => {
+        this._onMeshAddedToScene(mesh);
+      });
+    }
   }
 
   set onUpdate(callback: (timeElapsed: number) => void) {
@@ -117,7 +123,7 @@ export class World implements IWorld {
   }
 
   _draw() {
-    this._gl.clearColor(0, 0, 0, 0);
+    this._gl.clearColor(0, 0, 0, 0.5);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
     const sceneCamera: ICamera = this._activeScene.camera;
     if (!sceneCamera) return;
@@ -128,26 +134,54 @@ export class World implements IWorld {
       const program: IProgram = mesh.material.program;
 
       if (program) {
-        // Render the mesh
-        this._gl.useProgram(program);
+        // Use the correct shader for this mesh
+        this._gl.useProgram(program.glProgram);
+
+        // Mesh matrix
         const meshMatrix: Matrix4 = new Matrix4(sceneCameraMatrix);
         meshMatrix.multiply(mesh.matrix);
         this._gl.uniformMatrix4fv(program.matrixUniform, false, meshMatrix.value);
+
+        // Normals matrix
+        // Protect the normals from world scaling by inverting and transposing the mesh's matrix
         const normalsMatrix: Matrix4 = new Matrix4(mesh.normalsMatrix);
         normalsMatrix.invert();
         normalsMatrix.transpose();
         this._gl.uniformMatrix4fv(program.normalMatrixUniform, false, normalsMatrix.value);
 
+        // Normals
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._normalsBuffer);
         this._gl.enableVertexAttribArray(program.normalAttribute);
         this._gl.vertexAttribPointer(program.normalAttribute, 3, this._gl.FLOAT, false, 0, 0);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.normals, this._gl.STATIC_DRAW);
 
+        // Vertices
+        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
+        this._gl.enableVertexAttribArray(program.positionAttribute);
+        this._gl.vertexAttribPointer(program.positionAttribute, 2, this._gl.FLOAT, false, 0, 0);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.vertices, this._gl.STATIC_DRAW);
+
+        // Indices
+        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
+        this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, mesh.indices, this._gl.STATIC_DRAW);
+        this._gl.drawElements(this._gl.TRIANGLES, mesh.indices.length, this._gl.UNSIGNED_SHORT, 0);
+
+        // UVs / Material texture
+        if (program.uvAttribute && program.uvAttribute !== -1 && mesh.uvs.length && mesh.material.isTextureMap) {
+          this._gl.bindTexture(this._gl.TEXTURE_2D, mesh.material.texture);
+          this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._uvBuffer);
+          this._gl.enableVertexAttribArray(program.uvAttribute);
+          this._gl.vertexAttribPointer(program.uvAttribute, 2, this._gl.FLOAT, true, 0, 0);
+          this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.uvs, this._gl.STATIC_DRAW);
+        }
+
+        // Material color
         if (program.colorUniform) {
           this._gl.uniform4fv(program.colorUniform, [
             mesh.material.colorInUnits.r,
             mesh.material.colorInUnits.g,
             mesh.material.colorInUnits.b,
+            mesh.material.colorInUnits.a,
           ]);
         }
 
@@ -162,29 +196,9 @@ export class World implements IWorld {
         const normalizedLightValues: vec3 = normalizeVector(lightValues);
         this._gl.uniform3fv(
           program.lightDirectionUniform,
-          new Float32Array([normalizedLightValues.x, normalizedLightValues.y, normalizedLightValues.z])
+          [normalizedLightValues.x, normalizedLightValues.y, normalizedLightValues.z]
         );
         this._gl.uniform3fv(program.lightColorUniform, lightColor);
-
-        // UVs
-        if (program.uvAttribute && program.uvAttribute !== -1 && mesh.uvs.length && mesh.material.isTextureMap) {
-          this._gl.bindTexture(this._gl.TEXTURE_2D, mesh.material.texture);
-          this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._uvBuffer);
-          this._gl.enableVertexAttribArray(program.uvAttribute);
-          this._gl.vertexAttribPointer(program.uvAttribute, 2, this._gl.FLOAT, true, 0, 0);
-          this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.uvs, this._gl.STATIC_DRAW);
-        }
-
-        // Vertices
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
-        this._gl.enableVertexAttribArray(program.positionAttribute);
-        this._gl.vertexAttribPointer(program.positionAttribute, 2, this._gl.FLOAT, false, 0, 0);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.vertices, this._gl.STATIC_DRAW);
-
-        // Indices
-        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
-        this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, mesh.indices, this._gl.STATIC_DRAW);
-        this._gl.drawElements(this._gl.TRIANGLES, mesh.indices.length, this._gl.UNSIGNED_SHORT, 0);
       } else {
         throw new Error(`Mesh ${mesh.id} has no material assigned, so will not be rendered`);
       }

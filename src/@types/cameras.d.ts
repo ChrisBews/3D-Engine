@@ -9,8 +9,16 @@ interface IPerspectiveCameraOptions {
   canvasHeight: number;
   zNear?: number;
   zFar?: number;
+  x?: number;
+  y?: number;
+  z?: number;
 }
 
-interface IFollowCameraOptions extends IPerspectiveCameraOptions {
+interface IFollowCameraOptions {
+  fieldOfView: number;
+  canvasWidth: number;
+  canvasHeight: number;
+  zNear?: number;
+  zFar?: number;
   distance?: number;
 }

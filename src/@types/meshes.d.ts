@@ -25,6 +25,7 @@ interface IMeshOptions {
   normals?: number[];
   indices?: number[];
   uvs?: number[];
+  material: IMaterial;
 }
 
 interface ICubeOptions {

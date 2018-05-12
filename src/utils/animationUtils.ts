@@ -1,17 +1,19 @@
-export const getBezierObject = (easing: any): easingObject => {
-  const easingType: string = typeof easing;
+import { easing } from '@oomph3d/constants/easing';
+
+export const getBezierObject = (easingMethod: any): easingObject => {
+  const easingType: string = typeof easingMethod;
   if (easingType === 'string') {
     // String passed in
-    if (this[easing] && this[easing].x1) {
-      return this[easing];
-    } else if (easing.search('cubic-bezier(') > -1) {
-      return this.parseCubicBezierString();
+    if (easing[easingMethod]) {
+      return easing[easingMethod];
+    } else if (easingMethod.search('cubic-bezier(') > -1) {
+      return parseCubicBezierString(easingMethod);
     } else {
       throw new Error('getBezierObject: Invalid easing function');
     }
-  } else if (easingType === 'object' && easing.x1 && easing.x2 && easing.t1 && easing.t2) {
+  } else if (easingType === 'object' && easingMethod.x1 && easingMethod.x2 && easingMethod.t1 && easingMethod.t2) {
     // Valid easing object
-    return easing;
+    return easingMethod;
   } else {
     throw new Error('getBezierObject: Invalid easing function');
   }
@@ -34,7 +36,7 @@ export const parseCubicBezierString = (bezierString: string): easingObject => {
 export const getEasedPercentageOnCurve = (bezierObject: easingObject, percentage: number) => {
   // If the ease is linear, return the percentage as is
   if (bezierObject.x1 === bezierObject.t1 && bezierObject.x2 === bezierObject.t2) return percentage;
-  return this.calculateBezier(this.getPositionOnCurve(bezierObject, percentage), bezierObject.t1, bezierObject.t2);
+  return calculateBezier(getPositionOnCurve(bezierObject, percentage), bezierObject.t1, bezierObject.t2);
 };
 
 export const getPositionOnCurve = (bezierObject: easingObject, percentage: number) => {
@@ -44,9 +46,9 @@ export const getPositionOnCurve = (bezierObject: easingObject, percentage: numbe
   let currentBezierX: number = 0;
   const iterations: number = 30;
   for (let i: number = 0; i < iterations; i++) {
-    currentBezierSlope = this.getBezierSlope(bezierGuess, bezierObject.x1, bezierObject.x2);
+    currentBezierSlope = getBezierSlope(bezierGuess, bezierObject.x1, bezierObject.x2);
     if (currentBezierSlope === 0.0) return bezierGuess;
-    currentBezierX = this.calculateBezier(bezierGuess, bezierObject.x1, bezierObject.x2) - percentage;
+    currentBezierX = calculateBezier(bezierGuess, bezierObject.x1, bezierObject.x2) - percentage;
     bezierGuess -= currentBezierX / currentBezierSlope;
   }
   return bezierGuess;

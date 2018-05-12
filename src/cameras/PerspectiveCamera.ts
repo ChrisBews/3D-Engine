@@ -3,10 +3,10 @@ import { Matrix4 } from "../utils/Matrix4";
 
 export class PerspectiveCamera implements ICamera {
 
-  protected _aspectRatio: number;
+  protected _aspectRatio: number = 1;
   protected _zNear: number;
   protected _zFar: number;
-  protected _position: vec3;
+  protected _position: vec3 = {x: 0, y: 0, z: 0};
   protected _matrix: Matrix4;
   protected _angle: vec3;
   protected _angleInRadians: vec3;
@@ -26,7 +26,9 @@ export class PerspectiveCamera implements ICamera {
     this._matrix = new Matrix4();
     this._projectionMatrix = new Matrix4();
     this._viewMatrix = new Matrix4();
-    this._position = {x: 0, y: 0, z: 0};
+    if (options.x) this._position.x = options.x;
+    if (options.y) this._position.y = options.y;
+    if (options.z) this._position.z = options.z;
     this._angle = {x: 0, y: 0, z: 0};
     this._angleInRadians = {x: 0, y: 0, z: 0};
     this._updateMatrix();

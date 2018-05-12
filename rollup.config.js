@@ -23,9 +23,9 @@ export default {
       plugins: [
         'external-helpers',
         ["module-resolver", {
-          "root": ["/"],
+          "root": ["./"],
           "alias": {
-            "@oomph3d": "src"
+            "@oomph3d": "./src"
           }
         }],
       ],

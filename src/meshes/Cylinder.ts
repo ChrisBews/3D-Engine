@@ -11,7 +11,7 @@ export class Cylinder extends Mesh {
   private _heightSegments: number;
 
   constructor(options: ICylinderOptions) {
-    super();
+    super(options);
     if (!options.radius) throw new Error('Cylinders options object is mising a radius attribute');
     if (!options.material) throw new Error('Cylinder options object is missing a material attribute');
     this._id = `Cylinder-${Date.now()}`;

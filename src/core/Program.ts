@@ -16,6 +16,8 @@ export class Program implements IProgram {
     this._vertexShader = this._createShader(glContext, glContext.VERTEX_SHADER, vertexShader);
     this._fragmentShader = this._createShader(glContext, glContext.FRAGMENT_SHADER, fragmentShader);
     this._glProgram = this._createGLProgram(glContext);
+    this._getAttributeLocations(glContext);
+    this._getUniformLocations(glContext);
   }
 
   get positionAttribute(): number { return this._positionAttribute; }

@@ -8,26 +8,51 @@ function TestApp() {
 
 TestApp.prototype.init = function() {
   this.createWorld();
+  this.populateScene();
 }
 
 TestApp.prototype.createWorld = function() {
+  console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
   // 60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-  this.camera = new Oomph3D.PerspectiveCamera({
+  this.camera = new Oomph3D.cameras.PerspectiveCamera({
     fieldOfView: 60,
+    z: 300,
+    x: 0,
+    y: 0,
   });
+  this.scene.camera = this.camera;
+
+  this.light = new Oomph3D.lights.DirectionalLight({
+    directionX: Math.cos(Oomph3D.utils.degreesToRadians(120)),
+    directionY: 0,
+    directionZ: Math.sin(Oomph3D.utils.degreesToRadians(120)),
+  });
+
+  this.scene.addLight(this.light);
   this.world.scene = this.scene;
   this.world.onUpdate = this.onUpdate.bind(this);
 }
 
 TestApp.prototype.populateScene = function() {
   //this.cube = new Oomph3D.meshes.Cube(50);
-  //this.cube = new Oomph3D.meshes.Cube({width: 50});
+  this.cube = new Oomph3D.meshes.Cube({
+    width: 50,
+    material: new Oomph3D.materials.FlatColor({
+      r: 255,
+      g: 0,
+      b: 0,
+    }),
+  });
+  this.cube.x = 0;
+  this.scene.addChild(this.cube);
+  if (this.camera.lookAt) this.camera.lookAt(this.cube);
+  if (this.camera.followMesh) this.camera.followMesh(this.cube, 200);
 }
 
 TestApp.prototype.onUpdate = function() {
-
+  this.cube.rotationY += 1;
 }
 
 var app = new TestApp();

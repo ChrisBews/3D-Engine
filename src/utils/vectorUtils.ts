@@ -5,9 +5,9 @@ export const normalizeVector = (vector: vec3): vec3 => {
   // Don't divide by zero
   if (length > 0.00001) {
     return {
-      x: vector[0] / length,
-      y: vector[1] / length,
-      z: vector[2] / length,
+      x: vector.x / length,
+      y: vector.y / length,
+      z: vector.z / length,
     };
   } else {
     return {x: 0, y: 0, z: 0};

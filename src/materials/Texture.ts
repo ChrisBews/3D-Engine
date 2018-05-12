@@ -79,6 +79,6 @@ export class Texture implements IMaterial {
 
         // Multiply the colour portion (not alpha) by the light
         outColor.rgb *= light * u_lightColor;
-      }
-    `;
+      }`;
+    }
   }

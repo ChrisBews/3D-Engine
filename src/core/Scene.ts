@@ -10,6 +10,7 @@ export class Scene implements IScene {
 
   constructor() {
     this._children = [];
+    this._lights = [];
   }
 
   get children(): IMesh[] { return this._children; }
@@ -36,7 +37,7 @@ export class Scene implements IScene {
   }
 
   addChild(mesh: IMesh) {
-    if (this._children.indexOf(mesh)  -1) {
+    if (this._children.indexOf(mesh) === -1) {
       this._children.push(mesh);
       mesh.onMaterialUpdated = this._onMeshMaterialUpdated;
       if (this._onChildAdded) this._onChildAdded(mesh);
@@ -48,7 +49,7 @@ export class Scene implements IScene {
   }
 
   addLight(light: ILight) {
-    if (this._lights.indexOf(light) > -1) {
+    if (this._lights.indexOf(light) === -1) {
       if (light.isDirectional) {
         if (this._directionalLight) {
           throw new Error('Scene: Scene already contains a directional light. Remove the existing one before adding a new one');

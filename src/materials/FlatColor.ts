@@ -1,4 +1,4 @@
-import { convertColorToUnits } from 'utils/colorUtils';
+import { convertColorToUnits } from '@oomph3d/utils/colorUtils';
 
 export class FlatColor implements IMaterial {
 

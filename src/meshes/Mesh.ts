@@ -10,7 +10,7 @@ export class Mesh implements IMesh {
   protected _position: vec3 = {x: 0, y: 0, z: 0};
   protected _rotation: vec3 = {x: 0, y: 0, z: 0};
   protected _rotationRadians: vec3 = {x: 0, y: 0, z: 0};
-  protected _scale: vec3 = {x: 0, y: 0, z: 0};
+  protected _scale: vec3 = {x: 1, y: 1, z: 1};
   protected _material: IMaterial;
   protected _vertices: Float32Array;
   protected _normals: Float32Array;
@@ -20,12 +20,13 @@ export class Mesh implements IMesh {
   protected _normalMatrix: Matrix4;
   private _onMaterialUpdated: (mesh: IMesh) => void;
 
-  constructor(options: IMeshOptions = {}) {
+  constructor(options: IMeshOptions) {
     this._id = `Mesh-${Date.now()}`;
     this._vertices = new Float32Array(options.vertices || []);
     this._normals = new Float32Array(options.normals || []);
     this._indices = new Uint16Array(options.indices || []);
     this._uvs = new Float32Array(options.uvs || []);
+    this._material = options.material;
     if (options.vertices) this._calculateBounds();
   }
 
