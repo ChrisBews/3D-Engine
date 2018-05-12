@@ -36,18 +36,18 @@ TestApp.prototype.createWorld = function() {
 }
 
 TestApp.prototype.populateScene = function() {
-  //this.cube = new Oomph3D.meshes.Cube(50);
   this.cube = new Oomph3D.meshes.Cube({
-    width: 50,
+    width: 100,
     material: new Oomph3D.materials.FlatColor({
-      r: 255,
-      g: 0,
+      r: 200,
+      g: 200,
       b: 0,
     }),
   });
 
   this.cylinder = new Oomph3D.meshes.Cylinder({
     radius: 50,
+    height: 100,
     material: new Oomph3D.materials.FlatColor({
       r: 255,
       g: 0,
@@ -58,20 +58,38 @@ TestApp.prototype.populateScene = function() {
   this.sphere = new Oomph3D.meshes.Sphere({
     radius: 50,
     material: new Oomph3D.materials.FlatColor({
-      r: 255,
+      r: 0,
+      g: 200,
+      b: 200,
+    }),
+  });
+
+  this.fShape = new Oomph3D.meshes.FShape({
+    width: 100,
+    material: new Oomph3D.materials.FlatColor({
+      r: 200,
       g: 0,
+      b: 200,
+    }),
+  });
+
+  this.plane = new Oomph3D.meshes.Plane({
+    width: 100,
+    material: new Oomph3D.materials.FlatColor({
+      r: 200,
+      g: 200,
       b: 0,
     }),
   });
 
-  this.scene.addChild(this.sphere);
+  this.scene.addChild(this.cylinder);
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
   if (this.camera.followMesh) this.camera.followMesh(this.cube, 200);
   if (this.camera.enableControls) this.camera.enableControls();
 }
 
 TestApp.prototype.onUpdate = function() {
-  this.sphere.rotationY += 1;
+  this.cylinder.rotationX += 1;
 }
 
 var app = new TestApp();

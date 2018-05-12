@@ -12,7 +12,8 @@ export class Cylinder extends Mesh {
 
   constructor(options: ICylinderOptions) {
     super(options);
-    if (!options.radius) throw new Error('Cylinders options object is mising a radius attribute');
+    if (!options.radius) throw new Error('Cylinder options object is mising a radius attribute');
+    if (!options.height) throw new Error('Cylinder options object is missing a height attribute');
     if (!options.material) throw new Error('Cylinder options object is missing a material attribute');
     this._id = `Cylinder-${Date.now()}`;
     this._radius = options.radius;
@@ -103,7 +104,6 @@ export class Cylinder extends Mesh {
       );
       startIndex += 3;
     }
-
     this._vertices = new Float32Array(vertexArray);
     this._normals = new Float32Array(normalsArray);
     this._indices = new Uint16Array(indicesArray);

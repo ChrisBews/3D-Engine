@@ -159,7 +159,7 @@ export class World implements IWorld {
         // Vertices
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
         this._gl.enableVertexAttribArray(program.positionAttribute);
-        this._gl.vertexAttribPointer(program.positionAttribute, 2, this._gl.FLOAT, false, 0, 0);
+        this._gl.vertexAttribPointer(program.positionAttribute, 3, this._gl.FLOAT, false, 0, 0);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.vertices, this._gl.STATIC_DRAW);
 
         // Indices

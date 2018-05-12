@@ -6,6 +6,9 @@ export class Plane extends Mesh {
   private _widthSections: number;
   private _depthDivisions: number;
   private _depthSections: number;
+  private _tempVertices: number[] = [];
+  private _tempNormals: number[] = [];
+  private _tempIndices: number[] = [];
 
   constructor(options: IPlaneOptions) {
     super(options);
@@ -25,18 +28,14 @@ export class Plane extends Mesh {
 
   private _generateMeshData() {
     // Create the surface with as many faces as required
-    const length: number = (this._widthSections * this._depthSections * 12);
-
-    this._vertices = new Float32Array(length);
-    this._normals = new Float32Array(length);
-    let previousX = -(this._width / 2);
-    let previousZ = this._depth / 2;
-    for (let i = 0; i < this._depthSections; i++) {
-      const newZ = previousZ + (-this._depth / this._depthSections);
+    let previousX: number = -(this._width / 2);
+    let previousZ: number = this._depth / 2;
+    for (let i: number = 0; i < this._depthSections; i++) {
+      const newZ: number = previousZ + (-this._depth / this._depthSections);
       previousX = -(this._width / 2);
 
-      for (let k = 0; k < this._widthSections; k++) {
-        const newX = previousX + (this._width / this._widthSections);
+      for (let k: number = 0; k < this._widthSections; k++) {
+        const newX: number = previousX + (this._width / this._widthSections);
         // const counter = (i * (this._depthSections * 12)) + (k * 12);
         this._addDivision(previousX, previousZ, newX, newZ);
         previousX = newX;
@@ -44,41 +43,33 @@ export class Plane extends Mesh {
 
       previousZ = newZ;
     }
+    this._vertices = new Float32Array(this._tempVertices);
+    this._normals = new Float32Array(this._tempNormals);
+    this._indices = new Uint16Array(this._tempIndices);
   }
 
   private _addDivision(startX: number, startZ: number, endX: number, endZ: number) {
-    const indexArrayCounter = (this._vertices.length / 3);
+    const indexArrayCounter: number = (this._vertices.length / 3);
     if (this._vertices.length === 0) {
-      this.indices.set(
-        [0, 1, 2, 0, 2, 3],
-      );
+      this._tempIndices.push(0, 1, 2, 0, 2, 3);
     } else {
-      this._indices.set(
-        [
-          indexArrayCounter, indexArrayCounter + 1, indexArrayCounter + 2,
-          indexArrayCounter, indexArrayCounter + 2, indexArrayCounter + 3,
-        ],
-        this._indices.length
+      this._tempIndices.push(
+        indexArrayCounter, indexArrayCounter + 1, indexArrayCounter + 2,
+        indexArrayCounter, indexArrayCounter + 2, indexArrayCounter + 3
       );
     }
 
-    this._vertices.set(
-      [
-        startX, 0, startZ,
-        endX, 0, startZ,
-        endX, 0, endZ,
-        startX, 0, endZ,
-      ],
-      this._vertices.length
+    this._tempVertices.push(
+      startX, 0, startZ,
+      endX, 0, startZ,
+      endX, 0, endZ,
+      startX, 0, endZ
     );
-    this._normals.set(
-      [
-        0, 1, 0,
-        0, 1, 0,
-        0, 1, 0,
-        0, 1, 0,
-      ],
-      this._normals.length
+    this._tempNormals.push(
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0,
+      0, 1, 0
     );
   }
 }
