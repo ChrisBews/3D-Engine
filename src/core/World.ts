@@ -82,6 +82,7 @@ export class World implements IWorld {
       this._canvas.width = displayWidth;
       this._canvas.height = displayHeight;
     }
+    this._gl.viewport(0, 0, this._gl.canvas.clientWidth, this._gl.canvas.clientHeight);
     if (this._activeScene && this._activeScene.camera) {
       this._activeScene.camera.resize(displayWidth, displayHeight);
     }
@@ -123,7 +124,7 @@ export class World implements IWorld {
   }
 
   _draw() {
-    this._gl.clearColor(0, 0, 0, 0.5);
+    this._gl.clearColor(0.7, 0.7, 0.7, 1);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
     const sceneCamera: ICamera = this._activeScene.camera;
     if (!sceneCamera) return;

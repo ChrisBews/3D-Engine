@@ -8,7 +8,7 @@ export class Plane extends Mesh {
   private _depthSections: number;
 
   constructor(options: IPlaneOptions) {
-    super();
+    super(options);
     if (!options.width) throw new Error('Plane options object is missing a width attribute');
     if (!options.material) throw new Error('Plane options object is missing a material attribute');
     this._id = `Plane-${Date.now()}`;

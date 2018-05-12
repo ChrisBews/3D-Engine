@@ -21,7 +21,6 @@ export class Cube extends Mesh {
     const w: number = this._width / 2;
     const h: number = this._height;
     const d: number = this._depth / 2;
-    console.log(w, h, d);
     this._vertices = new Float32Array([
       // Front face
       -w, 0, d,

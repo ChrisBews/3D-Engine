@@ -3,7 +3,7 @@ import { Mesh } from './Mesh';
 export class FShape extends Mesh {
 
   constructor(options: IFShapeOptions) {
-    super();
+    super(options);
     if (!options.width) throw new Error('FShape options object is missing a width attribute');
     if (!options.material) throw new Error('FShape options object is missing a material attribute');
     this._id = `FShape-${Date.now()}`;

@@ -11,7 +11,7 @@ export class Sphere extends Mesh {
   private _normalsArray: number[];
 
   constructor(options: ISphereOptions) {
-    super();
+    super(options);
     if (!options.radius) throw new Error('Sphere options object is missing a radius attribute');
     if (!options.material) throw new Error('Sphere options object is missing a material attribute');
     this._id = `Sphere-${Date.now()}`;

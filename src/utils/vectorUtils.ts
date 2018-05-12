@@ -32,9 +32,10 @@ export const crossVectors = (vectorA: vec3, vectorB: vec3): vec3 => {
 
 export const transformVector = (matrix: Matrix4, vector: vec4): vec4 => {
   const result: number[] = [0, 0, 0, 0];
+  const vectorArray: number[] = [vector.x, vector.y, vector.z, vector.w];
   for (let i: number = 0; i < 4; i++) {
     for (let j: number = 0; j < 4; j++) {
-      result[i] += vector[j] * matrix.value[j * 4 + i];
+      result[i] += vectorArray[j] * matrix.value[j * 4 + i];
     }
   }
   return {

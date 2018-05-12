@@ -77,6 +77,7 @@ export class PerspectiveCamera implements ICamera {
 
   public setPosition(x: number, y: number, z: number) {
     this._position = {x, y, z};
+    this._updateMatrix();
   }
 
   public resize(canvasWidth: number, canvasHeight: number) {

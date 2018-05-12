@@ -16,9 +16,9 @@ TestApp.prototype.createWorld = function() {
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
   // 60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-  this.camera = new Oomph3D.cameras.PerspectiveCamera({
+  this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
-    z: 300,
+    z: 400,
     x: 0,
     y: 0,
   });
@@ -45,14 +45,33 @@ TestApp.prototype.populateScene = function() {
       b: 0,
     }),
   });
-  this.cube.x = 0;
-  this.scene.addChild(this.cube);
+
+  this.cylinder = new Oomph3D.meshes.Cylinder({
+    radius: 50,
+    material: new Oomph3D.materials.FlatColor({
+      r: 255,
+      g: 0,
+      b: 0,
+    }),
+  });
+
+  this.sphere = new Oomph3D.meshes.Sphere({
+    radius: 50,
+    material: new Oomph3D.materials.FlatColor({
+      r: 255,
+      g: 0,
+      b: 0,
+    }),
+  });
+
+  this.scene.addChild(this.sphere);
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
   if (this.camera.followMesh) this.camera.followMesh(this.cube, 200);
+  if (this.camera.enableControls) this.camera.enableControls();
 }
 
 TestApp.prototype.onUpdate = function() {
-  this.cube.rotationY += 1;
+  this.sphere.rotationY += 1;
 }
 
 var app = new TestApp();

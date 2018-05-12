@@ -115,8 +115,8 @@ export class Matrix4 implements IMatrix4 {
   }
 
   public rotate(angleXRadians: number, angleYRadians: number, angleZRadians: number) {
-    if (angleXRadians) this.rotateX(angleXRadians);
     if (angleYRadians) this.rotateY(angleYRadians);
+    if (angleXRadians) this.rotateX(angleXRadians);
     if (angleZRadians) this.rotateZ(angleZRadians);
   }
 

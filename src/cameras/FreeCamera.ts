@@ -28,8 +28,6 @@ export class FreeCamera extends PerspectiveCamera {
   private _previousMouseX: number = 0;
   private _previousMouseY: number = 0;
   private _keyFrameTimer: number;
-  private _angleXInRadians: number = 0;
-  private _angleYInRadians: number = 0;
   private _rotationMatrix: Matrix4;
 
   constructor(options: IPerspectiveCameraOptions) {
@@ -96,8 +94,8 @@ export class FreeCamera extends PerspectiveCamera {
 
   private _updatePosition(key: string, speedIncrement: number) {
     this._rotationMatrix.setToIdentity();
-    if (this._angleXInRadians) this._rotationMatrix.rotateX(this._angleXInRadians);
-    if (this._angleYInRadians) this._rotationMatrix.rotateY(this._angleYInRadians);
+    if (this._angleInRadians.x) this._rotationMatrix.rotateX(this._angleInRadians.x);
+    if (this._angleInRadians.y) this._rotationMatrix.rotateY(this._angleInRadians.y);
     let movementDirection: vec4 = {x: 0, y: 0, z: 0, w: 0};
 
     switch (key) {
@@ -121,26 +119,6 @@ export class FreeCamera extends PerspectiveCamera {
         break;
     }
 
-    // Handle rotations separately
-    if (!this._mouseXRotating) {
-      if (key === 'ArrowLeft') {
-        // Left arrow key
-        this._xRotationStrength = 1;
-      } else if ('ArrowRight') {
-        // Right arrow key
-        this._xRotationStrength = -1;
-      }
-    }
-    if (!this._mouseYRotating) {
-      if (key === 'ArrowUp') {
-        // Up arrow key
-        this._yRotationStrength = 1;
-      } else if ('ArrowDown') {
-        // Down arrow key
-        this._yRotationStrength = -1;
-      }
-    }
-
     const adjustment = transformVector(this._rotationMatrix, movementDirection);
     this._position = {
       x: this._position.x += (adjustment.x * speedIncrement),
@@ -150,14 +128,14 @@ export class FreeCamera extends PerspectiveCamera {
   }
 
   private _clearKeyRotations() {
-    if (this._pressedKeys.indexOf('LeftArrow') === -1
-      && this._pressedKeys.indexOf('RightArrow') === -1
+    if (this._pressedKeys.indexOf('ArrowLeft') === -1
+      && this._pressedKeys.indexOf('ArrowRight') === -1
       && !this._mouseXRotating) {
       this._xRotationStrength = 0;
     }
 
-    if (this._pressedKeys.indexOf('UpArrow') === -1
-      && this._pressedKeys.indexOf('DownArrow') === -1
+    if (this._pressedKeys.indexOf('ArrowUp') === -1
+      && this._pressedKeys.indexOf('ArrowDown') === -1
       && !this._mouseYRotating) {
       this._yRotationStrength = 0;
     }
