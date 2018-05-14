@@ -33,6 +33,10 @@ export class ProjectionCamera implements ICamera {
     this._orthoMatrix.setToOrthographic(this._left, this._right, this._bottom, this._top, this._zNear, this._zFar);
   }
 
+  public update() {
+
+  }
+
   private _updateMatrix() {
     this._matrix.setToIdentity();
     this._matrix.copyZToW(distanceMultiplier);

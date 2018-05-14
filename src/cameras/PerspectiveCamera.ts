@@ -85,6 +85,10 @@ export class PerspectiveCamera implements ICamera {
     this._updateMatrix();
   }
 
+  public update() {
+
+  }
+
   protected _updateMatrix() {
     this._projectionMatrix.setToPerspective(this._fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);
     this._viewMatrix.setToIdentity();

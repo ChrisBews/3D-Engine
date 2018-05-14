@@ -1,6 +1,6 @@
 {
   "name": "oomph3d",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A basic, from the ground up, 3D library",
   "main": "src/index.ts",
   "repository": "https://github.com/ChrisBews/3D-Engine.git",

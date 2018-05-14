@@ -84,7 +84,7 @@ export class World implements IWorld {
     }
     this._gl.viewport(0, 0, this._gl.canvas.clientWidth, this._gl.canvas.clientHeight);
     if (this._activeScene && this._activeScene.camera) {
-      this._activeScene.camera.resize(displayWidth, displayHeight);
+      this._activeScene.resize(displayWidth, displayHeight);
     }
   }
 
@@ -115,6 +115,7 @@ export class World implements IWorld {
     // Store previous render time
     this._previousRenderTime = renderTime;
 
+    if (this._activeScene) this._activeScene.update();
     // Allow for updates to take place
     if (this._onUpdate) this._onUpdate(timePassed);
     // Draw all children in current scene
@@ -215,7 +216,7 @@ export class World implements IWorld {
   }
 
   _onCameraAdded = (camera: ICamera) => {
-    camera.resize(this._canvas.clientWidth, this._canvas.clientHeight);
+    this._activeScene.resize(this._canvas.clientWidth, this._canvas.clientHeight);
   }
 
   _onWindowResized = () => {

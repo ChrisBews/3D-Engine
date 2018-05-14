@@ -51,20 +51,20 @@ export class FollowCamera implements ICamera {
 
   private _updateMatrix() {
     const projectionMatrix: Matrix4 = new Matrix4();
-    projectionMatrix.setToPerspective(this._fieldOfView, this._aspectRatio, this._zNear, this._zFar);
+    projectionMatrix.setToPerspective(this._fieldOfViewRadians, this._aspectRatio, this._zNear, this._zFar);
 
     // New camera position
-    const cameraX = this._target[0];
-    const cameraY = this._target[1];
-    const cameraZ = this._target[2] + this._distance;
+    const cameraX = this._target.x;
+    const cameraY = this._target.y;
+    const cameraZ = this._target.z + this._distance;
 
     this._matrix.setToIdentity();
     this._matrix.translate(cameraX, cameraY, cameraZ);
 
     const cameraPosition: vec3 = {
-      x: this._matrix[12],
-      y: this._matrix[13],
-      z: this._matrix[14],
+      x: this._matrix.value[12],
+      y: this._matrix.value[13],
+      z: this._matrix.value[14],
     };
 
     const xAngleInRadians = degreesToRadians(this._targetMesh.rotationX);
@@ -72,7 +72,6 @@ export class FollowCamera implements ICamera {
 
     // Calculate the x and y rotation from the target and camera position
     let directionVector: vec4 = {...subtractVectors(cameraPosition, this._target), w: 0};
-
     let upDirection: vec4 = {x: 0, y: 1, z: 0, w: 0};
 
     /// pitch = y, yaw = x

@@ -15,8 +15,7 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  // 60, canvas.clientWidth, canvas.clientHeight, 1, 2000);
-  this.camera = new Oomph3D.cameras.FreeCamera({
+  this.camera = new Oomph3D.cameras.FollowCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
@@ -38,58 +37,38 @@ TestApp.prototype.createWorld = function() {
 TestApp.prototype.populateScene = function() {
   this.cube = new Oomph3D.meshes.Cube({
     width: 100,
-    material: new Oomph3D.materials.FlatColor({
-      r: 200,
-      g: 200,
-      b: 0,
-    }),
+    material: new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
   });
 
   this.cylinder = new Oomph3D.meshes.Cylinder({
     radius: 50,
     height: 100,
-    material: new Oomph3D.materials.FlatColor({
-      r: 255,
-      g: 0,
-      b: 0,
-    }),
+    material: new Oomph3D.materials.FlatColor({ r: 255, g: 0, b: 0 }),
   });
 
   this.sphere = new Oomph3D.meshes.Sphere({
     radius: 50,
-    material: new Oomph3D.materials.FlatColor({
-      r: 0,
-      g: 200,
-      b: 200,
-    }),
+    material: new Oomph3D.materials.FlatColor({ r: 0, g: 200, b: 200 }),
   });
 
   this.fShape = new Oomph3D.meshes.FShape({
     width: 100,
-    material: new Oomph3D.materials.FlatColor({
-      r: 200,
-      g: 0,
-      b: 200,
-    }),
+    material: new Oomph3D.materials.FlatColor({ r: 200, g: 0, b: 200 }),
   });
 
   this.plane = new Oomph3D.meshes.Plane({
     width: 100,
-    material: new Oomph3D.materials.FlatColor({
-      r: 200,
-      g: 200,
-      b: 0,
-    }),
+    material: new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
   });
 
-  this.scene.addChild(this.cylinder);
+  this.scene.addChild(this.fShape);
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
-  if (this.camera.followMesh) this.camera.followMesh(this.cube, 200);
+  if (this.camera.followMesh) this.camera.followMesh(this.fShape, 200);
   if (this.camera.enableControls) this.camera.enableControls();
 }
 
 TestApp.prototype.onUpdate = function() {
-  this.cylinder.rotationX += 1;
+  this.fShape.rotationX += 1;
 }
 
 var app = new TestApp();

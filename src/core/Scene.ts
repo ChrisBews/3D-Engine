@@ -69,9 +69,15 @@ export class Scene implements IScene {
     }
   }
 
-  update(canvasWidth: number, canvasHeight: number) {
-    if (this._camera && this._camera.resize) {
+  resize(canvasWidth: number, canvasHeight: number) {
+    if (this._camera) {
       this._camera.resize(canvasWidth, canvasHeight);
+    }
+  }
+
+  update() {
+    if (this._camera) {
+      this._camera.update();
     }
   }
 }
