@@ -15,7 +15,7 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  this.camera = new Oomph3D.cameras.FollowCamera({
+  this.camera = new Oomph3D.cameras.LookAtCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
@@ -62,7 +62,7 @@ TestApp.prototype.populateScene = function() {
   });
 
   this.scene.addChild(this.fShape);
-  if (this.camera.lookAt) this.camera.lookAt(this.cube);
+  if (this.camera.lookAt) this.camera.lookAt(this.fShape);
   if (this.camera.followMesh) this.camera.followMesh(this.fShape, 200);
   if (this.camera.enableControls) this.camera.enableControls();
 }

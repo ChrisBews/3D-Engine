@@ -96,11 +96,9 @@ export class LookAtCamera implements ICamera {
         y: this._matrix.value[13],
         z: this._matrix.value[14],
       };
-
       const upDirection = {x: 0, y: 1, z: 0};
       this._viewMatrix.setToLookAt(cameraPosition, this._targetCoords, upDirection);
-
-      //this._viewMatrix.invert();
+      this._viewMatrix.invert();
       this._matrix.value = this._projectionMatrix.value;
       this._matrix.multiply(this._viewMatrix.value);
     }
