@@ -27,6 +27,8 @@ export class Mesh implements IMesh {
     this._indices = new Uint16Array(options.indices || []);
     this._uvs = new Float32Array(options.uvs || []);
     this._material = options.material;
+    this._matrix = new Matrix4();
+    this._normalMatrix = new Matrix4();
     if (options.vertices) this._calculateBounds();
   }
 

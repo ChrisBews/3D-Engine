@@ -6,8 +6,6 @@ interface ICamera {
 
 interface IPerspectiveCameraOptions {
   fieldOfView: number;
-  canvasWidth: number;
-  canvasHeight: number;
   zNear?: number;
   zFar?: number;
   x?: number;
@@ -17,9 +15,13 @@ interface IPerspectiveCameraOptions {
 
 interface IFollowCameraOptions {
   fieldOfView: number;
-  canvasWidth: number;
-  canvasHeight: number;
   zNear?: number;
   zFar?: number;
   distance?: number;
+}
+
+interface IProjectionCameraOptions {
+  distanceMultiplier?: number;
+  zNear?: number;
+  zFar?: number;
 }

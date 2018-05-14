@@ -29,7 +29,6 @@ export class LookAtCamera implements ICamera {
     this._projectionMatrix = new Matrix4();
     this._viewMatrix = new Matrix4();
     this._targetCoords = {x: 0, y: 0, z: 0};
-    this.resize(options.canvasWidth, options.canvasHeight);
     this._updateMatrix();
   }
 
