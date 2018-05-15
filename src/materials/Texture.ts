@@ -1,9 +1,11 @@
+import { ImageLoader } from '@oomph3d/utils/loaders/ImageLoader';
+
 export class Texture implements IMaterial {
 
   private _imageUrl: string;
   private _texture: WebGLTexture;
-  private _image;
   private _program: IProgram;
+  private _image: HTMLImageElement;
 
   constructor(imageUrl: string) {
     this._imageUrl = imageUrl;
@@ -19,7 +21,10 @@ export class Texture implements IMaterial {
   get imageUrl(): string { return this._imageUrl; }
   set imageUrl(value: string) {
     this._imageUrl = value;
+    this._texture = undefined;
   }
+
+  get image(): HTMLImageElement { return this._image; }
 
   get texture(): WebGLTexture { return this._texture; }
   set texture(value: WebGLTexture) {
@@ -80,5 +85,12 @@ export class Texture implements IMaterial {
         // Multiply the colour portion (not alpha) by the light
         outColor.rgb *= light * u_lightColor;
       }`;
+    }
+
+    public loadImage(callback: (material: IMaterial) => void) {
+      ImageLoader.loadImage(this._imageUrl, (url: string, image: HTMLImageElement) => {
+        this._image = image;
+        callback(this);
+      });
     }
   }

@@ -2,6 +2,7 @@ import { Scene } from './Scene';
 import { Program } from './Program';
 import { Matrix4 } from '../utils/Matrix4';
 import { normalizeVector } from '../utils/vectorUtils';
+import { defaultTexture } from '@oomph3d/constants/textures';
 
 export class World implements IWorld {
 
@@ -104,7 +105,23 @@ export class World implements IWorld {
     if (!mesh.material.program) {
       // Instantiate the material as required
       mesh.material.program = new Program(this._gl, mesh.material.vertexShader, mesh.material.fragmentShader);
+      if (mesh.material.isTextureMap && !mesh.material.texture) {
+        // Prepare the texture
+        this._prepareMaterialTexture(mesh.material);
+      }
     }
+  }
+
+  _prepareMaterialTexture(material: IMaterial) {
+    const texture = this._gl.createTexture();
+    material.texture = texture;
+    this._gl.bindTexture(this._gl.TEXTURE_2D, texture);
+    this._gl.texImage2D(this._gl.TEXTURE_2D, 0, this._gl.RGBA, 16, 16, 0, this._gl.RGBA, this._gl.UNSIGNED_BYTE, defaultTexture);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_WRAP_S, this._gl.CLAMP_TO_EDGE);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_WRAP_T, this._gl.CLAMP_TO_EDGE);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MIN_FILTER, this._gl.NEAREST);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MAG_FILTER, this._gl.NEAREST);
+    material.loadImage(this._onImageLoadComplete);
   }
 
   _update = (renderTime: number) => {
@@ -217,6 +234,15 @@ export class World implements IWorld {
 
   _onCameraAdded = (camera: ICamera) => {
     this._activeScene.resize(this._canvas.clientWidth, this._canvas.clientHeight);
+  }
+
+  _onImageLoadComplete = (material: IMaterial) => {
+    this._gl.bindTexture(this._gl.TEXTURE_2D, material.texture);
+    // TODO: Allow the texture filtering to be selectable
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MIN_FILTER, this._gl.LINEAR);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MAG_FILTER, this._gl.LINEAR);
+    this._gl.texImage2D(this._gl.TEXTURE_2D, 0, this._gl.RGBA, this._gl.RGBA, this._gl.UNSIGNED_BYTE, material.image);
+    this._gl.generateMipmap(this._gl.TEXTURE_2D);
   }
 
   _onWindowResized = () => {

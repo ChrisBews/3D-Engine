@@ -38,7 +38,7 @@ TestApp.prototype.createWorld = function() {
 TestApp.prototype.populateScene = function() {
   this.cube = new Oomph3D.meshes.Cube({
     width: 100,
-    material: new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
+    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),
   });
   this.cube.x = 200;
   this.cube.z = 50;
@@ -76,8 +76,8 @@ TestApp.prototype.populateScene = function() {
   if (this.camera.enableControls) this.camera.enableControls();
 }
 
-TestApp.prototype.onUpdate = function() {
-  this.fShape.rotationX += 1;
+TestApp.prototype.onUpdate = function(elapsedTime) {
+  this.cube.rotationY += (elapsedTime * 120);
 }
 
 var app = new TestApp();

@@ -5,4 +5,7 @@ interface IMaterial {
   program: IProgram;
   colorInUnits?: rgba;
   texture?: WebGLTexture;
+  imageUrl?: string;
+  image?: HTMLImageElement;
+  loadImage?: (callback: (material: IMaterial) => void) => void;
 }
