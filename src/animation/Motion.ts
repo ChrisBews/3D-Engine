@@ -14,13 +14,15 @@ class MotionCore {
   private _animFrame: number;
 
   constructor() {
-
+    this._activeAnimations = [];
   }
 
   get outputColorsAsStrings(): boolean { return this._outputColorsAsStrings; }
   set outputColorsAsStrings(value: boolean) {
     this._outputColorsAsStrings = value;
   }
+
+  get easing(): IEasingMethods { return easing; }
 
   /**
    * Start a new animation of properties

@@ -9,6 +9,7 @@ function TestApp() {
 TestApp.prototype.init = function() {
   this.createWorld();
   this.populateScene();
+  this.createAnimations();
 }
 
 TestApp.prototype.createWorld = function() {
@@ -88,6 +89,32 @@ TestApp.prototype.populateScene = function() {
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
   if (this.camera.followMesh) this.camera.followMesh(this.fShape, 200);
   if (this.camera.enableControls) this.camera.enableControls();
+}
+
+TestApp.prototype.createAnimations = function() {
+
+  Oomph3D.Motion.start(this.fShape, {
+    to: { rotationY: 360 },
+    duration: 3000,
+    easing: Oomph3D.Motion.easing.inOutQuad,
+    bounce: true,
+  });
+
+  Oomph3D.Motion.timeline(this.cylinder, [
+    {
+      to: { rotationX: 180 },
+      duration: 2000,
+      easing: Oomph3D.Motion.easing.inOutQuad,
+    },
+    {
+      to: { rotationZ: 180 },
+      duration: 2000,
+      easing: Oomph3D.Motion.easing.inOutQuad,
+    },
+  ],
+  {
+    bounce: true,
+  });
 }
 
 TestApp.prototype.onUpdate = function(elapsedTime) {
