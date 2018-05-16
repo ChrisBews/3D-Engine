@@ -74,7 +74,7 @@ export class World implements IWorld {
     window.addEventListener('resize', this._onWindowResized);
   }
 
-  _resizeCanvas() {
+  private _resizeCanvas() {
     this._resizeFrameRequest = undefined;
     const cssToRealPixels: number = window.devicePixelRatio || 1;
     const displayWidth: number = Math.floor(this._canvas.clientWidth * cssToRealPixels);
