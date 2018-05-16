@@ -16,7 +16,7 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  this.camera = new Oomph3D.cameras.LookAtCamera({
+  this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
