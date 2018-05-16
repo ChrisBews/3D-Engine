@@ -51,7 +51,7 @@ export class World implements IWorld {
     }
   }
 
-  _initGL() {
+  private _initGL() {
     this._gl = this._canvas.getContext('webgl2') as WebGL2RenderingContext;
     if (!this._gl) throw new Error('World: Failed to instantiate a WebGL2 context');
     this._vao = this._gl.createVertexArray();
@@ -63,14 +63,14 @@ export class World implements IWorld {
     this._createBuffers();
   }
 
-  _createBuffers() {
+  private _createBuffers() {
     this._positionBuffer = this._gl.createBuffer();
     this._normalsBuffer = this._gl.createBuffer();
     this._indexBuffer = this._gl.createBuffer();
     this._uvBuffer = this._gl.createBuffer();
   }
 
-  _addListeners() {
+  private _addListeners() {
     window.addEventListener('resize', this._onWindowResized);
   }
 
@@ -89,19 +89,19 @@ export class World implements IWorld {
     }
   }
 
-  _startFrameTimer() {
+  private _startFrameTimer() {
     this._clearFrameTimer();
     this._frameTimer = requestAnimationFrame(this._update);
   }
 
-  _clearFrameTimer() {
+  private _clearFrameTimer() {
     if (this._frameTimer) {
       cancelAnimationFrame(this._frameTimer);
       this._frameTimer = undefined;
     }
   }
 
-  _processMeshMaterial(mesh: IMesh) {
+  private _processMeshMaterial(mesh: IMesh) {
     if (!mesh.material.program) {
       // Instantiate the material as required
       mesh.material.program = new Program(this._gl, mesh.material.vertexShader, mesh.material.fragmentShader);
@@ -112,7 +112,7 @@ export class World implements IWorld {
     }
   }
 
-  _prepareMaterialTexture(material: IMaterial) {
+  private _prepareMaterialTexture(material: IMaterial) {
     const texture = this._gl.createTexture();
     material.texture = texture;
     this._gl.bindTexture(this._gl.TEXTURE_2D, texture);
@@ -124,7 +124,7 @@ export class World implements IWorld {
     material.loadImage(this._onImageLoadComplete);
   }
 
-  _update = (renderTime: number) => {
+  private _update = (renderTime: number) => {
     // Convert from milliseconds to seconds
     renderTime *= 0.001;
     // Get the elapsed time
@@ -141,7 +141,7 @@ export class World implements IWorld {
     this._startFrameTimer();
   }
 
-  _draw() {
+  private _draw() {
     this._gl.clearColor(0.7, 0.7, 0.7, 1);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
     const sceneCamera: ICamera = this._activeScene.camera;
@@ -183,7 +183,6 @@ export class World implements IWorld {
         // Indices
         this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
         this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, mesh.indices, this._gl.STATIC_DRAW);
-        this._gl.drawElements(this._gl.TRIANGLES, mesh.indices.length, this._gl.UNSIGNED_SHORT, 0);
 
         // UVs / Material texture
         if (program.uvAttribute && program.uvAttribute !== -1 && mesh.uvs.length && mesh.material.isTextureMap) {
@@ -193,6 +192,8 @@ export class World implements IWorld {
           this._gl.vertexAttribPointer(program.uvAttribute, 2, this._gl.FLOAT, true, 0, 0);
           this._gl.bufferData(this._gl.ARRAY_BUFFER, mesh.uvs, this._gl.STATIC_DRAW);
         }
+
+        this._gl.drawElements(this._gl.TRIANGLES, mesh.indices.length, this._gl.UNSIGNED_SHORT, 0);
 
         // Material color
         if (program.colorUniform) {
@@ -224,19 +225,19 @@ export class World implements IWorld {
     });
   }
 
-  _onMeshAddedToScene = (newChild: IMesh) => {
+  private _onMeshAddedToScene = (newChild: IMesh) => {
     this._processMeshMaterial(newChild);
   }
 
-  _onMeshMaterialUpdated = (child: IMesh) => {
+  private _onMeshMaterialUpdated = (child: IMesh) => {
     this._processMeshMaterial(child);
   }
 
-  _onCameraAdded = (camera: ICamera) => {
+  private _onCameraAdded = (camera: ICamera) => {
     this._activeScene.resize(this._canvas.clientWidth, this._canvas.clientHeight);
   }
 
-  _onImageLoadComplete = (material: IMaterial) => {
+  private _onImageLoadComplete = (material: IMaterial) => {
     this._gl.bindTexture(this._gl.TEXTURE_2D, material.texture);
     // TODO: Allow the texture filtering to be selectable
     this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MIN_FILTER, this._gl.LINEAR);
@@ -245,13 +246,13 @@ export class World implements IWorld {
     this._gl.generateMipmap(this._gl.TEXTURE_2D);
   }
 
-  _onWindowResized = () => {
+  private _onWindowResized = () => {
     if (!this._resizeFrameRequest) {
       this._resizeFrameRequest = requestAnimationFrame(this._onFrameTimerTicked);
     }
   }
 
-  _onFrameTimerTicked = () => {
+  private _onFrameTimerTicked = () => {
     this._resizeCanvas();
   }
 

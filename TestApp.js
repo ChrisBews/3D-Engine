@@ -15,11 +15,11 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  this.camera = new Oomph3D.cameras.ProjectionCamera({
+  this.camera = new Oomph3D.cameras.LookAtCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
-    y: 0,
+    y: 200,
     distanceMultiplier: 0.5,
   });
   this.scene.camera = this.camera;
@@ -68,16 +68,30 @@ TestApp.prototype.populateScene = function() {
     material: new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
   });
 
+  this.modalLoader = new Oomph3D.loaders.ObjLoader('TestAppAssets/girl.obj', meshData => {
+    this.girlMesh = new Oomph3D.meshes.Mesh({
+      vertices: meshData.vertices,
+      normals: meshData.normals,
+      indices: meshData.indices,
+      uvs: meshData.uvs,
+      material: new Oomph3D.materials.Texture('TestAppAssets/girl.png'),
+    });
+    this.girlMesh.scale = 24;
+    this.girlMesh.x = 300;
+    this.girlMesh.z = 200;
+    this.scene.addChild(this.girlMesh);
+  });
+
   this.scene.addChild(this.fShape);
   this.scene.addChild(this.cube);
   this.scene.addChild(this.cylinder);
-  if (this.camera.lookAt) this.camera.lookAt(this.fShape);
+  if (this.camera.lookAt) this.camera.lookAt(this.cube);
   if (this.camera.followMesh) this.camera.followMesh(this.fShape, 200);
   if (this.camera.enableControls) this.camera.enableControls();
 }
 
 TestApp.prototype.onUpdate = function(elapsedTime) {
-  this.cube.rotationY += (elapsedTime * 120);
+  this.cube.rotationY += (elapsedTime * 60);
 }
 
 var app = new TestApp();

@@ -36,7 +36,7 @@ export class Scene implements IScene {
     this._onCameraAdded = value;
   }
 
-  addChild(mesh: IMesh) {
+  public addChild(mesh: IMesh) {
     if (this._children.indexOf(mesh) === -1) {
       this._children.push(mesh);
       mesh.onMaterialUpdated = this._onMeshMaterialUpdated;
@@ -44,11 +44,11 @@ export class Scene implements IScene {
     }
   }
 
-  removeChild(mesh: IMesh) {
+  public removeChild(mesh: IMesh) {
     this._children = this._children.filter(currentMesh => currentMesh !== mesh);
   }
 
-  addLight(light: ILight) {
+  public addLight(light: ILight) {
     if (this._lights.indexOf(light) === -1) {
       if (light.isDirectional) {
         if (this._directionalLight) {
@@ -61,7 +61,7 @@ export class Scene implements IScene {
     }
   }
 
-  removeLight(light: ILight) {
+  public removeLight(light: ILight) {
     if (light.isDirectional) {
       this._directionalLight = undefined;
     } else {
@@ -69,13 +69,13 @@ export class Scene implements IScene {
     }
   }
 
-  resize(canvasWidth: number, canvasHeight: number) {
+  public resize(canvasWidth: number, canvasHeight: number) {
     if (this._camera) {
       this._camera.resize(canvasWidth, canvasHeight);
     }
   }
 
-  update() {
+  public update() {
     if (this._camera) {
       this._camera.update();
     }

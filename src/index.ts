@@ -7,11 +7,13 @@ import * as cameras from '@oomph3d/cameras';
 import * as lights from '@oomph3d/lights';
 import * as materials from '@oomph3d/materials';
 import * as utils from '@oomph3d/utils';
+import * as loaders from '@oomph3d/loaders';
 
 export {
-  meshes,
   cameras,
+  meshes,
   lights,
+  loaders,
   materials,
   utils,
 };

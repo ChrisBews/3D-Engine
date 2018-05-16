@@ -1,4 +1,4 @@
-import { ImageLoader } from '@oomph3d/utils/loaders/ImageLoader';
+import { ImageLoader } from '@oomph3d/loaders/ImageLoader';
 
 export class Texture implements IMaterial {
 
