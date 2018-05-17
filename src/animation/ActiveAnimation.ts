@@ -230,7 +230,7 @@ export class ActiveAnimation implements IActiveAnimation {
   }
 
   private _updateNumberValue() {
-    this._currentValues = this._startValues.value + (this._easedProgress * (this._endValues.value - this._startValues.value));
+    this._currentValues = this._startValues + (this._easedProgress * (this._endValues - this._startValues));
   }
 
   private _updateColorValue() {

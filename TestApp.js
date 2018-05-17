@@ -123,8 +123,15 @@ TestApp.prototype.createAnimations = function() {
     bounce: true,
   });
 
-  Oomph3D.Motion.start('rgba(255, 255, 255, 1)', {
+  /*Oomph3D.Motion.start('rgba(255, 255, 255, 1)', {
     to: 'rgba(0, 0, 0, 0)',
+    duration: 2000,
+    onUpdate: function(data) {
+      console.log(data.value);
+    },
+  });*/
+  Oomph3D.Motion.start(10, {
+    to: 200,
     duration: 2000,
     onUpdate: function(data) {
       console.log(data.value);
