@@ -130,8 +130,15 @@ TestApp.prototype.createAnimations = function() {
       console.log(data.value);
     },
   });*/
-  Oomph3D.Motion.start(10, {
+  /*Oomph3D.Motion.start(10, {
     to: 200,
+    duration: 2000,
+    onUpdate: function(data) {
+      console.log(data.value);
+    },
+  });*/
+  Oomph3D.Motion.start([10, 10, 10], {
+    to: [200, 200, 200],
     duration: 2000,
     onUpdate: function(data) {
       console.log(data.value);
