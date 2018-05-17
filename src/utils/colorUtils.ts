@@ -63,6 +63,8 @@ export const expandHex = (color: string): string => {
 export const convertToRGBA = (color: string, type: colorType): string => {
   if (type === colorType.rgb) {
     return rgbToRGBA(color);
+  } else if (type === colorType.rgba) {
+    return color;
   } else if (type === colorType.hex) {
     return hexToRGBA(color);
   } else if (type === colorType.hsl || type === colorType.hsla) {

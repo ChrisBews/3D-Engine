@@ -7,7 +7,7 @@ export class FlatColor implements IMaterial {
   private _program: IProgram;
 
   constructor(color: rgb | rgba) {
-    if (!color['a']) color['a'] = 0;
+    if (!color['a']) color['a'] = 1;
     this._color = color as rgba;
     this._colorInUnits = convertColorToUnits(color);
   }

@@ -109,7 +109,7 @@ class MotionCore {
       throw new Error('Motion: End value is neither an object of values, a color, a number, or an array of numbers');
     }
     if (sourceType !== destType || sourceIsNumberArray !== destIsNumberArray) {
-      throw new Error(`Motion: Start and end values don't match.`);
+      throw new Error(`Motion: Start and end value types don't match.`);
     }
 
     const animationInfo: animationInfo = {

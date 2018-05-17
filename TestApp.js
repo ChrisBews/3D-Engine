@@ -44,10 +44,11 @@ TestApp.prototype.populateScene = function() {
   this.cube.x = 200;
   this.cube.z = 50;
 
+  this.cylinderMaterial = new Oomph3D.materials.FlatColor({ r: 255, g: 0, b: 0 });
   this.cylinder = new Oomph3D.meshes.Cylinder({
     radius: 50,
     height: 100,
-    material: new Oomph3D.materials.FlatColor({ r: 255, g: 0, b: 0 }),
+    material: this.cylinderMaterial,
   });
   this.cylinder.x = 600;
 
@@ -114,6 +115,20 @@ TestApp.prototype.createAnimations = function() {
   ],
   {
     bounce: true,
+  });
+
+  Oomph3D.Motion.start(this.cylinderMaterial, {
+    to: { color: {r: 0, g: 255, b: 0, a: 1} },
+    duration: 2000,
+    bounce: true,
+  });
+
+  Oomph3D.Motion.start('rgba(255, 255, 255, 1)', {
+    to: 'rgba(0, 0, 0, 0)',
+    duration: 2000,
+    onUpdate: function(data) {
+      console.log(data.value);
+    },
   });
 }
 

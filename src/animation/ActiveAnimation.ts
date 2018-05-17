@@ -1,4 +1,4 @@
-import { convertToRGBA, getColorBetweenRGBA } from '../utils/colorUtils';
+import { convertToRGBA, getColorBetweenRGBA, getColorType } from '../utils/colorUtils';
 import { getEasedPercentageOnCurve } from '../utils/animationUtils';
 
 export class ActiveAnimation implements IActiveAnimation {
@@ -214,8 +214,10 @@ export class ActiveAnimation implements IActiveAnimation {
   private _prepareStartAndEndValue(startValue, endValue): processedAnimationData {
     const isColor: boolean = (this._info.sourceColorType >= 0 && this._info.destColorType >= 0);
     if (isColor) {
-      startValue = convertToRGBA(startValue, startValue.colorType);
-      endValue = convertToRGBA(endValue, endValue.colorType);
+      const startType = getColorType(startValue);
+      const endType = getColorType(endValue);
+      startValue = convertToRGBA(startValue, startType);
+      endValue = convertToRGBA(endValue, endType);
     }
 
     return {
@@ -253,7 +255,15 @@ export class ActiveAnimation implements IActiveAnimation {
           newValue.push(this._startValues[key].value[i] + (this._easedProgress * (this._endValues[key].value[i] - this._startValues[key].value[i])));
         }
       } else {
-        newValue = this._startValues[key].value + (this._easedProgress * (this._endValues[key].value - this._startValues[key].value));
+        // If the value itself is an object, update each key of that value separately
+        if (typeof this._endValues[key].value === 'object') {
+          newValue = {};
+          Object.keys(this._endValues[key].value).forEach(subKey => {
+            newValue[subKey] = this._startValues[key].value[subKey] + (this._easedProgress * (this._endValues[key].value[subKey] - this._startValues[key].value[subKey]));
+          });
+        } else {
+          newValue = this._startValues[key].value + (this._easedProgress * (this._endValues[key].value - this._startValues[key].value));
+        }
       }
       this._source[key] = newValue;
       this._currentValues[key] = newValue;
