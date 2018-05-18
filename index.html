@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
   <head>
-    <meta charset='utf-8'>
-    <title>3D Engine</title>
+    <meta charset='utf-8' />
+    <title>Oomph3D Development</title>
     <style>
       html, body {
         margin: 0;
@@ -24,41 +24,9 @@
     </style>
   </head>
   <body>
-    <canvas id='canvas'></canvas>
+    <canvas id='test-canvas'></canvas>
 
-    <script src='src/animation/Colors.js'></script>
-    <script src='src/animation/Easing.js'></script>
-    <script src='src/animation/Timeline.js'></script>
-    <script src='src/animation/ActiveAnimation.js'></script>
-    <script src='src/animation/OomphMotion.js'></script>
-
-    <script src='src/utils/Helpers.js'></script>
-    <script src='src/utils/Matrix3D.js'></script>
-    
-    <script src='src/shaders/FlatColorShader.js'></script>
-    <script src='src/shaders/TextureShader.js'></script>
-
-    <script src='src/Program.js'></script>
-
-    <script src='src/meshes/Mesh.js'></script>
-    <script src='src/meshes/Plane.js'></script>
-    <script src='src/meshes/FShape.js'></script>
-    <script src='src/meshes/Cube.js'></script>
-    <script src='src/meshes/Sphere.js'></script>
-    <script src='src/meshes/Cylinder.js'></script>
-
-    <script src='src/lights/DirectionalLight.js'></script>
-    
-    <script src='src/cameras/FollowCamera.js'></script>
-    <script src='src/cameras/ProjectionCamera.js'></script>
-    <script src='src/cameras/PerspectiveCamera.js'></script>
-    <script src='src/cameras/LookAtCamera.js'></script>
-    <script src='src/cameras/FreeCamera.js'></script>
-
-    <script src='src/utils/loaders/ObjLoader.js'></script>
-    <script src='src/Scene.js'></script>
-    <script src='src/Oomph3D.js'></script>
-
-    <script src='app.js'></script>
+    <script src='dist/oomph3d.min.js'></script>
+    <script src='./TestApp.js'></script>
   </body>
 </html>
