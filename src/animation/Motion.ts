@@ -51,7 +51,7 @@ class MotionCore {
     }
   }
 
-  stop(id: number) {
+  public stop(id: number) {
     const remainingAnimations: Array<IActiveAnimation|ITimeline> = [];
     for (let i: number = 0; i < this._activeAnimations.length; i++) {
       if (this._activeAnimations[i].id === id || !id) {
@@ -63,7 +63,7 @@ class MotionCore {
     this._activeAnimations = remainingAnimations;
   }
 
-  timeline(source, animations, options) {
+  public timeline(source, animations, options) {
     const newAnimations: ActiveAnimation[] = [];
     for (let i: number = 0; i < animations.length; i++) {
       animations[i].loops = false;
@@ -74,7 +74,7 @@ class MotionCore {
     this._activeAnimations.push(new Timeline(source, newAnimations, options));
   }
 
-  pause(id?: number) {
+  public pause(id?: number) {
     for (let i: number = 0; i < this._activeAnimations.length; i++) {
       if (this._activeAnimations[i].id === id || !id) {
         this._activeAnimations[i].pause();
@@ -82,7 +82,7 @@ class MotionCore {
     }
   }
 
-  resume(id: number) {
+  public resume(id: number) {
     for (let i: number = 0; i < this._activeAnimations.length; i++) {
       if (this._activeAnimations[i].id === id || !id) {
         this._activeAnimations[i].resume();
@@ -90,7 +90,7 @@ class MotionCore {
     }
   }
 
-  _createAnimation(source, options): ActiveAnimation {
+  private _createAnimation(source, options): ActiveAnimation {
     const destination: animationValue = options.to;
     const sourceType: string = typeof source;
     const destType: string = typeof destination;
@@ -132,19 +132,19 @@ class MotionCore {
     return new ActiveAnimation(source, destination, options, animationInfo);
   }
 
-  _startAnimFrameRequest() {
+  private _startAnimFrameRequest() {
     this._stopAnimFrameRequest();
     this._animFrame = requestAnimationFrame(this._onFrame.bind(this));
   }
 
-  _stopAnimFrameRequest() {
+  private _stopAnimFrameRequest() {
     if (this._animFrame) {
       cancelAnimationFrame(this._animFrame);
       this._animFrame = undefined;
     }
   }
 
-  _isNumberArray(value: any): boolean {
+  private _isNumberArray(value: any): boolean {
     const isArray: boolean = Array.isArray(value);
     if (!isArray) return false;
     for (let i: number = 0; i < value.length; i++) {
@@ -153,7 +153,7 @@ class MotionCore {
     return true;
   }
 
-  _onFrame(currentTime: number) {
+  private _onFrame(currentTime: number) {
     const elapsed: number = (!this._requestStartTime) ? 0 : currentTime - this._requestStartTime;
     this._requestStartTime = currentTime;
     for (let i: number = 0; i < this._activeAnimations.length; i++) {
@@ -167,7 +167,7 @@ class MotionCore {
     }
   }
 
-  _checkForCompletedAnimations() {
+  private _checkForCompletedAnimations() {
     const incompleteAnims: Array<IActiveAnimation|ITimeline> = [];
     for (let i: number = 0; i < this._activeAnimations.length; i++) {
       if (!this._activeAnimations[i].complete) {
