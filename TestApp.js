@@ -16,7 +16,7 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  this.camera = new Oomph3D.cameras.FreeCamera({
+  this.camera = new Oomph3D.cameras.FollowCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
@@ -88,12 +88,13 @@ TestApp.prototype.populateScene = function() {
   this.scene.addChild(this.cube);
   this.scene.addChild(this.cylinder);
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
-  if (this.camera.followMesh) this.camera.followMesh(this.fShape, 200);
+  if (this.camera.followMesh) this.camera.followMesh(this.cube, 200);
   if (this.camera.enableControls) this.camera.enableControls();
 }
 
 TestApp.prototype.createAnimations = function() {
 
+  // Mesh rotation
   Oomph3D.Motion.start(this.fShape, {
     to: { rotationY: 360 },
     duration: 3000,
@@ -101,6 +102,7 @@ TestApp.prototype.createAnimations = function() {
     bounce: true,
   });
 
+  // Mesh rotation
   Oomph3D.Motion.timeline(this.cylinder, [
     {
       to: { rotationX: 180 },
@@ -117,26 +119,36 @@ TestApp.prototype.createAnimations = function() {
     bounce: true,
   });
 
+  // rgba colour
   Oomph3D.Motion.start(this.cylinderMaterial, {
     to: { color: {r: 0, g: 255, b: 0, a: 1} },
     duration: 2000,
     bounce: true,
   });
 
-  /*Oomph3D.Motion.start('rgba(255, 255, 255, 1)', {
+  /*
+  // Colour string
+  Oomph3D.Motion.start('rgba(255, 255, 255, 1)', {
     to: 'rgba(0, 0, 0, 0)',
     duration: 2000,
     onUpdate: function(data) {
       console.log(data.value);
     },
-  });*/
-  /*Oomph3D.Motion.start(10, {
+  });
+  */
+  /*
+  // Number
+  Oomph3D.Motion.start(10, {
     to: 200,
     duration: 2000,
     onUpdate: function(data) {
       console.log(data.value);
     },
-  });*/
+  });
+  */
+
+  /*
+  // Number array
   Oomph3D.Motion.start([10, 10, 10], {
     to: [200, 200, 200],
     duration: 2000,
@@ -144,10 +156,13 @@ TestApp.prototype.createAnimations = function() {
       console.log(data.value);
     },
   });
+  */
 }
 
 TestApp.prototype.onUpdate = function(elapsedTime) {
+  this.cube.rotationX += (elapsedTime * 60);
   this.cube.rotationY += (elapsedTime * 60);
+
 }
 
 var app = new TestApp();

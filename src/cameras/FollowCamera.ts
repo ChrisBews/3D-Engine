@@ -76,8 +76,9 @@ export class FollowCamera implements ICamera {
 
     /// pitch = y, yaw = x
     const rotationMatrix: Matrix4 = new Matrix4();
-    rotationMatrix.rotateX(xAngleInRadians);
     rotationMatrix.rotateY(yAngleInRadians);
+    rotationMatrix.rotateX(xAngleInRadians);
+
     directionVector = transformVector(rotationMatrix, directionVector);
     upDirection = transformVector(rotationMatrix, {x: 0, y: 1, z: 0, w: 0});
 

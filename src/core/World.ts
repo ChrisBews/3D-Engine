@@ -132,9 +132,11 @@ export class World implements IWorld {
     // Store previous render time
     this._previousRenderTime = renderTime;
 
-    if (this._activeScene) this._activeScene.update();
-    // Allow for updates to take place
+    // Allow for updates to take place before updating camera matrix
+    // This ensures the whole scene remains on the same frame
     if (this._onUpdate) this._onUpdate(timePassed);
+
+    if (this._activeScene) this._activeScene.update();
     // Draw all children in current scene
     this._draw();
     // Wait for next frame
