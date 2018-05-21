@@ -99,7 +99,7 @@ TestApp.prototype.populateScene = function() {
 TestApp.prototype.createAnimations = function() {
 
   // Mesh rotation
-  Oomph3D.Motion.start(this.fShape, {
+  Oomph3D.Motion.start(this.plane, {
     to: { rotationY: 360 },
     duration: 3000,
     easing: Oomph3D.Motion.easing.inOutQuad,

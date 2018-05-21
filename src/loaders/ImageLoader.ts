@@ -9,15 +9,13 @@ class ImageLoaderCore {
   }
 
   public loadImage(url: string, callback?: (url?: string, image?: HTMLImageElement) => void) {
-    if (this._loadingImageUrls.indexOf(url) === -1) {
-      const image: HTMLImageElement = new Image();
-      image.addEventListener('load', () => {
-        this._onImageLoadComplete(url, image, callback);
-      });
-      image.src = url;
-      this._loadingImages.push(image);
-      this._loadingImageUrls.push(url);
-    }
+    const image: HTMLImageElement = new Image();
+    image.addEventListener('load', () => {
+      this._onImageLoadComplete(url, image, callback);
+    });
+    image.src = url;
+    this._loadingImages.push(image);
+    this._loadingImageUrls.push(url);
   }
 
   private _onImageLoadComplete = (url: string, image: HTMLImageElement, callback?: (url: string, image?: HTMLImageElement) => void) => {
