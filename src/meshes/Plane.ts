@@ -9,6 +9,7 @@ export class Plane extends Mesh {
   private _tempVertices: number[] = [];
   private _tempNormals: number[] = [];
   private _tempIndices: number[] = [];
+  private _tempUvs: number[] = [];
 
   constructor(options: IPlaneOptions) {
     super(options);
@@ -36,7 +37,6 @@ export class Plane extends Mesh {
 
       for (let k: number = 0; k < this._widthSections; k++) {
         const newX: number = previousX + (this._width / this._widthSections);
-        // const counter = (i * (this._depthSections * 12)) + (k * 12);
         this._addDivision(previousX, previousZ, newX, newZ);
         previousX = newX;
       }
@@ -46,11 +46,12 @@ export class Plane extends Mesh {
     this._vertices = new Float32Array(this._tempVertices);
     this._normals = new Float32Array(this._tempNormals);
     this._indices = new Uint16Array(this._tempIndices);
+    this._uvs = new Float32Array(this._tempUvs);
   }
 
   private _addDivision(startX: number, startZ: number, endX: number, endZ: number) {
-    const indexArrayCounter: number = (this._vertices.length / 3);
-    if (this._vertices.length === 0) {
+    const indexArrayCounter: number = (this._tempVertices.length / 3);
+    if (this._tempIndices.length === 0) {
       this._tempIndices.push(0, 1, 2, 0, 2, 3);
     } else {
       this._tempIndices.push(
@@ -70,6 +71,17 @@ export class Plane extends Mesh {
       0, 1, 0,
       0, 1, 0,
       0, 1, 0
+    );
+    const startPercentX: number = (startX + (this._width / 2)) / this._width;
+    const startPercentY: number = 1 - ((startZ + (this._depth / 2)) / this._depth);
+    const endPercentX: number = (endX + (this._width / 2)) / this._width;
+    const endPercentY: number = 1 - ((endZ + (this._depth / 2)) / this._depth);
+
+    this._tempUvs.push(
+      startPercentX, startPercentY,
+      endPercentX, startPercentY,
+      endPercentX, endPercentY,
+      startPercentX, endPercentY,
     );
   }
 }

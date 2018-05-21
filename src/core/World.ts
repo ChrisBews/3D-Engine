@@ -117,8 +117,8 @@ export class World implements IWorld {
     material.texture = texture;
     this._gl.bindTexture(this._gl.TEXTURE_2D, texture);
     this._gl.texImage2D(this._gl.TEXTURE_2D, 0, this._gl.RGBA, 16, 16, 0, this._gl.RGBA, this._gl.UNSIGNED_BYTE, defaultTexture);
-    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_WRAP_S, this._gl.CLAMP_TO_EDGE);
-    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_WRAP_T, this._gl.CLAMP_TO_EDGE);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_WRAP_S, this._gl.REPEAT);
+    this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_WRAP_T, this._gl.REPEAT);
     this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MIN_FILTER, this._gl.NEAREST);
     this._gl.texParameteri(this._gl.TEXTURE_2D, this._gl.TEXTURE_MAG_FILTER, this._gl.NEAREST);
     material.loadImage(this._onImageLoadComplete);
