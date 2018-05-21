@@ -13,7 +13,7 @@ export class ProjectionCamera implements ICamera {
   private _orthoMatrix: Matrix4;
 
   constructor(options: IProjectionCameraOptions) {
-    this._distanceMultiplier = options.distanceMultiplier || 0.25;
+    this._distanceMultiplier = typeof options.distanceMultiplier === 'number' ? options.distanceMultiplier : 0.25;
     this._zNear = options.zNear || 400;
     this._zFar = options.zFar || -200;
     this._matrix = new Matrix4();

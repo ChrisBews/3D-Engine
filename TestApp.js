@@ -16,12 +16,12 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  this.camera = new Oomph3D.cameras.PerspectiveCamera({
+  this.camera = new Oomph3D.cameras.ProjectionCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
     y: 100,
-    distanceMultiplier: 0.5,
+    distanceMultiplier: 0,
   });
   this.scene.camera = this.camera;
 
@@ -51,6 +51,7 @@ TestApp.prototype.populateScene = function() {
     material: this.cylinderMaterial,
   });
   this.cylinder.x = 600;
+  this.cylinder.y = 400;
 
   this.sphere = new Oomph3D.meshes.Sphere({
     radius: 50,
