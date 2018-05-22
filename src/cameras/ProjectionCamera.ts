@@ -1,4 +1,4 @@
-import { Matrix4 } from "../utils/Matrix4";
+import { Matrix4 } from '../utils/Matrix4';
 
 export class ProjectionCamera implements ICamera {
 

@@ -9,6 +9,7 @@ export class Sphere extends Mesh {
   private _longitudeBands: number;
   private _vertexArray: number[];
   private _normalsArray: number[];
+  private _uvArray: number[]
 
   constructor(options: ISphereOptions) {
     super(options);
@@ -21,6 +22,7 @@ export class Sphere extends Mesh {
     this._longitudeBands = options.segments || defaultSegments;
     this._vertexArray = [];
     this._normalsArray = [];
+    this._uvArray = [];
     this._generateMeshData();
     this._updateMatrix();
   }
@@ -57,12 +59,16 @@ export class Sphere extends Mesh {
         const vertex2: vec3 = this._createVertex(normal2);
         const vertex3: vec3 = this._createVertex(normal3);
         const vertex4: vec3 = this._createVertex(normal4);
+        const v: number = 1 - (k / this._latitudeBands);
+        const u: number = 1 - (i / this._longitudeBands);
+        const v2: number = 1 - ((k + 1) / this._latitudeBands);
+        const u2: number = 1 - ((i + 1) / this._longitudeBands);
 
         if (i === 0) {
           // Top cap of the sphere
-          this._addVertex(vertex1, normal1);
-          this._addVertex(vertex3, normal3);
-          this._addVertex(vertex4, normal4);
+          this._addVertex(vertex1, normal1, u, v);
+          this._addVertex(vertex3, normal3, u2, v2);
+          this._addVertex(vertex4, normal4, u2, v);
           tempIndices.push(
             startIndex,
             startIndex + 1,
@@ -71,9 +77,9 @@ export class Sphere extends Mesh {
           startIndex += 3;
         } else if (i === this._longitudeBands - 1) {
           // End cap
-          this._addVertex(vertex3, normal3);
-          this._addVertex(vertex1, normal1);
-          this._addVertex(vertex2, normal2);
+          this._addVertex(vertex3, normal3, u2, v2);
+          this._addVertex(vertex1, normal1, u, v);
+          this._addVertex(vertex2, normal2, u, v2);
           tempIndices.push(
             startIndex,
             startIndex + 1,
@@ -82,10 +88,10 @@ export class Sphere extends Mesh {
           startIndex += 3;
         } else {
           // Body
-          this._addVertex(vertex3, normal3);
-          this._addVertex(vertex4, normal4);
-          this._addVertex(vertex1, normal1);
-          this._addVertex(vertex2, normal2);
+          this._addVertex(vertex3, normal3, u2, v2);
+          this._addVertex(vertex4, normal4, u2, v);
+          this._addVertex(vertex1, normal1, u, v);
+          this._addVertex(vertex2, normal2, u, v2);
           tempIndices.push(
             startIndex, startIndex + 1, startIndex + 2,
             startIndex, startIndex + 2, startIndex + 3
@@ -98,12 +104,14 @@ export class Sphere extends Mesh {
     this._vertices = new Float32Array(this._vertexArray);
     this._normals = new Float32Array(this._normalsArray);
     this._indices = new Uint16Array(tempIndices);
+    this._uvs = new Float32Array(this._uvArray);
   }
 
-  private _addVertex(vertex: vec3, normal: vec3) {
+  private _addVertex(vertex: vec3, normal: vec3, u: number, v: number) {
     // Add a single vertex and it's normal to the JS arrays being built up
     this._vertexArray.push(vertex.x, vertex.y, vertex.z);
     this._normalsArray.push(normal.x, normal.y, normal.z);
+    this._uvArray.push(u, v);
   }
 
   private _createNormal(theta, phi): vec3 {

@@ -16,7 +16,7 @@ TestApp.prototype.createWorld = function() {
   console.log(Oomph3D);
   this.world = new Oomph3D.World('test-canvas');
   this.scene = new Oomph3D.Scene();
-  this.camera = new Oomph3D.cameras.ProjectionCamera({
+  this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
     z: 400,
     x: 0,
@@ -66,6 +66,13 @@ TestApp.prototype.populateScene = function() {
   this.fShape.x = 50;
   this.fShape.y = 0;
 
+  this.sphere = new Oomph3D.meshes.Sphere({
+    radius: 50,
+    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
+  });
+  this.sphere.x = 300;
+  this.sphere.y = 200;
+
   this.plane = new Oomph3D.meshes.Plane({
     width: 100,
     widthDivisions: 2,
@@ -91,6 +98,7 @@ TestApp.prototype.populateScene = function() {
   this.scene.addChild(this.fShape);
   this.scene.addChild(this.cube);
   this.scene.addChild(this.cylinder);
+  this.scene.addChild(this.sphere);
   this.scene.addChild(this.plane);
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
   if (this.camera.followMesh) this.camera.followMesh(this.cube, 400);
