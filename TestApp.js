@@ -19,8 +19,8 @@ TestApp.prototype.createWorld = function() {
   this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
     z: 400,
-    x: 0,
-    y: 100,
+    x: 400,
+    y: 400,
     distanceMultiplier: 0,
   });
   this.scene.camera = this.camera;
@@ -52,6 +52,14 @@ TestApp.prototype.populateScene = function() {
   });
   this.cylinder.x = 600;
   this.cylinder.y = 400;
+
+  this.cylinder2 = new Oomph3D.meshes.Cylinder({
+    radius: 50,
+    height: 100,
+    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),
+  });
+  this.cylinder2.x = 400;
+  this.cylinder2.y = 400;
 
   this.sphere = new Oomph3D.meshes.Sphere({
     radius: 50,
@@ -98,6 +106,7 @@ TestApp.prototype.populateScene = function() {
   this.scene.addChild(this.fShape);
   this.scene.addChild(this.cube);
   this.scene.addChild(this.cylinder);
+  this.scene.addChild(this.cylinder2);
   this.scene.addChild(this.sphere);
   this.scene.addChild(this.plane);
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
@@ -108,11 +117,17 @@ TestApp.prototype.populateScene = function() {
 TestApp.prototype.createAnimations = function() {
 
   // Mesh rotation
-  Oomph3D.Motion.start(this.plane, {
+  Oomph3D.Motion.start(this.sphere, {
     to: { rotationY: 360 },
     duration: 3000,
     easing: Oomph3D.Motion.easing.inOutQuad,
     bounce: true,
+  });
+
+  Oomph3D.Motion.start(this.cylinder2, {
+    to: { rotationY: 360 },
+    duration: 3000,
+    loops: true,
   });
 
   // Mesh rotation

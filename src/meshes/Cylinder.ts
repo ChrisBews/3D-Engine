@@ -29,8 +29,9 @@ export class Cylinder extends Mesh {
     const vertexArray: number[] = [];
     const normalsArray: number[] = [];
     const indicesArray: number[] = [];
-    // const uvsArray: number[] = [];
+    const uvsArray: number[] = [];
     const segmentAngle: number = (360 / this._segments);
+    const halfSegments: number = this._segments / 2;
     let startIndex: number = 0;
     for (let i: number = 0; i < this._segments; i++) {
       // Theta = the angle within this face segment
@@ -53,7 +54,15 @@ export class Cylinder extends Mesh {
       vertexArray.push(
         0, 0, 0,
         vX1, 0, vZ1,
-        vX2, 0, vZ2,
+        vX2, 0, vZ2
+      );
+      // nX/nZ are in the -1 to 1 range (via cosine/sine)
+      // They need to be 0 to 1, so we have to + 1, and
+      // then divide the result by 2
+      uvsArray.push(
+        0.5, 0.5,
+        (nX1 + 1) / 2, (nZ1 + 1) / 2,
+        (nX2 + 1) / 2, (nZ2 + 1) / 2
       );
       normalsArray.push(
         0, -1, 0,
@@ -74,6 +83,12 @@ export class Cylinder extends Mesh {
           vX2, h2, vZ2,
           vX2, h1, vZ2,
         );
+        uvsArray.push(
+          (i / halfSegments), k / this._heightSegments,
+          (i / halfSegments), (k + 1) / this._heightSegments,
+          (i + 1) / halfSegments, (k + 1) / this._heightSegments,
+          (i + 1) / halfSegments, k / this._heightSegments
+        );
         normalsArray.push(
           nX1, 0, nZ1,
           nX1, 0, nZ1,
@@ -93,6 +108,11 @@ export class Cylinder extends Mesh {
         vX2, this._height, vZ2,
         vX1, this._height, vZ1,
       );
+      uvsArray.push(
+        0.5, 0.5,
+        (nX2 + 1) / 2, (nZ2 + 1) / 2,
+        (nX1 + 1) / 2, (nZ1 + 1) / 2
+      );
       normalsArray.push(
         0, 1, 0,
         0, 1, 0,
@@ -107,5 +127,6 @@ export class Cylinder extends Mesh {
     this._vertices = new Float32Array(vertexArray);
     this._normals = new Float32Array(normalsArray);
     this._indices = new Uint16Array(indicesArray);
+    this._uvs = new Float32Array(uvsArray);
   }
 }
