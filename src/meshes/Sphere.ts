@@ -9,7 +9,7 @@ export class Sphere extends Mesh {
   private _longitudeBands: number;
   private _vertexArray: number[];
   private _normalsArray: number[];
-  private _uvArray: number[]
+  private _uvArray: number[];
 
   constructor(options: ISphereOptions) {
     super(options);
@@ -59,9 +59,9 @@ export class Sphere extends Mesh {
         const vertex2: vec3 = this._createVertex(normal2);
         const vertex3: vec3 = this._createVertex(normal3);
         const vertex4: vec3 = this._createVertex(normal4);
-        const v: number = 1 - (k / this._latitudeBands);
+        const v: number = 1 - (k / (this._latitudeBands / 2));
         const u: number = 1 - (i / this._longitudeBands);
-        const v2: number = 1 - ((k + 1) / this._latitudeBands);
+        const v2: number = 1 - ((k + 1) / (this._latitudeBands / 2));
         const u2: number = 1 - ((i + 1) / this._longitudeBands);
 
         if (i === 0) {
