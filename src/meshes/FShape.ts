@@ -327,8 +327,8 @@ export class FShape extends Mesh {
       0, 0,
 
       // right of bottom
-      1, 0,
-      1, 1,
+      2, 0,
+      2, 1,
       0, 1,
       0, 0,
 
