@@ -68,7 +68,7 @@ TestApp.prototype.populateScene = function() {
 
   this.fShape = new Oomph3D.meshes.FShape({
     width: 100,
-    material: new Oomph3D.materials.FlatColor({ r: 200, g: 0, b: 200 }),
+    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 0, b: 200 }),
   });
 
   this.fShape.x = 50;
@@ -188,8 +188,8 @@ TestApp.prototype.createAnimations = function() {
 }
 
 TestApp.prototype.onUpdate = function(elapsedTime) {
-  this.cube.rotationX += (elapsedTime * 60);
-  this.cube.rotationY += (elapsedTime * 60);
+  this.fShape.rotationX += (elapsedTime * 60);
+  this.fShape.rotationY += (elapsedTime * 60);
 
 }
 

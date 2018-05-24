@@ -247,6 +247,102 @@ export class FShape extends Mesh {
   }
 
   private _generateUVs() {
+    this._uvs = new Float32Array([
+      // left column front
+      0, 0,
+      1, 0,
+      1, 5,
+      0, 5,
 
+      // top rung front
+      0, 1,
+      0, 0,
+      2, 0,
+      2, 1,
+
+      // middle run front
+      0, 1,
+      0, 0,
+      1, 0,
+      1, 1,
+
+      // left column back
+      0, 0,
+      0, 5,
+      1, 5,
+      1, 0,
+
+      // top rung back
+      2, 1,
+      2, 0,
+      0, 0,
+      0, 1,
+
+      // middle rung back
+      1, 1,
+      1, 0,
+      0, 0,
+      0, 1,
+
+      // top
+      0, 1,
+      3, 1,
+      3, 0,
+      0, 0,
+
+      // top rung right
+      1, 1,
+      0, 1,
+      0, 0,
+      1, 0,
+
+      // under top rung
+      0, 0,
+      2, 0,
+      2, 1,
+      0, 1,
+
+      // between top and middle rungs
+      1, 1,
+      0, 1,
+      0, 0,
+      1, 0,
+
+      // top of middle rung
+      1, 1,
+      0, 1,
+      0, 0,
+      1, 0,
+
+      // right of middle rung
+      1, 1,
+      0, 1,
+      0, 0,
+      1, 0,
+
+      // bottom of middle rung
+      1, 0,
+      1, 1,
+      0, 1,
+      0, 0,
+
+      // right of bottom
+      1, 0,
+      1, 1,
+      0, 1,
+      0, 0,
+
+      // bottom
+      0, 0,
+      1, 0,
+      1, 1,
+      0, 1,
+
+      // left side
+      0, 1,
+      5, 1,
+      5, 0,
+      0, 0,
+    ]);
   }
 }
