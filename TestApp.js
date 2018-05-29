@@ -39,7 +39,7 @@ TestApp.prototype.createWorld = function() {
 TestApp.prototype.populateScene = function() {
   this.cube = new Oomph3D.meshes.Cube({
     width: 100,
-    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),
+    material: new Oomph3D.materials.Texture('TestAppAssets/teapot.jpg'),
   });
   this.cube.x = 200;
   this.cube.z = 50;
@@ -56,7 +56,7 @@ TestApp.prototype.populateScene = function() {
   this.cylinder2 = new Oomph3D.meshes.Cylinder({
     radius: 50,
     height: 100,
-    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),
+    material: new Oomph3D.materials.Texture('TestAppAssets/teapot.jpg'),
   });
   this.cylinder2.x = 400;
   this.cylinder2.y = 400;
@@ -68,7 +68,7 @@ TestApp.prototype.populateScene = function() {
 
   this.fShape = new Oomph3D.meshes.FShape({
     width: 100,
-    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 0, b: 200 }),
+    material: new Oomph3D.materials.Texture('TestAppAssets/teapot.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 0, b: 200 }),
   });
 
   this.fShape.x = 50;
@@ -76,7 +76,7 @@ TestApp.prototype.populateScene = function() {
 
   this.sphere = new Oomph3D.meshes.Sphere({
     radius: 50,
-    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
+    material: new Oomph3D.materials.Texture('TestAppAssets/teapot.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
   });
   this.sphere.x = 300;
   this.sphere.y = 200;
@@ -85,7 +85,7 @@ TestApp.prototype.populateScene = function() {
     width: 100,
     widthDivisions: 2,
     depthDivisions: 2,
-    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),
+    material: new Oomph3D.materials.Texture('TestAppAssets/teapot.jpg'),
   });
   this.plane.rotationX = 90;
 
@@ -125,7 +125,7 @@ TestApp.prototype.createAnimations = function() {
   });
 
   Oomph3D.Motion.start(this.cylinder2, {
-    to: { rotationY: 360 },
+    to: { rotationX: 360 },
     duration: 3000,
     loops: true,
   });

@@ -84,10 +84,10 @@ export class Cylinder extends Mesh {
           vX2, h1, vZ2,
         );
         uvsArray.push(
-          (i / halfSegments), k / this._heightSegments,
           (i / halfSegments), (k + 1) / this._heightSegments,
-          (i + 1) / halfSegments, (k + 1) / this._heightSegments,
-          (i + 1) / halfSegments, k / this._heightSegments
+          (i / halfSegments), k / this._heightSegments,
+          (i + 1) / halfSegments, k / this._heightSegments,
+          (i + 1) / halfSegments, (k + 1) / this._heightSegments
         );
         normalsArray.push(
           nX1, 0, nZ1,

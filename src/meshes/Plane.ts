@@ -73,9 +73,9 @@ export class Plane extends Mesh {
       0, 1, 0
     );
     const startPercentX: number = (startX + (this._width / 2)) / this._width;
-    const startPercentY: number = 1 - ((startZ + (this._depth / 2)) / this._depth);
+    const startPercentY: number = ((startZ + (this._depth / 2)) / this._depth);
     const endPercentX: number = (endX + (this._width / 2)) / this._width;
-    const endPercentY: number = 1 - ((endZ + (this._depth / 2)) / this._depth);
+    const endPercentY: number = ((endZ + (this._depth / 2)) / this._depth);
 
     this._tempUvs.push(
       startPercentX, startPercentY,
