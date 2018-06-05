@@ -83,7 +83,7 @@ export class World implements IWorld {
       this._canvas.width = displayWidth;
       this._canvas.height = displayHeight;
     }
-    this._gl.viewport(0, 0, this._gl.canvas.clientWidth, this._gl.canvas.clientHeight);
+    this._gl.viewport(0, 0, displayWidth, displayHeight);
     if (this._activeScene && this._activeScene.camera) {
       this._activeScene.resize(displayWidth, displayHeight);
     }
