@@ -18,9 +18,9 @@ TestApp.prototype.createWorld = function() {
   this.scene = new Oomph3D.Scene();
   this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
-    z: 400,
-    x: 400,
-    y: 400,
+    z: 250,
+    x: 100,
+    y: 100,
     distanceMultiplier: 0,
   });
   this.scene.camera = this.camera;
@@ -189,7 +189,7 @@ TestApp.prototype.createAnimations = function() {
 
 TestApp.prototype.onUpdate = function(elapsedTime) {
   this.fShape.rotationX += (elapsedTime * 60);
-  this.fShape.rotationY += (elapsedTime * 60);
+  //this.fShape.rotationY += (elapsedTime * 60);
 
 }
 
