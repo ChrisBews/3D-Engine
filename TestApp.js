@@ -18,9 +18,9 @@ TestApp.prototype.createWorld = function() {
   this.scene = new Oomph3D.Scene();
   this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
-    z: 250,
-    x: 100,
-    y: 100,
+    z: 200,
+    x: 300,
+    y: 250,
     distanceMultiplier: 0,
   });
   this.scene.camera = this.camera;
@@ -76,10 +76,11 @@ TestApp.prototype.populateScene = function() {
 
   this.sphere = new Oomph3D.meshes.Sphere({
     radius: 50,
-    material: new Oomph3D.materials.Texture('TestAppAssets/teapot.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
+    material: new Oomph3D.materials.Texture('TestAppAssets/crate-2.jpg'),//new Oomph3D.materials.FlatColor({ r: 200, g: 200, b: 0 }),
   });
   this.sphere.x = 300;
   this.sphere.y = 200;
+  this.sphere.rotationX = 0;
 
   this.plane = new Oomph3D.meshes.Plane({
     width: 100,
@@ -118,8 +119,8 @@ TestApp.prototype.createAnimations = function() {
 
   // Mesh rotation
   Oomph3D.Motion.start(this.sphere, {
-    to: { rotationY: 360 },
-    duration: 3000,
+    to: { rotationX: 360 },
+    duration: 10000,
     easing: Oomph3D.Motion.easing.inOutQuad,
     bounce: true,
   });

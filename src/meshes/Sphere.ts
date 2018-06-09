@@ -1,6 +1,6 @@
 import { Mesh } from './Mesh';
 
-const defaultSegments: number = 20;
+const defaultSegments: number = 10;
 
 export class Sphere extends Mesh {
 
@@ -59,16 +59,16 @@ export class Sphere extends Mesh {
         const vertex2: vec3 = this._createVertex(normal2);
         const vertex3: vec3 = this._createVertex(normal3);
         const vertex4: vec3 = this._createVertex(normal4);
-        const v: number = 1 - (k / (this._latitudeBands / 2));
-        const u: number = 1 - (i / this._longitudeBands);
-        const v2: number = 1 - ((k + 1) / (this._latitudeBands / 2));
-        const u2: number = 1 - ((i + 1) / this._longitudeBands);
+        const u: number = 1 - (k / (this._longitudeBands / 2));
+        const v: number = 1 - ((this._latitudeBands - i) / this._latitudeBands);
+        const u2: number = 1 - ((k + 1) / (this._longitudeBands / 2));
+        const v2: number = 1 - ((this._latitudeBands - (i + 1)) / this._latitudeBands);
 
         if (i === 0) {
           // Top cap of the sphere
-          this._addVertex(vertex1, normal1, u, v);
+          this._addVertex(vertex1, normal1, u + ((u2 - u) / 2), 0);
           this._addVertex(vertex3, normal3, u2, v2);
-          this._addVertex(vertex4, normal4, u2, v);
+          this._addVertex(vertex4, normal4, u, v2);
           tempIndices.push(
             startIndex,
             startIndex + 1,
@@ -77,9 +77,9 @@ export class Sphere extends Mesh {
           startIndex += 3;
         } else if (i === this._longitudeBands - 1) {
           // End cap
-          this._addVertex(vertex3, normal3, u2, v2);
+          this._addVertex(vertex3, normal3, u + ((u2 - u) / 2), v2);
           this._addVertex(vertex1, normal1, u, v);
-          this._addVertex(vertex2, normal2, u, v2);
+          this._addVertex(vertex2, normal2, u2, v);
           tempIndices.push(
             startIndex,
             startIndex + 1,
@@ -89,9 +89,22 @@ export class Sphere extends Mesh {
         } else {
           // Body
           this._addVertex(vertex3, normal3, u2, v2);
+          this._addVertex(vertex4, normal4, u, v2);
+          this._addVertex(vertex1, normal1, u, v);
+          this._addVertex(vertex2, normal2, u2, v);
+
+          /*
+          this._addVertex(vertex3, normal3, u2, v2);
+          this._addVertex(vertex4, normal4, u, v2);
+          this._addVertex(vertex1, normal1, u, v);
+          this._addVertex(vertex2, normal2, u2, v);
+          */
+
+          /*this._addVertex(vertex3, normal3, u2, v2);
           this._addVertex(vertex4, normal4, u2, v);
           this._addVertex(vertex1, normal1, u, v);
-          this._addVertex(vertex2, normal2, u, v2);
+          this._addVertex(vertex2, normal2, u, v2);*/
+
           tempIndices.push(
             startIndex, startIndex + 1, startIndex + 2,
             startIndex, startIndex + 2, startIndex + 3
