@@ -1,6 +1,6 @@
 import { Mesh } from './Mesh';
 
-const defaultSegments: number = 10;
+const defaultSegments: number = 20;
 
 export class Sphere extends Mesh {
 

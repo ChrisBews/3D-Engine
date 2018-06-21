@@ -9,6 +9,7 @@ function TestApp() {
 TestApp.prototype.init = function() {
   this.createWorld();
   this.populateScene();
+  this.createCustomMaterialMesh();
   this.createAnimations();
 }
 
@@ -18,9 +19,9 @@ TestApp.prototype.createWorld = function() {
   this.scene = new Oomph3D.Scene();
   this.camera = new Oomph3D.cameras.FreeCamera({
     fieldOfView: 60,
-    z: 200,
-    x: 300,
-    y: 250,
+    z: 400,
+    x: 500,
+    y: 50,
     distanceMultiplier: 0,
   });
   this.scene.camera = this.camera;
@@ -113,6 +114,69 @@ TestApp.prototype.populateScene = function() {
   if (this.camera.lookAt) this.camera.lookAt(this.cube);
   if (this.camera.followMesh) this.camera.followMesh(this.cube, 400);
   if (this.camera.enableControls) this.camera.enableControls();
+}
+
+TestApp.prototype.createCustomMaterialMesh = function() {
+  const testMaterial = new Oomph3D.materials.BaseMaterial();
+  testMaterial.colorInUnits = {r: 0, g: 0.5, b: 0.5, a: 1};
+  testMaterial.vertexShader = `#version 300 es
+    in vec4 a_position;
+    in vec3 a_normal;
+
+    // Uniforms
+    uniform mat4 u_matrix;
+    uniform mat4 u_worldMatrix;
+
+    out vec3 v_normal;
+
+    highp float random(vec2 co) {
+      highp float a = 12.9898;
+      highp float b = 78.233;
+      highp float c = 43758.5453;
+      highp float dt= dot(co.xy ,vec2(a,b));
+      highp float sn= mod(dt,3.14);
+      return fract(sin(sn) * c);
+    }
+
+    void main() {
+      vec4 newPos = a_position;
+      newPos.y = random(vec2(a_position.xz)) * 50.0;
+      gl_Position = u_matrix * newPos;
+      v_normal = mat3(u_worldMatrix) * a_normal;
+    }
+  `;
+  testMaterial.fragmentShader = `#version 300 es
+    precision mediump float;
+
+    in vec3 v_normal;
+
+    uniform vec3 u_reverseLightDirection;
+    uniform vec3 u_lightColor;
+    uniform vec4 u_color;
+
+    out vec4 outColor;
+
+    void main() {
+      vec3 normal = normalize(v_normal);
+
+      float light = dot(normal, u_reverseLightDirection);
+
+      outColor = u_color;
+      outColor.rgb *= light * u_lightColor;
+    }
+  `;
+
+  this.customCube = new Oomph3D.meshes.Plane({
+    width: 100,
+    widthDivisions: 10,
+    depthDivisions: 10,
+    material: testMaterial,
+  });
+  this.customCube.rotationX = 45;
+  this.customCube.x = 500;
+  this.customCube.z = 150;
+
+  this.scene.addChild(this.customCube);
 }
 
 TestApp.prototype.createAnimations = function() {

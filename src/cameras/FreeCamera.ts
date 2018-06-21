@@ -13,7 +13,6 @@ export class FreeCamera extends PerspectiveCamera {
   private _horizontalDeadzoneEnd: number = 0;
   private _verticalDeadzoneStart: number = 0;
   private _verticalDeadzoneEnd: number = 0;
-  private _keyDown: boolean = false;
   private _alwaysRotateToMouse: boolean = false;
   private _dragInProgress: boolean = false;
   private _speedPerSecond: number = startSpeed;
@@ -22,17 +21,17 @@ export class FreeCamera extends PerspectiveCamera {
   private _previousUpdateTime: number = 0;
   private _xRotationStrength: number = 0;
   private _yRotationStrength: number = 0;
-  private _currentDirection: vec3;
   private _mouseXRotating: boolean = false;
   private _mouseYRotating: boolean = false;
   private _previousMouseX: number = 0;
   private _previousMouseY: number = 0;
   private _keyFrameTimer: number;
   private _rotationMatrix: Matrix4;
+  private _activeTouches: any = [];
+  private _previousPinchDiff: point = {x: 0, y: 0};
 
   constructor(options: IPerspectiveCameraOptions) {
     super(options);
-    this._currentDirection = {x: 0, y: 0, z: 0};
     this._rotationMatrix = new Matrix4();
     this._updateDeadzones();
   }
@@ -47,6 +46,7 @@ export class FreeCamera extends PerspectiveCamera {
     document.addEventListener('keydown', this._onKeyDown);
     document.addEventListener('keyup', this._onKeyUp);
     document.addEventListener('mousemove', this._onMouseMove);
+    document.addEventListener('touchstart', this._onTouchStart);
     window.addEventListener('resize', this._onWindowResized);
     if (!this._alwaysRotateToMouse) {
       document.addEventListener('mousedown', this._onMouseDown);
@@ -59,6 +59,7 @@ export class FreeCamera extends PerspectiveCamera {
   public disableControls() {
     document.removeEventListener('keydown', this._onKeyDown);
     document.removeEventListener('keyup', this._onKeyUp);
+    document.removeEventListener('touchstart', this._onTouchStart);
     window.removeEventListener('resize', this._onWindowResized);
     if (!this._alwaysRotateToMouse) {
       document.removeEventListener('mousedown', this._onMouseDown);
@@ -202,6 +203,84 @@ export class FreeCamera extends PerspectiveCamera {
     this._dragInProgress = false;
     document.removeEventListener('mousemove', this._onMouseMove);
     document.removeEventListener('mouseup', this._onMouseUp);
+  }
+
+  private _onTouchStart = (e: TouchEvent) => {
+    if (!this._activeTouches.length) {
+      document.addEventListener('touchmove', this._onTouchMove);
+      document.addEventListener('touchend', this._onTouchEnd);
+    }
+    const touch: Touch = e.touches[0];
+    this._activeTouches.push(touch);
+  }
+
+  private _onTouchMove = (e: TouchEvent) => {
+    if (e.touches.length === 2) {
+      // Check for pinch-zooming
+      const currentDiff: point = {
+        x: Math.abs(e.touches[0].pageX - e.touches[1].pageX),
+        y: Math.abs(e.touches[0].pageY - e.touches[1].pageY),
+      };
+      const movementDirection = {x: 0, y: 0, z: 0, w: 0};
+      if (this._previousPinchDiff.x > 0 || this._previousPinchDiff.y > 0) {
+        if (currentDiff.x > this._previousPinchDiff.x) {
+          // Distance X has increased
+          movementDirection.z = -1;
+        } else if (currentDiff.x < this._previousPinchDiff.x) {
+          // Distance has decreased
+          movementDirection.z = 1;
+        } else if (currentDiff.y > this._previousPinchDiff.y) {
+          movementDirection.z = -1;
+        } else if (currentDiff.y < this._previousPinchDiff.y) {
+          movementDirection.z = 1;
+        }
+        if (movementDirection.z) {
+          // Reset the rotation matrix
+          this._rotationMatrix.setToIdentity();
+          if (this._angleInRadians.x) this._rotationMatrix.rotateX(this._angleInRadians.x);
+          if (this._angleInRadians.y) this._rotationMatrix.rotateY(this._angleInRadians.y);
+
+          // Perform the zoom whil respecting camera angle
+          const adjustment = transformVector(this._rotationMatrix, movementDirection);
+          // TODO: Scale the increment according to the size of the difference between current and previous gaps
+          const speedIncrement = 3;
+          this._position = {
+            x: this._position.x += (adjustment.x * speedIncrement),
+            y: this._position.y += (adjustment.y * speedIncrement),
+            z: this._position.z += (adjustment.z * speedIncrement),
+          };
+        }
+      }
+      this._previousPinchDiff = currentDiff;
+    } else {
+      // Rotate the camera
+      const touch: Touch = e.touches[0];
+      const diffX = touch.pageX - this._activeTouches[0].pageX;
+      const diffY = touch.pageY - this._activeTouches[0].pageY;
+      this.angleY += (diffX / window.innerWidth) * 180;
+      this.angleX += (diffY / window.innerHeight) * 180;
+    }
+
+    // Update the cached touch data
+    for (let i: number = 0; i < e.touches.length; i++) {
+      for (let j: number = 0; j < this._activeTouches.length; j++) {
+        if (e.touches[i].identifier === this._activeTouches[j].identifier) {
+          this._activeTouches[j] = e.touches[i];
+          break;
+        }
+      }
+    }
+    e.preventDefault();
+  }
+
+  private _onTouchEnd = (e: TouchEvent) => {
+    this._activeTouches = [];
+    this._previousPinchDiff = {
+      x: 0,
+      y: 0,
+    };
+    document.removeEventListener('touchmove', this._onTouchMove);
+    document.removeEventListener('touchend', this._onTouchEnd);
   }
 
   private _onWindowResized = () => {
